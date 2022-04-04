@@ -9,7 +9,7 @@ import java.util.Date;
 @Setter
 @Getter
 @Entity
-@Table(name = "order")
+@Table(name = "booking_order")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,4 +33,6 @@ public class Order {
     @Column(name = "dropoff_location", nullable = false)
     private String dropoffLocation;
 
+    @ManyToOne
+    private Car car;
 }
