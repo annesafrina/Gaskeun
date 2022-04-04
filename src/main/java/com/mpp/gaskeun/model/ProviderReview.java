@@ -10,10 +10,10 @@ import javax.persistence.*;
 @Setter @Getter
 public class ProviderReview {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @OneToOne
+    @MapsId
     private Order order;
 
     @Column(name = "rating", nullable = false)

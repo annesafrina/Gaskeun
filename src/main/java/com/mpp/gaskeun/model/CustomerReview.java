@@ -10,10 +10,10 @@ import javax.persistence.*;
 @Getter @Setter
 public class CustomerReview {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @OneToOne
+    @MapsId
     private Order order;
 
     @Column(name = "rating", nullable = false)
