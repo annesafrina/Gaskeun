@@ -28,5 +28,5 @@ public class RentalProvider {
     private String phoneNumber;
 
     @Column(name="performance_rating")
-    private double performanceRatings;
+    private double performanceRating;
 }
