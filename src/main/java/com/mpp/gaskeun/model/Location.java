@@ -10,6 +10,6 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "cityName")
+    @Column(name = "cityName", nullable = false)
     private String cityName;
 }

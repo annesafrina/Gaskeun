@@ -1,8 +1,13 @@
 package com.mpp.gaskeun.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Date;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "car")
 public class Car {
@@ -17,17 +22,17 @@ public class Car {
     private int capacity;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "color")
+    @Column(name = "color", nullable = false)
     private Color color;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "transmission")
+    @Column(name = "transmission", nullable = false)
     private Transmission transmission;
 
-    @Column(name = "rating")
+    @Column(name = "rating", nullable = false)
     private double rating;
 
-    @Column(name = "is_available")
+    @Column(name = "is_available", nullable = false)
     private boolean isAvailable;
 
     @Column(name = "available_start_date")
@@ -36,9 +41,9 @@ public class Car {
     @Column(name = "available_end_date")
     private Date availableEndDate;
 
-    @Column(name = "price_rate")
+    @Column(name = "price_rate", nullable = false)
     private long priceRate;
 
-    @Column(name = "model")
+    @Column(name = "model", nullable = false)
     private String model;
 }
