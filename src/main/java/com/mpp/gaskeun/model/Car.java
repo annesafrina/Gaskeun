@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -47,6 +48,11 @@ public class Car {
     @Column(name = "model", nullable = false)
     private String model;
 
-    @ManyToOne
-    private RentalProvider rentalProvider;
+    @ManyToMany
+    @JoinTable(
+            name = "car_facilities",
+            joinColumns = @JoinColumn(name = "car_id"),
+            inverseJoinColumns = @JoinColumn(name = "facility_id")
+    )
+    private Set<Facility> availableFacilities;
 }

@@ -1,12 +1,20 @@
 package com.mpp.gaskeun.model;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+
+@Entity
 @Table(name = "customer_review")
+@Getter @Setter
 public class CustomerReview {
+    @Id
+    private long id;
 
-    //TODO: Create OneToOne Relationship with Order
+    @OneToOne
+    @MapsId
+    private Order order;
 
     @Column(name = "rating", nullable = false)
     private double rating;
