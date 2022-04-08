@@ -34,5 +34,12 @@ public class Order {
     private String dropoffLocation;
 
     @ManyToOne
+    private Customer customer;
+
+    @ManyToOne
     private Car car;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status", nullable = false)
+    private OrderStatus orderStatus;
 }
