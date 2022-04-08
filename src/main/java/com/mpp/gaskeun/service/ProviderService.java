@@ -1,13 +1,12 @@
 package com.mpp.gaskeun.service;
 
 import com.mpp.gaskeun.model.Car;
-
-import java.security.Provider;
+import com.mpp.gaskeun.model.RentalProvider;
 
 public interface ProviderService {
 
-    Car addCar(Provider provider, Car car);
-    Car deleteCar(Provider provider, Car car);
+    Car addCar(RentalProvider provider, Car car);
+    Car deleteCar(RentalProvider provider, Car car);
     Car getCarById(long id);
     void addPolicy();
 
