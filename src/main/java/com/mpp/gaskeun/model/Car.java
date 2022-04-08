@@ -48,6 +48,9 @@ public class Car {
     @Column(name = "model", nullable = false)
     private String model;
 
+    @ManyToOne
+    private RentalProvider rentalProvider;
+
     @ManyToMany
     @JoinTable(
             name = "car_facilities",
