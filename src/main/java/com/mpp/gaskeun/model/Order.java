@@ -38,4 +38,8 @@ public class Order {
 
     @ManyToOne
     private Car car;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status", nullable = false)
+    private OrderStatus orderStatus;
 }
