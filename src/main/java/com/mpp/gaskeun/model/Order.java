@@ -34,5 +34,8 @@ public class Order {
     private String dropoffLocation;
 
     @ManyToOne
+    private Customer customer;
+
+    @ManyToOne
     private Car car;
 }
