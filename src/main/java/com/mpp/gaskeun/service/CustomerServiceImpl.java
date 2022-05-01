@@ -1,9 +1,8 @@
 package com.mpp.gaskeun.service;
 
-import com.mpp.gaskeun.CustomerRepository;
+import com.mpp.gaskeun.repository.CustomerRepository;
 import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.model.Order;
-import com.mpp.gaskeun.security.PasswordEncoder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +55,6 @@ public class CustomerServiceImpl implements CustomerService {
         } else {
             throw new IllegalStateException(String.format("Email %s already exists", newCustomer.getEmail()));
         }
-
 
     }
 }

@@ -1,9 +1,8 @@
 package com.mpp.gaskeun.service;
 
-import com.mpp.gaskeun.ProviderRepository;
+import com.mpp.gaskeun.repository.ProviderRepository;
 import com.mpp.gaskeun.model.Car;
 import com.mpp.gaskeun.model.RentalProvider;
-import com.mpp.gaskeun.security.PasswordEncoder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
