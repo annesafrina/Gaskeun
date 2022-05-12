@@ -1,10 +1,18 @@
 package com.mpp.gaskeun.service;
 
 import com.mpp.gaskeun.model.*;
+import com.mpp.gaskeun.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Service
 public class OrderServiceImpl implements OrderService{
+
+    @Autowired
+    private OrderRepository orderRepository;
+
     @Override
     public boolean validateOrder(Customer customer, Car car, Date startDate, Date endDate) {
         return false;
@@ -29,7 +37,8 @@ public class OrderServiceImpl implements OrderService{
      *
      * @param provider=The provider object that receives the order from the customer
      * @param order=The order whose status and description is wanted to be changed
-     * @param status=The status given by the rental provider to the order
+     * @param status=The status given by the rental provider to the order. When the customer chooses to confirm,
+     *              the system must change the order status to WAITING_FOR_PAYMENT, else REJECTED.
      * @param bookingMessage=Description given by the rental provider regarding the booking/order
      *                      The field is nullable.
      * @return The edited order
@@ -46,7 +55,7 @@ public class OrderServiceImpl implements OrderService{
      * @param order=The order object to be tested
      * @return true if the car used in the order belongs to the provider, false if otherwise
      */
-    private boolean verifyOrderOwnership(RentalProvider provider, Order order) {
+    public boolean verifyOrderOwnership(RentalProvider provider, Order order) {
         return false;
     }
 }
