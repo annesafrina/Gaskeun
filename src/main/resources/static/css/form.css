@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    --pastel-blue: hsl(172, 72%, 69%);
+    --medium-gray: hsl(0, 0%, 77%);
+    --turquoise-green: hsl(176, 86%, 26%);
+
+    font-family: "Poppins", sans-serif;
+}
+
+.title {
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1rem;
+    letter-spacing: 0.04em;   
+}
+
+.logo-text {
+    color: var(--pastel-blue);
+    font-family: "Poppins", sans-serif;
+    font-size: 2.25rem;
+    font-weight: 500;
+
+    margin: 0;
+    
+}
+
+.logo-svg {
+    height: 2rem;
+}
+
+.logo-header-class {
+    padding: 1.25rem;
+}
+
+.logo {
+    display: flex;
+
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Form */
+.form-section {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 70%;
+}
+
+.form-text {
+    display: flex;
+    flex-direction: column;
+
+    margin: 2rem 0;
+
+    width: 60%;
+    min-width: 275px;
+}
+
+.form-label {
+    font-family: "Poppins", sans-serif;
+
+    text-align: center;
+}
+
+.form-input {
+    display: flex;
+    align-items: center;
+
+    background-color: var(--medium-gray);
+
+    padding: 0.5rem 1.15rem;
+
+    border-radius: 2.5rem;
+}
+
+.form-input__text {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.05rem;
+
+    width: 100%;
+
+    margin: 0 0.75rem 0 0;
+
+    background: none;
+    border: none;
+}
+
+.form-input__text:focus,
+.form-input__text:focus-visible {
+    outline: none;
+}
+
+.form-icon {
+    margin: 0 1rem;
+    
+    height: 2rem;
+}
+
+.form-icon-btn {
+    cursor: pointer;
+}
+
+/* Buttons */
+.button {
+    padding: 0.3rem 0.75rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+
+    border: none;
+    width: 15%;
+    border-radius: 1.5rem;
+}
+
+.button-cyan {
+    background-color: var(--pastel-blue);
+    color: black;
+}
+
+/* Links */
+.link {
+    text-decoration: none;
+
+    font-weight: 700;
+}
+
+.link-green,
+.link-green:hover {
+    color: var(--turquoise-green);
+}
+
+
+
+
