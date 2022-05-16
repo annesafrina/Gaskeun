@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller @Slf4j
+@RequestMapping("/")
 public class BaseController {
 
     @Autowired
