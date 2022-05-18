@@ -28,11 +28,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // So post request from other website can be processed
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/registration/*", "/registration/*")
+                .antMatchers(
+                        "/api/registration/*",
+                        "/registration/*",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**"
+                )
                 .permitAll()
                 .anyRequest()
                 .authenticated().and()
-                .formLogin();
+                .formLogin()
+                .usernameParameter("email")
+                .permitAll()
+                .loginPage("/login");
     }
 
     @Override
