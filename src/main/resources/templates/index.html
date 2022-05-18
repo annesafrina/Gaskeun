@@ -4,133 +4,86 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            background: hsla(42, 98%, 80%, 1);
-        }
-
-        .display-text {
-            display: flex;
-            justify-content: flex-start;
-            
-            transform: translateY(-100%) translateX(10%);
-        }
-
-        .footer {
-            position: absolute;
-            bottom: 0;
-            
-            left: 45%;
-        }
-
-        .subheading-text {
-            font-family: "Poppins", sans-serif;
-            color: hsla(198, 100%, 20%, 1);
-        }
-
-        .heading-text {
-
-            font-family: "Poppins", sans-serif;
-            font-size: 2.5rem;
-
-            color: hsla(198, 100%, 20%, 1);
-        }
-
-        .typewriting {
-            position: relative;
-            margin-left: 10px;
-        }
-
-        .typewriting::after {
-            position: absolute;
-            right: -4px;
-
-            top: 0.6rem;
-
-            content: "";
-            
-            width: 2px;
-            height: 2.6rem;
-
-            background: hsla(198, 100%, 20%, 1);
-            animation: blink 0.25s infinite ease;
-            animation-direction: alternate;
-        }
-
-        @keyframes blink {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-        
-    </style>
-
-    <title>Adpro</title>
+    <title>Gaskeun</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/home.css}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    
-    <main>
-        <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_kqfglvmb.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>
-    
-        <div class="display-text">
-            <h1 class="heading-text">Hello </h1>
-            <h1 class="heading-text typewriting"> </h1>
+    <div class="blob"></div>
+    <nav class="nav-main">
+        <section class="nav-section">
+            <h1 class="brand">Gaskeun</h1>
+        </section>
+        <section class="nav-section">
+            <a href="" class="nav-link">Explore</a>
+        </section>
+        <section class="nav-section">
+            <form action="" class="custom-search">
+                <div class="custom-search__group">
+                <label for="budget" class="custom-search__label">Budget (Rp)</label>
+                <input name="budget" type="number" class="custom-search__input" placeholder="Enter your budget">
+                </div>
+                <div class="custom-search__group">
+                <label for="startDate" class="custom-search__label">Start Date</label>
+                <input name="startDate" type="date" class="custom-search__input">
+                </div>
+                <div class="custom-search__group">
+                <label for="endDate" class="custom-search__label">End Date</label>
+                <input name="endDate" type="date" class="custom-search__input">
+                </div>
+                <div class="custom-button__container stretch">
+                <button type="submit" class="custom-search__button"><i class="fa fa-search"></i></button>
+            </div>
+            </form>
+        </section>
+        <div class="nav-section stretch join-button-container">
+            <a href="" class="anchor-pill-button">JOIN NOW!</a>
         </div>
-
-        <div class="footer">
-
-            <p class="subheading-text">Work in progress...</p>
-        
+        <section class="nav-section user-actions">
+            <a href="" class="nav-link"><i class="fa-solid fa-gear"></i></a>
+            <a href="" class="nav-link"><i class="fa-regular fa-user"></i></a>
+        </section>
+        <input class="checkbox" type="checkbox" name="" id="" />
+        <div class="drawer-opener">
+            <div class="bun line-1"></div>
+            <div class="bun line-2"></div>
+            <div class="bun line-3"></div>
         </div>
-    </main>
-    
-    <script>
-        const typewrittenText = document.querySelector(".heading-text.typewriting");
-        
-        const MEMBERS = ["Rashad!", "Johanes!", "Alex!", "Arya!", "Anne!", "world!"];
-        let currentInd = 0;
-        let currentCharInd = 0;
-        let increments = true;
-        let currentText = MEMBERS[currentInd]
+        <div class="drawer">
+            <a href="" class="drawer-link">User Settings <i class="fa-solid fa-gear"></i></a>
+            <a href="" class="drawer-link">My Profile <i class="fa-regular fa-user"></i></a>
+            <div class="drawer-link">
+            <a href="" class="anchor-pill-button">JOIN NOW!</a>
+            </div>
+        </div>
+    </nav>
 
-        window.setInterval(() => {
-            
-            typewrittenText.innerText = currentText.slice(0, currentCharInd);
-
-            (increments) ? currentCharInd++ : currentCharInd--;
-
-            if (increments && currentCharInd > currentText.length) {
-                increments = false;
-            }
-
-            if (!increments && currentCharInd === 0) {
-                increments = true;
-                currentText = MEMBERS[++currentInd % MEMBERS.length];
-                currentCharInd = 0;
-            }
-
-        }, 500);
-    </script>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <div class="container">
+        <div class="page-banner">
+            <div>
+            <h2>Gaskeun</h2>
+            <svg width="100" height="60" viewBox="0 0 56 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.2191 2.30511C16.909 5.03659 14.5076 8.91329 13.6953 12.7553" stroke="black" stroke-width="3" stroke-linecap="round"/>
+                <path d="M25.0191 24.8383C26.8577 24.8383 29.6216 25.5025 31.4022 24.5117C32.1982 24.0688 31.8946 22.9161 32.2615 22.0806C33.0992 20.1729 37.2608 19.7227 38.7059 20.9921C39.6614 21.8313 39.6573 23.7417 39.6573 24.9835C39.6573 26.9195 39.1291 27.6999 37.4784 28.2854C34.8683 29.2113 33.7126 26.0125 32.4763 24.1852" stroke="black" stroke-width="3" stroke-linecap="round"/>
+                <path d="M39.3811 23.8586C41.9589 23.8586 44.5366 23.8586 47.1144 23.8586C48.3001 23.8586 51.9727 24.6023 52.6076 23.1692C53.4818 21.1958 55.0271 13.9993 53.0065 12.2473C51.1039 10.5976 47.4082 11.449 45.1197 11.449C41.607 11.449 42.4064 7.73564 40.6086 5.40751C39.5956 4.09574 38.5503 3.28482 37.0488 3.28482C36.7224 3.28482 36.201 3.40718 35.944 3.1034C34.9604 1.94033 32.4159 2.45386 31.0953 2.37769C27.5602 2.17379 22.5419 1.38672 19.2191 2.95826" stroke="black" stroke-width="3" stroke-linecap="round"/>
+                <path d="M13.6953 14.0616C11.1133 12.8702 6.49452 11.6076 3.93654 13.3359C2.73344 14.1487 2.64765 14.5415 2.64765 16.1843C2.64765 17.5972 2.12862 18.886 2.09526 20.2664C2.04785 22.2285 1.57977 25.1401 3.2614 26.2172C5.80631 27.8471 9.68832 27.1243 12.5292 27.1243C12.9716 27.1243 14.5867 27.3844 14.8001 26.9429C15.5342 25.4237 14.191 21.1155 15.6286 20.6655C18.3653 19.8089 22.3174 19.5633 24.344 22.2258C24.6918 22.6826 24.5815 25.1799 24.4361 25.7817C24.3133 26.2896 23.7809 26.0409 23.5768 26.5437C23.2607 27.3223 22.0716 28.0504 21.4286 28.4306C20.5509 28.9495 17.6918 29.3301 16.8715 28.5757C15.8936 27.6764 15.9878 26.3798 14.8001 25.818" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            </svg>     
+            </div>
+            <div>
+                <h3>
+                    Drive Freely!
+                </h3>
+            </div>
+            <div>
+                <p>
+                   Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et harum officiis repudiandae natus consequatur perspiciatis vitae, aliquam odio nulla libero dolorum quae error doloribus impedit optio a quisquam iste esse? 
+                </p>
+            </div>
+            <div style="justify-content: center;">
+                <a href="" style="background-color: #78E9E2;" class="anchor-pill-button">BOOK NOW!</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
