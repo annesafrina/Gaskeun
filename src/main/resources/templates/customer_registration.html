@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Registration</title>
+</head>
+<body>
+    <h3>Customer Registration Form</h3>
+    <form action="" th:object="${customerDto}" method="post">
+        <input th:field="*{email}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter email"><br/>
+        <input th:field="*{phone_number}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter phone number"><br/>
+        <input th:field="*{name}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter name"><br/>
+        <input th:field="*{id_card}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter id card number"><br/>
+        <input th:field="*{driving_license}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter driving license number"><br/>
+        <input th:field="*{password}" type="password" class="form-control" aria-describedby="nameHelp" placeholder="Enter password"><br/>
+        <input th:field="*{passwordConfirmation}" type="password" class="form-control" aria-describedby="nameHelp" placeholder="Enter password confirmation"><br/>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

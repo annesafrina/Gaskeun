@@ -1,5 +1,6 @@
 package com.mpp.gaskeun.security.config;
 
+import com.mpp.gaskeun.service.AuthenticationService;
 import com.mpp.gaskeun.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final CustomerService customerService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -27,7 +28,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // So post request from other website can be processed
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/registration/*","/css/**","/js/**","/images/**")
+                .antMatchers(
+                        "/api/registration/*",
+                        "/registration/*",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**"
+                )
                 .permitAll()
                 .anyRequest()
                 .authenticated().and()
@@ -46,7 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder);
-        provider.setUserDetailsService(customerService);
+        provider.setUserDetailsService(authenticationService);
+
         return provider;
     }
 }

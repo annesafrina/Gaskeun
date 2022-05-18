@@ -1,10 +1,17 @@
 package com.mpp.gaskeun.service;
 
 import com.mpp.gaskeun.model.*;
+import com.mpp.gaskeun.repository.CarRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class SearchServiceImpl implements SearchService{
+
+    @Autowired
+    private CarRepository carRepository;
 
     /**
      * Method to return all cars in the database provided by any car provider

@@ -6,8 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface CustomerService extends UserDetailsService {
+public interface CustomerService {
     public List<Order> findAllOrders(Customer customer);
     public List<Order> findAllOnGoingOrders(Customer customer);
-    public Customer register(Customer customer);
 }
