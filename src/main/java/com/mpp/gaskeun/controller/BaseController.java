@@ -18,36 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/")
 public class BaseController {
 
-    @Autowired
-    private CustomerService customerService;
-
-    @Autowired
-    private ProviderService providerService;
-
-    @GetMapping("/")
-    public String displayHomePage(Model model) {
-        Object principal = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-
-        if(principal instanceof UserDetails currentUser) {
-            Customer currentCustomer = (Customer) customerService.loadUserByUsername(currentUser.getUsername());
-            log.info(currentCustomer.getName());
-        }
-
+    @GetMapping("")
+    public String displayHomePage() {
         return "index";
-    }
-
-    @PostMapping("/api/registration/customer")
-    public @ResponseBody ResponseEntity<?> registerCustomer(@RequestBody Customer newCustomer) {
-        customerService.register(newCustomer);
-        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/api/registration/provider")
-    public @ResponseBody ResponseEntity<?> registerProvider(@RequestBody RentalProvider provider) {
-        providerService.register(provider);
-        return new ResponseEntity<>(provider, HttpStatus.CREATED);
     }
 
 }

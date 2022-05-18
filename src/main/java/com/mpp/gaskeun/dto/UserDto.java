@@ -9,4 +9,5 @@ public class UserDto {
     private String phone_number;
     private String name;
     private String password;
+    private String passwordConfirmation;
 }
