@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
-                        "/api/registration/*",
+                        "/api/*",
                         "/registration/*",
                         "/css/**",
                         "/js/**",

@@ -6,7 +6,7 @@
 </head>
 <body>
     <h3>Provider Registration</h3>
-    <form th:action="@{/registration/provider}" th:object="${providerDto}" method="post">
+    <form th:action="@{/registration/provider}" th:object="${userDto}" method="post">
         <input th:field="*{email}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter email"><br/>
         <input th:field="*{phone_number}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter phone number"><br/>
         <input th:field="*{name}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter name"><br/>

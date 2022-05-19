@@ -59,8 +59,8 @@ public class RegistrationController {
 
     @GetMapping("/provider")
     public String registerProviderGet(Model model) {
-        UserDto providerDto = new UserDto();
-        model.addAttribute("providerDto", providerDto);
+        UserDto userDto = new UserDto();
+        model.addAttribute("userDto", userDto);
         return "provider_registration";
     }
 

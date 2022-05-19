@@ -11,8 +11,8 @@ import java.io.Serializable;
 @Getter @Setter
 public class PoliciesId implements Serializable {
     @Column(name = "car_id")
-    private long employee_id;
+    private long car_id;
 
-    @Column(name = "payroll_id")
-    private long payroll_id;
+    @Column(name = "policy_id")
+    private long policy_id;
 }
