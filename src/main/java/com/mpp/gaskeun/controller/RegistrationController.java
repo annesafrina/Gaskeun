@@ -24,6 +24,11 @@ public class RegistrationController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @GetMapping("/")
+    public String chooseRegistration() {
+        return "choose_registration";
+    }
+
     @GetMapping("/customer")
     public String registerCustomer(Model model) {
         CustomerDto customerDto = new CustomerDto();
