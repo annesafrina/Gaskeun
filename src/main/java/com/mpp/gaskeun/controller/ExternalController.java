@@ -35,5 +35,4 @@ public class ExternalController {
 
         return new ResponseEntity<>(generatedLocation, HttpStatus.OK);
     }
-
 }

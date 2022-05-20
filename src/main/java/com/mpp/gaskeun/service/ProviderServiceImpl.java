@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -43,6 +44,12 @@ public class ProviderServiceImpl implements ProviderService{
             throw new IllegalStateException("Available start date should not be after available end date");
         }
 
+        if(carRepository.findCarByLicensePlate(newCar.getLicensePlate()).isPresent()) {
+            throw new IllegalStateException(
+                    String.format("Car with license plate %s has been registered",
+                            newCar.getLicensePlate()));
+        }
+
         boolean todayIsInBetweenDateRange = new Date().after(startDate) && new Date().before(endDate);
 
         newCar.setAvailable(todayIsInBetweenDateRange);
@@ -60,8 +67,15 @@ public class ProviderServiceImpl implements ProviderService{
     }
 
     @Override
-    public Car getCarById(long id) {
-        return null;
+    public Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalStateException {
+        Car car = carRepository.findCarByLicensePlate(licensePlate).orElseThrow(IllegalStateException::new);
+
+        if(!checkCarOwnership(provider, car)) {
+            throw new IllegalStateException(String.format("Car with license %s does not belong to %s",
+                    licensePlate, provider.getEmail()));
+        }
+
+        return car;
     }
 
     @Override
@@ -80,12 +94,24 @@ public class ProviderServiceImpl implements ProviderService{
         return locationRepository.save(location);
     }
 
+    @Override
+    public List<Location> getAllLocations() {
+        return locationRepository.findAll(Sort.by(Sort.Direction.ASC, "cityName"));
+    }
+
+    private boolean checkCarOwnership(RentalProvider provider, Car car) {
+        return car.getRentalProvider().equals(provider);
+    }
+
     /**
      * Popular Car entity with all attributes except
      * id, rating, isAvailable, and rentalProvider
      */
     private Car convertDtoToCar(CarDto carDto) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        Location carLocation = locationRepository.findByCityName(carDto.getCityName())
+                .orElse(null);
 
         Car car = new Car();
         car.setLicensePlate(carDto.getLicensePlate());
@@ -96,7 +122,9 @@ public class ProviderServiceImpl implements ProviderService{
         car.setAvailableEndDate(format.parse(carDto.getAvailableEnd()));
         car.setPriceRate(carDto.getPriceRate());
         car.setModel(carDto.getModel());
+        car.setLocation(carLocation);
         car.setPicture(carDto.getBase64image());
+        car.setDescription(carDto.getDescription());
 
         return car;
     }

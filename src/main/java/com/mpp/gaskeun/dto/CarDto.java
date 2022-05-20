@@ -1,5 +1,6 @@
 package com.mpp.gaskeun.dto;
 
+import com.mpp.gaskeun.model.Location;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +17,6 @@ public class CarDto {
     String availableStart;
     String availableEnd;
     String base64image;
+    String description;
+    String cityName;
 }

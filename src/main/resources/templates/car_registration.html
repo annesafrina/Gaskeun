@@ -38,6 +38,16 @@
         <label>Available End Date</label>
         <input type="date" th:field="*{availableEnd}"><br/>
 
+        <label>Location</label>
+        <select name="Location" th:field="*{cityName}">
+                <option th:each="location: ${locations}"
+                        th:value="${location.getCityName()}"
+                        th:text="${location.getCityName()}"></option>
+        </select><br/>
+
+        <label>Car Description</label><br/>
+        <textarea th:field="*{description}"></textarea><br/>
+
         <input type="file" name="car-image" accept="image/jpeg, image/png" />
 
         <button type="submit">Submit</button>
