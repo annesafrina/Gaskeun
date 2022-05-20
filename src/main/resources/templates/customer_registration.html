@@ -1,20 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" th:href="@{/css/global.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/form.css}" type="text/css">
+
+    <script defer th:src="@{/js/customerRegis.js}" type="text/javascript"></script>
+
+
     <title>Customer Registration</title>
 </head>
 <body>
-    <h3>Customer Registration Form</h3>
-    <form action="" th:object="${customerDto}" method="post">
-        <input th:field="*{email}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter email"><br/>
-        <input th:field="*{phone_number}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter phone number"><br/>
-        <input th:field="*{name}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter name"><br/>
-        <input th:field="*{id_card}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter id card number"><br/>
-        <input th:field="*{driving_license}" type="text" class="form-control" aria-describedby="nameHelp" placeholder="Enter driving license number"><br/>
-        <input th:field="*{password}" type="password" class="form-control" aria-describedby="nameHelp" placeholder="Enter password"><br/>
-        <input th:field="*{passwordConfirmation}" type="password" class="form-control" aria-describedby="nameHelp" placeholder="Enter password confirmation"><br/>
-        <button type="submit">Submit</button>
-    </form>
-</body>
+    <div class="blob"></div>
+    <header class="logo-header">
+
+        <div class="logo">
+            <svg class="logo-svg" viewBox="0 0 108 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M36 3C31.3997 8.22761 26.6177 15.647 25 23" stroke="black" stroke-width="3" stroke-linecap="round"/>
+                <path d="M25.3128 26.1431C20.166 23.7619 10.9592 21.2383 5.8602 24.6926C3.46201 26.3173 3.29099 27.1023 3.29099 30.3856C3.29099 33.2097 2.25638 35.7856 2.18989 38.5444C2.09538 42.466 1.16234 48.2854 4.51442 50.438C9.58732 53.6957 17.3255 52.2511 22.9883 52.2511C23.8702 52.2511 27.0897 52.7709 27.515 51.8885C28.9785 48.8522 26.301 40.2414 29.1667 39.3421C34.6219 37.6302 42.4997 37.1392 46.5394 42.4606C47.2326 43.3737 47.0129 48.3648 46.723 49.5678C46.4783 50.5828 45.4171 50.0857 45.0102 51.0907C44.3801 52.6469 42.0098 54.1021 40.7281 54.8619C38.9785 55.899 33.2793 56.6598 31.6441 55.152C29.6948 53.3546 29.8827 50.7631 27.515 49.6403" stroke="black" stroke-width="3" stroke-linecap="round"/>
+                <path d="M48 47.9307C51.6424 47.9307 57.1181 49.2307 60.6457 47.2915C62.2227 46.4246 61.6212 44.1683 62.348 42.5331C64.0077 38.7991 72.2522 37.918 75.1153 40.4025C77.0082 42.0451 77 45.7843 77 48.2148C77 52.0042 75.9537 53.5316 72.6834 54.6777C67.5124 56.4899 65.2229 50.2289 62.7736 46.6523" stroke="black" stroke-width="3" stroke-linecap="round"/>
+                <path d="M76.5779 45.6151C81.766 45.6151 86.954 45.6151 92.1421 45.6151C94.5284 45.6151 101.92 47.099 103.198 44.2395C104.957 40.302 108.067 25.9426 104 22.4467C100.171 19.155 92.7333 20.8539 88.1275 20.8539C81.0578 20.8539 82.6666 13.4445 79.0484 8.79911C77.0098 6.18169 74.9059 4.56365 71.884 4.56365C71.2271 4.56365 70.1776 4.8078 69.6605 4.20164C67.6809 1.88094 62.5598 2.90559 59.9021 2.75362C52.7873 2.34677 42.6874 0.776298 36 3.91203" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+
+            <h5 class="logo-text">Gaskeun</h5>
+        </div>
+
+        <div>
+            <div class="header-left">
+                <p class="text-small">Already on Gaskeun?</p>
+                <a href="/login" class="button button-cyan">LOGIN</a>
+            </div>
+        </div>
+
+    </header>
+
+    <main class="form-section">
+
+        <h3 class="title">Register as Customer</h3>
+
+        <ul class="steps">
+            <li class="step">
+                <div class="step__circle step__circle--select" data-step="1">1</div>
+                <p class="step__text">Account Details</p>
+            </li>
+            <li class="step">
+                <div class="step__circle" data-step="2">2</div>
+                <p class="step__text">Personal Information</p>
+            </li>
+        </ul>
+
+        <form action="" th:object="${customerDto}" method="post" class="form-content">
+
+            <div class="form-step form-step--show">
+
+                <p class="form-desc">Fill in the following details for your account.</p>
+
+                <div class="form-text">
+                    <div class="form-input">
+                        <input class="form-input__text" id="email" placeholder=" " th:field="*{email}" type="text" aria-describedby="nameHelp">
+                        <i class="fa-regular fa-envelope"></i>
+                        <label class="form-label" for="email">Email</label>
+                    </div>
+                </div>
+
+                <div class="form-text">
+                    <div class="form-input">
+                        <input class="form-input__text" id="phone-number" th:field="*{phone_number}" type="text" aria-describedby="nameHelp" placeholder=" ">
+                        <i class="fa-solid fa-phone"></i>
+                        <label class="form-label" for="phone-number">Phone Number</label>
+                    </div>
+                </div>
+
+                <div class="form-text">
+                    <div class="form-input">
+                        <input class="form-input__text" th:field="*{password}" id="password" type="password" aria-describedby="nameHelp" placeholder=" "><br/>
+                        <i class="fa-regular fa-eye form-icon-btn" id="password-btn"></i>
+                        <label class="form-label" for="password">Password</label>
+                    </div>
+                </div>
+
+                <div class="form-text">
+                    <div class="form-input">
+                        <input class="form-input__text" id="password-confirm" th:field="*{passwordConfirmation}" type="password" aria-describedby="nameHelp" placeholder=" "><br/>
+                        <i class="fa-regular fa-eye form-icon-btn" id="password-confirm-btn"></i>
+                        <label class="form-label" for="password-confirm">Confirm Password</label>
+                    </div>
+                </div>
+
+                <button class="button button-cyan" id="continue">CONTINUE</button>
+
+            </div>
+
+            <div class="form-step">
+
+                <p class="form-desc">Fill in the following personal information for future bookings.</p>
+
+                <div class="form-text">
+                    <div class="form-input">
+                        <input class="form-input__text" id="name" th:field="*{name}" type="text" aria-describedby="nameHelp" placeholder=" "><br/>
+                        <label class="form-label" for="name">Name</label>
+                    </div>
+                </div>
+
+                <div class="form-text">
+                    <div class="form-input">
+                        <input class="form-input__text" id="id-card" th:field="*{id_card}" type="text" aria-describedby="nameHelp" placeholder=" "><br/>
+                        <label class="form-label" for="name">ID Card Number</label>
+                    </div>
+                </div>
+
+                <div class="form-text">
+                    <div class="form-input">
+                        <input class="form-input__text" id="driving-liscence" th:field="*{driving_license}" type="text" aria-describedby="nameHelp" placeholder=" "><br/>
+                        <label class="form-label" for="name">Driving Liscense Number</label>
+                    </div>
+                </div>
+
+                <button class="button button-cyan" type="submit">SUBMIT</button>
+
+            </div>
+        </form>
+
+    </main>
+    </body>
 </html>

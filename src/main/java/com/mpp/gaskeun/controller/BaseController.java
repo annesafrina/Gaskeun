@@ -27,10 +27,8 @@ public class BaseController {
 
     @GetMapping("/login")
     public String showLoginPage() {
-        log.info("/login");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-            log.info("Null or Anonymous Authentication");
             return "login";
         }
 

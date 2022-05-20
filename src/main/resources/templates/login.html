@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" th:href="@{/css/global.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/form.css}" type="text/css">
 
     <script defer th:src="@{/js/loginPassword.js}"></script>
@@ -15,6 +16,7 @@
     <title>Log In</title>
 </head>
 <body>
+    <div class="blob blob--left"></div>
     <header class="logo-header">
         
         <div class="logo">
@@ -29,32 +31,32 @@
         </div>
             
     </header>
-    
+
     <main class="form-section">
 
         <h1 class="title">Login to continue</h1>
-        
-        <form name="f" th:action="@{/login}" method="post" class="form-content">
+
+        <form name="f" th:action="@{/login}" method="post" class="form-content form-step form-step--show form-step--relative">
             <div class="form-text">
-                <label for="email" class="form-label">Email</label>
 
                 <div class="form-input">
-                    <input type="text" id="email" name="email" class="form-input__text">
+                    <input type="text" id="email" name="email" class="form-input__text" placeholder=" ">
                     <i class="fa-regular fa-envelope"></i>
+                    <label for="email" class="form-label">Email</label>
                 </div>
             </div>
             <div class="form-text">
-                <label for="password" class="form-label">Password</label>
 
                 <div class="form-input">
-                    <input type="password" id="password" name="password" class="form-input__text">
+                    <input type="password" id="password" name="password" class="form-input__text" placeholder=" ">
                     <i class="fa-regular fa-eye form-icon-btn" id="password-btn"></i>
+                    <label for="password" class="form-label">Password</label>
                 </div>
             </div>
             <button type="submit" class="button button-cyan">LOG IN</button>
         </form>
 
-        <p>Don't have an account? <a href="#" class="link link-green">SIGN UP</a></p>
+        <p>Don't have an account? <a href="/registration/customer" class="link link-green">SIGN UP</a></p>
 
     </main>
 </body>
