@@ -35,7 +35,7 @@ public class Car {
     private Transmission transmission;
 
     @Column(name = "rating", nullable = false)
-    private double rating;
+    private double rating = 0;
 
     @Column(name = "is_available", nullable = false)
     private boolean isAvailable;
@@ -52,7 +52,10 @@ public class Car {
     @Column(name = "model", nullable = false)
     private String model;
 
-    @ManyToOne
+    @Column(name = "picture", length = 65_535)
+    private String picture;
+
+    @ManyToOne(targetEntity = RentalProvider.class)
     private RentalProvider rentalProvider;
 
     @ManyToMany
