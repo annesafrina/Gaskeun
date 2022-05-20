@@ -55,14 +55,12 @@ public class Car {
     @Column(name = "picture", length = 65_535)
     private String picture;
 
-    @ManyToOne(targetEntity = RentalProvider.class)
+    @Column(name = "description")
+    private String description;
+
+    @ManyToOne
     private RentalProvider rentalProvider;
 
-    @ManyToMany
-    @JoinTable(
-            name = "car_facilities",
-            joinColumns = @JoinColumn(name = "car_id"),
-            inverseJoinColumns = @JoinColumn(name = "facility_id")
-    )
-    private Set<Facility> availableFacilities;
+    @ManyToOne
+    private Location location;
 }

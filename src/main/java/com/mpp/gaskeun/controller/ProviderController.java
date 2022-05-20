@@ -32,22 +32,29 @@ public class ProviderController {
         model.addAttribute("carDto", dto);
         model.addAttribute("colors", Color.values());
         model.addAttribute("transmissions", Transmission.values());
+        model.addAttribute("locations", providerService.getAllLocations());
         return "car_registration";
     }
 
     @PostMapping("/register-car")
     public String registerCarPost(@AuthenticationPrincipal RentalProvider provider,
                                   @ModelAttribute CarDto carDto,
-                                  @RequestParam("car-image")MultipartFile file) throws IOException, ParseException {
+                                  @RequestParam("car-image")MultipartFile file,
+                                  Model model) throws IOException, ParseException {
 
         log.info("Registering car");
         byte[] image = Base64.encodeBase64(file.getBytes());
         String base64Image = new String(image);
 
         carDto.setBase64image(base64Image);
-        providerService.addCar(provider, carDto);
+        try {
+            providerService.addCar(provider, carDto);
+        } catch (IllegalStateException e) {
+            log.error(e.getMessage());
+            model.addAttribute("error", e.getMessage());
+        }
 
-        return "redirect:/provider/display-car-image";
+        return "redirect:/provider/register-car";
     }
 
 

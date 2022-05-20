@@ -7,6 +7,7 @@ import com.mpp.gaskeun.model.RentalProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.text.ParseException;
+import java.util.List;
 
 public interface ProviderService {
 
@@ -15,5 +16,6 @@ public interface ProviderService {
     Car getCarById(long id);
     void addPolicy();
     Location addLocation(Location location);
+    List<Location> getAllLocations();
 
 }
