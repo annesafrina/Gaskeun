@@ -13,7 +13,7 @@ public interface ProviderService {
 
     Car addCar(RentalProvider provider, CarDto carDto) throws ParseException;
     Car deleteCar(RentalProvider provider, Car car);
-    Car getCarById(long id);
+    Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalStateException;
     void addPolicy();
     Location addLocation(Location location);
     List<Location> getAllLocations();

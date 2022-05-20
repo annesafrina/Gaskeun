@@ -63,4 +63,16 @@ public class Car {
 
     @ManyToOne
     private Location location;
+
+    public String getLocationName() {
+        return location.getCityName();
+    }
+
+    public String getTransmissionName() {
+        return transmission.toString();
+    }
+
+    public String getColorName() {
+        return color.toString();
+    }
 }

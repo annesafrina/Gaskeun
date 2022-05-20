@@ -7,15 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 @Controller
 @RequestMapping("/provider")
@@ -57,5 +56,31 @@ public class ProviderController {
         return "redirect:/provider/register-car";
     }
 
+    @GetMapping("/update-car")
+    public String updateCar(@RequestParam("id") Long carId) {
 
+        return null;
+    }
+
+    @GetMapping("/car-detail/{licensePlate}")
+    public String displayCar(
+            @PathVariable("licensePlate") String licensePlate,
+            @AuthenticationPrincipal UserDetails provider,
+            Model model) {
+
+        if(!(provider instanceof RentalProvider))
+            return "redirect:/";
+
+        try {
+            Car car = providerService.getCarByLicensePlate((RentalProvider) provider, licensePlate);
+            log.info("Get: {}, Expected: {}", car.getLicensePlate(), licensePlate);
+            model.addAttribute("car", car);
+
+        } catch (IllegalStateException e){
+            log.error(e.getMessage());
+            model.addAttribute("error", e.getMessage());
+        }
+
+        return "car_display_provider";
+    }
 }

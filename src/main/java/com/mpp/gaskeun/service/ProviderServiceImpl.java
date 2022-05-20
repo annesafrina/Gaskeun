@@ -67,8 +67,15 @@ public class ProviderServiceImpl implements ProviderService{
     }
 
     @Override
-    public Car getCarById(long id) {
-        return null;
+    public Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalStateException {
+        Car car = carRepository.findCarByLicensePlate(licensePlate).orElseThrow(IllegalStateException::new);
+
+        if(!checkCarOwnership(provider, car)) {
+            throw new IllegalStateException(String.format("Car with license %s does not belong to %s",
+                    licensePlate, provider.getEmail()));
+        }
+
+        return car;
     }
 
     @Override
@@ -90,6 +97,10 @@ public class ProviderServiceImpl implements ProviderService{
     @Override
     public List<Location> getAllLocations() {
         return locationRepository.findAll(Sort.by(Sort.Direction.ASC, "cityName"));
+    }
+
+    private boolean checkCarOwnership(RentalProvider provider, Car car) {
+        return car.getRentalProvider().equals(provider);
     }
 
     /**
