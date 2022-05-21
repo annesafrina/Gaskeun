@@ -1,5 +1,7 @@
 package com.mpp.gaskeun.service;
 
+import com.mpp.gaskeun.dto.CustomerDto;
+import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.repository.CustomerRepository;
@@ -27,21 +29,40 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private final BCryptPasswordEncoder encoder;
 
+    private void initDataCustomer(CustomerDto customerDto, Customer customer) {
+        customer.setEmail(customerDto.getEmail());
+        customer.setPassword(customerDto.getPassword());
+        customer.setDrivingLicenseNumber(customerDto.getDriving_license());
+        customer.setIdCardNumber(customerDto.getId_card());
+        customer.setName(customerDto.getName());
+        customer.setPhoneNumber(customerDto.getPhone_number());
+    }
+
+    private void initDataProvider(UserDto userDto, RentalProvider provider) {
+        provider.setEmail(userDto.getEmail());
+        provider.setName(userDto.getName());
+        provider.setPassword(userDto.getPassword());
+    }
+
     @Override
-    public UserDetails register(UserDetails user) throws IllegalStateException {
-        log.info("Register {}", user.getUsername());
-        boolean exists = getMatchingUserFromUsername(user.getUsername()) != null;
+    public UserDetails register(UserDto userDto) throws IllegalStateException {
+        log.info("Register {}", userDto.getEmail());
+        boolean exists = getMatchingUserFromUsername(userDto.getEmail()) != null;
 
         if(!exists) {
-            if(user instanceof Customer customer) {
+            if(userDto instanceof CustomerDto customerDto) {
+                Customer customer = new Customer();
+                initDataCustomer(customerDto, customer);
                 return registerCustomer(customer);
 
             } else {
-                return registerProvider((RentalProvider) user);
-
+                RentalProvider provider = new RentalProvider();
+                initDataProvider(userDto, provider);
+                return registerProvider(provider);
             }
+
         } else {
-            throw new IllegalStateException(String.format("Email %s already exists", user.getUsername()));
+            throw new IllegalStateException(String.format("Email %s already exists", userDto.getEmail()));
         }
     }
 
