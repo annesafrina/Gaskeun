@@ -44,8 +44,8 @@ public class ProviderController {
         log.info("Registering car");
         byte[] image = Base64.encodeBase64(file.getBytes());
         String base64Image = new String(image);
-
         carDto.setBase64image(base64Image);
+
         try {
             providerService.addCar(provider, carDto);
         } catch (IllegalStateException e) {
