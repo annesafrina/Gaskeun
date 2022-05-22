@@ -65,7 +65,6 @@ public class SearchServiceImpl implements SearchService{
     }
 
     private Order createDummyOrder(Date startDate, Date endDate) {
-
         return null;
     }
 }
