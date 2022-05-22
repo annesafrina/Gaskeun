@@ -79,7 +79,7 @@ public class OrderServiceImpl implements OrderService{
         return startDate.before(endDate);
     }
 
-    private boolean isValidDuringDate(Car car, Order order) {
+    public boolean isValidDuringDate(Car car, Order order) {
         List<Order> orderMadeUsingCar = orderRepository.findAllByCar(car);
 
         List<DateRange> unavailableDateRange = OrderUtils.findUnavailableDates(orderMadeUsingCar);
