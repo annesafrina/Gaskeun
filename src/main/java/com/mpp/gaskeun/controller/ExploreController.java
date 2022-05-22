@@ -7,6 +7,7 @@ import com.mpp.gaskeun.repository.LocationRepository;
 import com.mpp.gaskeun.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ public class ExploreController {
     }
 
     @GetMapping
-    public String getCars(
+    public ResponseEntity<List<Car>> getCars(
             Model model,
             @RequestParam(defaultValue = "", name = "budget") long maxPrice,
             @RequestParam(defaultValue = "") Date startDate,
@@ -45,8 +46,6 @@ public class ExploreController {
         Transmission transmission = Transmission.valueOf(transmissionType.toUpperCase());
         List<Car> allCars = searchService.getCars(cityName, startDate, endDate, -1, transmission, 0, maxPrice, modelName);
 
-        model.addAttribute("allCars", allCars);
-
-        return "explore";
+        return ResponseEntity.ok(allCars);
     }
 }

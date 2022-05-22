@@ -108,7 +108,7 @@ public class ProviderServiceImpl implements ProviderService{
      * id, rating, isAvailable, and rentalProvider
      */
     private Car convertDtoToCar(CarDto carDto) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("y-yyy-MMdd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         Location carLocation = locationRepository.findByCityName(carDto.getCityName())
                 .orElse(null);

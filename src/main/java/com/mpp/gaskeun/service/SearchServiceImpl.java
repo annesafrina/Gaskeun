@@ -63,4 +63,8 @@ public class SearchServiceImpl implements SearchService{
 
         return allCars;
     }
+
+    private Order createDummyOrder(Date startDate, Date endDate) {
+        return null;
+    }
 }
