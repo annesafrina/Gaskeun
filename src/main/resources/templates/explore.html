@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/global.css}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" th:href="@{/css/explore.css}" type="text/css">
+    <script defer th:src="@{/js/searchFilter.js}"></script>
+</head>
+<body>
+    <div class="blob"></div>
+    <nav class="nav-main">
+        <section class="nav-section">
+            <h1 class="brand">Gaskeun</h1>
+        </section>
+        <section class="nav-section">
+            <!-- Place holder nya ganti sama apa yang di search kalau client ngakses dari home page-->
+            <form action="" class="custom-search">
+                <div class="custom-search__group">
+                <label for="budget" class="custom-search__label">Budget (Rp)</label>
+                <input id="budget" name="budget" type="number" class="custom-search__input" placeholder="Enter your budget" >
+                </div>
+                <div class="custom-search__group">
+                <label for="startDate" class="custom-search__label">Start Date</label>
+                <input id="startDate" name="startDate" type="date" class="custom-search__input">
+                </div>
+                <div class="custom-search__group">
+                <label for="endDate" class="custom-search__label">End Date</label>
+                <input id="endDate" name="endDate" type="date" class="custom-search__input">
+                </div>
+                <div class="custom-button__container stretch">
+                <button class="custom-search__button"><i class="fa fa-search"></i></button>
+                <div style="width: 10px;"></div>
+                <button id="filter-button" class="custom-search__button"><i class="fa-solid fa-filter"></i></button>
+                </div>
+                <div class="custom-search__filters">
+                    <h4>Filters</h4>
+                    <hr>
+                    <div class="custom-search__filter-group trans-type">
+                        <h5>Transmission:</h5>
+                        <div class="wrapper">
+                            <input type="radio" name="transmissionType" value="manual" id="option-1">
+                            <input type="radio" name="transmissionType" value="automatic" id="option-2">
+                              <label for="option-1" class="option option-1">
+                                 <span>Manual</span>
+                                 </label>
+                              <label for="option-2" class="option option-2">
+                                 <span>Automatic</span>
+                              </label>
+                        </div>
+                    </div>
+                    <div class="custom-search__filter-group">
+                        <h5>Available location</h5>
+                        <div class="autocomplete-search">
+                            <input name="location" type="text" class="custom-search__filter-input" placeholder="Type your desired location">
+                            <div class="recommendation-box">
+                                <ul>
+                                    <!-- ini nanti isinya location2 -->
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="custom-search__filter-group">
+                        <h5>Car Model</h5>
+                        <div class="autocomplete-search">
+                            <input name="model" type="text" class="custom-search__filter-input" placeholder="Type your desired car">
+                            <div class="recommendation-box">
+                                <ul>
+                                    <!-- ini nanti isinya mobil2 -->
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+        <div class="nav-section stretch">
+            <a href="" class="anchor-pill-button">JOIN NOW!</a>
+        </div>
+        <section class="nav-section user-actions">
+            <a href="" class="nav-link"><i class="fa-solid fa-gear"></i></a>
+            <a href="" class="nav-link"><i class="fa-regular fa-user"></i></a>
+        </section>
+        <input class="checkbox" type="checkbox" name="" id="" />
+        <div class="drawer-opener">
+            <div class="bun line-1"></div>
+            <div class="bun line-2"></div>
+            <div class="bun line-3"></div>
+        </div>
+        <div class="drawer">
+            <a href="" class="drawer-link">User Settings <i class="fa-solid fa-gear"></i></a>
+            <a href="" class="drawer-link">My Profile <i class="fa-regular fa-user"></i></a>
+            <div class="drawer-link">
+                <a href="" class="anchor-pill-button">JOIN NOW!</a>
+            </div>
+        </div>
+    </nav>
+    <div class="explore-filter"></div>
+    <div class="car-list">
+        <!-- maximum 4 mobil per row please -->
+
+    </div>
+</body>
+
+</html>
