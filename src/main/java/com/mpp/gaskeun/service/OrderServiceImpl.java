@@ -1,9 +1,11 @@
 package com.mpp.gaskeun.service;
 
 import com.mpp.gaskeun.dto.OrderDto;
+import com.mpp.gaskeun.exception.IllegalUserAccessException;
 import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.OrderRepository;
+import com.mpp.gaskeun.utils.OrderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -53,6 +56,11 @@ public class OrderServiceImpl implements OrderService{
             return isValid;
         }
 
+        if (!isValidDuringDate(car, order)) {
+            isValid[0] = false;
+            isValid[1] = "The car has already been booked for the selected date.";
+        }
+
         return isValid;
     }
 
@@ -69,6 +77,19 @@ public class OrderServiceImpl implements OrderService{
         Date endDate = order.getEndDate();
 
         return startDate.before(endDate);
+    }
+
+    private boolean isValidDuringDate(Car car, Order order) {
+        List<Order> orderMadeUsingCar = orderRepository.findAllByCar(car);
+
+        List<DateRange> unavailableDateRange = OrderUtils.findUnavailableDates(orderMadeUsingCar);
+        for (DateRange dateRange: unavailableDateRange) {
+            if (dateRange.dateInRange(order.getStartDate()) || dateRange.dateInRange(order.getEndDate())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -109,28 +130,15 @@ public class OrderServiceImpl implements OrderService{
     }
 
     private void handleIllegalCustomer(Order order, Customer customer) {
-        if (!order.getCustomer().equals(customer)) {
-            throw new IllegalStateException(String.format("Order %s does not belong to %s", order.getId(), customer.getEmail()));
+        if (order.getCustomer().getId() != customer.getId()) {
+            throw new IllegalUserAccessException(order.getId(), customer.getEmail());
         }
     }
 
     private void handleIllegalProvider(Order order, RentalProvider provider) {
-        RentalProvider actualProvider = order.getCarProvider();
-        if (!actualProvider.equals(provider)) {
-            throw new IllegalStateException(String.format("Order %s is not provided for by %s", order.getId(), provider.getEmail()));
+        if (!verifyOrderOwnership(provider, order)) {
+            throw new IllegalUserAccessException(order.getId(), provider.getEmail());
         }
-
-    }
-
-    public Order getOrderForCustomer(long id, Customer customer) throws NoSuchElementException, IllegalStateException {
-        Order order = orderRepository.getById(id);
-
-
-
-        return order;
-    }
-
-    public Order getOrderForProvider(long id, RentalProvider provider) throws NoSuchElementException, IllegalStateException {
 
     }
 
@@ -167,6 +175,7 @@ public class OrderServiceImpl implements OrderService{
      * @return true if the car used in the order belongs to the provider, false if otherwise
      */
     public boolean verifyOrderOwnership(RentalProvider provider, Order order) {
-        return false;
+        RentalProvider actualProvider = order.getCarProvider();
+        return actualProvider.getId() == provider.getId();
     }
 }
