@@ -1,8 +1,10 @@
 package com.mpp.gaskeun.controller;
 
+import com.mpp.gaskeun.dto.ConfirmOrderDto;
 import com.mpp.gaskeun.dto.OrderDto;
 import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.model.Order;
+import com.mpp.gaskeun.model.OrderStatus;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
@@ -58,5 +60,12 @@ public class OrderController {
         model.addAttribute("order", order);
         model.addAttribute("is-provider", user instanceof RentalProvider);
         return "order_details";
+    }
+
+    @PostMapping("/confirm/{orderId}")
+    public String confirmOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, ConfirmOrderDto confirmOrderDto) {
+        Order order = orderService.getOrder(Long.parseLong(orderId), provider);
+        orderService.confirmOrRejectOrder(provider, order, OrderStatus.WAITING_FOR_PAYMENT, confirmOrderDto.getBookingMessage());
+        return "redirect:/display/" + orderId;
     }
 }

@@ -8,6 +8,7 @@
 </head>
 <body>
     <p th:text="${order.getStartDate()}"></p>
+    <p th:text="${order.getOrderStatus()}"></p>
     <p th:text="${order.getEndDate()}"></p>
     <p th:text="${order.getCustomer().getName()}"></p>
     <p th:text="${order.getCarProvider().getName()}"></p>
