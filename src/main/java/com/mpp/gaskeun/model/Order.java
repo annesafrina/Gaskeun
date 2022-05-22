@@ -42,4 +42,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false)
     private OrderStatus orderStatus;
+
+    public RentalProvider getCarProvider() {
+        return this.car.getRentalProvider();
+    }
 }

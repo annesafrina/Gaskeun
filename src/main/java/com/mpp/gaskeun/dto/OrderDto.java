@@ -7,8 +7,8 @@ import java.util.Date;
 
 @Setter @Getter
 public class OrderDto {
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private String pickUpLocation;
     private String dropOffLocation;
     private String carId;
