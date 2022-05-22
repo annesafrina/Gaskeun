@@ -8,5 +8,5 @@ import java.util.List;
 public interface SearchService {
     public List<Car> getCars();
 
-    List<Car> getCars(Location location, DateRange dateRange, int carCapacity, Transmission transmission, PriceRange priceRange);
+    List<Car> getCars(String cityName, Date startDate, Date endDate, int carCapacity, Transmission transmission, long minPrice, long maxPrice, String modelName);
 }
