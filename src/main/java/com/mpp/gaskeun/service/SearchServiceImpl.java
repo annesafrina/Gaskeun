@@ -3,15 +3,20 @@ package com.mpp.gaskeun.service;
 import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.LocationRepository;
-import com.mpp.gaskeun.repository.OrderRepository;
 import com.mpp.gaskeun.utils.OrderUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Service
+@Slf4j
 public class SearchServiceImpl implements SearchService{
 
     @Autowired
@@ -49,22 +54,44 @@ public class SearchServiceImpl implements SearchService{
      * neglected field will be included as long as it complies to the remaining filters.
      */
     @Override
-    public List<Car> getCars(String cityName, Date startDate, Date endDate, int carCapacity, Transmission transmission, long minPrice, long maxPrice, String modelName) {
-        Order dummyOrder = new Order();
-        dummyOrder.setStartDate(startDate);
-        dummyOrder.setEndDate(endDate);
+    public List<Car> getCars(String cityName, String startDate, String endDate, int carCapacity, String transmission, long minPrice, long maxPrice, String modelName) throws ParseException {
+        Order dummyOrder = createDummyOrder(startDate, endDate);
         Location location = locationRepository.findByCityName(cityName).orElse(null);
-        List<Car> allCars = carRepository.findAll()
+        return carRepository.findAll()
                 .stream()
                 .filter(location != null ? car -> car.getLocation().equals(location) : car -> true)
-                .filter(startDate != null ? car -> orderService.isValidDuringDate(car, dummyOrder) : car -> true)
-
+                .filter(dummyOrder == null ? car -> true : car -> orderService.isValidDuringDate(car, dummyOrder) && orderService.isValidForCar(car, dummyOrder))
+                .filter(carCapacity == -1 ? car -> true : car -> car.getCapacity() == carCapacity)
+                .filter(transmission.length() == 0 ? car -> true : car -> car.getTransmission() == Transmission.valueOf(transmission.toUpperCase()))
+                .filter(car -> car.getPriceRate() >= minPrice && (car.getPriceRate() <= maxPrice || maxPrice == 0))
+                .filter(modelName.length() == 0 ? car -> true : car -> car.getModel().equalsIgnoreCase(modelName))
                 .toList();
-
-        return allCars;
     }
 
-    private Order createDummyOrder(Date startDate, Date endDate) {
-        return null;
+
+    private Order createDummyOrder(String startDate, String endDate) throws ParseException {
+        Date parsedStartDate = null, parsedEndDate = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        if (startDate.length() == 0 && endDate.length() == 0) {
+            return null;
+        } else if (startDate.length() == 0) {
+            parsedEndDate = format.parse(endDate);
+            cal.setTime(parsedEndDate);
+            cal.add(Calendar.DATE, -1);
+            parsedStartDate = cal.getTime();
+        } else if (endDate.length() == 0) {
+            parsedStartDate = format.parse(startDate);
+            cal.setTime(parsedStartDate);
+            cal.add(Calendar.DATE, 1);
+            parsedEndDate = cal.getTime();
+        }
+
+        Order dummyOrder = new Order();
+        dummyOrder.setStartDate(parsedStartDate);
+        dummyOrder.setEndDate(parsedEndDate);
+        log.info("{} {}", parsedStartDate, parsedEndDate);
+
+        return dummyOrder;
     }
 }
