@@ -164,7 +164,18 @@ public class OrderServiceImpl implements OrderService{
      */
     @Override
     public Order confirmOrRejectOrder(RentalProvider provider, Order order, OrderStatus status, String bookingMessage) {
-        return null;
+
+        order.setOrderStatus(status);
+
+        if (bookingMessage.length() != 0 && status == OrderStatus.REJECTED) {
+            throw new IllegalStateException("Please give a reason to reject the order.");
+        }
+
+        if (bookingMessage.length() != 0) {
+            order.setBookingMessage(bookingMessage);
+        }
+
+        return orderRepository.save(order);
     }
 
 

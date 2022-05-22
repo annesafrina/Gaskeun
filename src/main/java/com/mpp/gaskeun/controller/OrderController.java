@@ -27,7 +27,7 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/create/{carId}")
-    public String displayCreateOrder(Model model, @PathVariable("carId") String carId) {
+    public String displayCreateOrder(Model model, @PathVariable("carId") String carId, @AuthenticationPrincipal Customer customer) {
         OrderDto orderDto = new OrderDto();
         orderDto.setCarId(carId);
 
@@ -58,7 +58,7 @@ public class OrderController {
     public String displayIndividualOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user, Model model) {
         Order order = orderService.getOrder(Long.parseLong(orderId), user);
         model.addAttribute("order", order);
-        model.addAttribute("is-provider", user instanceof RentalProvider);
+        model.addAttribute("isProvider", user instanceof RentalProvider);
         return "order_details";
     }
 
@@ -67,5 +67,11 @@ public class OrderController {
         Order order = orderService.getOrder(Long.parseLong(orderId), provider);
         orderService.confirmOrRejectOrder(provider, order, OrderStatus.WAITING_FOR_PAYMENT, confirmOrderDto.getBookingMessage());
         return "redirect:/display/" + orderId;
+    }
+
+    @PostMapping("/reject/{orderId}")
+    public String rejectOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, ConfirmOrderDto confirmOrderDto) {
+        Order order;
+        return "";
     }
 }

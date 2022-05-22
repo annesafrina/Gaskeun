@@ -25,7 +25,7 @@ public class ExploreController {
     @Autowired
     SearchService searchService;
 
-    @GetMapping
+    @GetMapping("/")
     public String getCars(Model model) {
         List<Car> allCars = searchService.getCars();
         model.addAttribute("allCars", allCars);

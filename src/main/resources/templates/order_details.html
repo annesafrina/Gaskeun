@@ -13,5 +13,10 @@
     <p th:text="${order.getCustomer().getName()}"></p>
     <p th:text="${order.getCarProvider().getName()}"></p>
 
+    <div th:if="${isProvider}">
+        <button type="button">Confirm</button>
+        <button type="button">Reject</button>
+    </div>
+
 </body>
 </html>
