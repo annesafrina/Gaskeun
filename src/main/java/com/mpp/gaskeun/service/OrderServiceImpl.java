@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService{
         return isValid;
     }
 
-    private boolean isValidForCar(Car car, Order order) {
+    public boolean isValidForCar(Car car, Order order) {
 
         Date carStartAvailable = car.getAvailableStartDate();
         Date carEndAvailable = car.getAvailableEndDate();
