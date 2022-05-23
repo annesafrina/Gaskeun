@@ -5,7 +5,7 @@
     <title>Car Registration</title>
 </head>
 <body>
-<form action="/provider/register-car" method="post" enctype="multipart/form-data" th:object="${carDto}">
+    <form action="/provider/register-car" method="post" enctype="multipart/form-data" th:object="${carDto}">
         <label>License Plate</label>
         <input type="text" class="form-control" placeholder="License Plate" th:field="*{licensePlate}"><br/>
 

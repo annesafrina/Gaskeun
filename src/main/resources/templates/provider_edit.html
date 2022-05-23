@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Rental Provider Info</title>
+</head>
+<body>
+    <span th:if="${error != null}" th:text="${error}"></span>
+    <h1>Edit Rental Provider</h1>
+    <span>ID:</span><span th:text="${userDto.id}"></span>
+    <br/>
+    <span>Email:</span><span th:text="${userDto.email}"></span>
+    <br/>
+
+    <form th:action="@{/provider/edit}" th:object="${userDto}" method="post">
+        <label>Name:</label>
+        <input th:value="*{name}" th:field="*{name}">
+        <br/>
+
+        <label>Registered Phone Number:</label>
+        <input th:value="*{phone_number}" th:field="*{phone_number}" >
+        <br/>
+
+        <label>Old Password</label>
+        <input type="password" th:field="*{oldPassword}">
+
+        <label>New Password</label>
+        <input type="password" th:field="*{password}">
+        <br/>
+
+        <label>Password Confirmation</label>
+        <input type="password" th:field="*{passwordConfirmation}">
+
+        <button>Save</button>
+    </form>
+</body>
+</html>

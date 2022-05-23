@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Car Listing</title>
+</head>
+<body>
+    <span th:if="${error != null}" th:text="${error}"></span>
+    <div th:if="${carDto != null}">
+        <h3>Edit Car Listing</h3>
+
+        <label>License Plate</label>
+        <span class="form-control" th:text="${carDto.getLicensePlate()}"></span>
+        <br/>
+
+        <label>Model</label>
+        <span class="form-control" th:text="*{carDto.getModel()}"></span>
+        <br/>
+
+        <form action="/provider/update-car" method="post" enctype="multipart/form-data" th:object="${carDto}">
+            <input type="hidden" th:value="*{licensePlate}" th:field="*{licensePlate}">
+            <input type="hidden" th:value="*{model}" th:field="*{model}">
+            <input type="hidden" th:value="*{base64image}" th:field="*{base64image}">
+
+            <label>Price Rate</label>
+            <input type="number"
+                   class="form-control"
+                   placeholder="Price Rate"
+                   th:field="*{priceRate}"
+                   th:value="*{priceRate}"
+            ><br/>
+
+            <label>Capacity</label>
+            <input type="number"
+                   class="form-control"
+                   placeholder="Capacity"
+                   th:field="*{capacity}"
+                   th:value="*{capacity}"
+            ><br/>
+
+            <label>Transmission</label>
+            <select name="Transmission" th:field="*{transmission}">
+                <option selected
+                        th:text="*{transmission}"
+                        th:value="*{transmission}"></option>
+
+                <option th:each="transmission: ${transmissions}"
+                        th:value="${transmission.toString()}"
+                        th:text="${transmission.toString().toLowerCase()}"></option>
+            </select><br/>
+
+            <label>Color</label>
+            <select name="Color" th:field="*{color}">
+                <option selected
+                        th:text="*{color}"
+                        th:value="*{color}"></option>
+
+                <option th:each="color: ${colors}"
+                        th:value="${color.toString()}"
+                        th:text="${color.toString().toLowerCase()}"></option>
+            </select><br/>
+
+            <label>Available Start Date</label>
+            <input type="date"
+                   th:field="*{availableStart}"
+                   th:value="*{availableStart}"
+            ><br/>
+
+            <label>Available End Date</label>
+            <input type="date"
+                   th:field="*{availableEnd}"
+                   th:value="*{availableEnd}"
+            ><br/>
+
+            <label>Location</label>
+            <select name="Location" th:field="*{cityName}">
+                <option selected
+                        th:value="*{cityName}"
+                        th:text="*{cityName}">
+                </option>
+                <option th:each="location: ${locations}"
+                        th:value="${location.getCityName()}"
+                        th:text="${location.getCityName()}">
+                </option>
+            </select><br/>
+
+            <label>Car Description</label><br/>
+            <textarea th:field="*{description}" th:value="*{description}"></textarea><br/>
+
+            <input type="file"
+                   name="car-image"
+                   accept="image/jpeg, image/png"
+            />
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <img th:src="@{'data:image/png;base64,' + ${carDto.getBase64image()}}" >
+</body>
+</html>

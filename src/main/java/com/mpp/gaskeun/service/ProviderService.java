@@ -1,21 +1,10 @@
 package com.mpp.gaskeun.service;
 
-import com.mpp.gaskeun.dto.CarDto;
-import com.mpp.gaskeun.model.Car;
-import com.mpp.gaskeun.model.Location;
+import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.model.RentalProvider;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-import java.text.ParseException;
-import java.util.List;
 
 public interface ProviderService {
+    long getNumberOfCarRegistered(RentalProvider provider);
 
-    Car addCar(RentalProvider provider, CarDto carDto) throws ParseException;
-    Car deleteCar(RentalProvider provider, Car car);
-    Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalStateException;
-    void addPolicy();
-    Location addLocation(Location location);
-    List<Location> getAllLocations();
-
+    RentalProvider update(RentalProvider provider, UserDto userDto);
 }

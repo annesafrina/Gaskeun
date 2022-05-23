@@ -1,10 +1,15 @@
 package com.mpp.gaskeun.controller;
 
 import com.mpp.gaskeun.dto.CarDto;
-import com.mpp.gaskeun.model.*;
+import com.mpp.gaskeun.dto.UserDto;
+import com.mpp.gaskeun.model.Car;
+import com.mpp.gaskeun.model.Color;
+import com.mpp.gaskeun.model.RentalProvider;
+import com.mpp.gaskeun.model.Transmission;
+import com.mpp.gaskeun.service.CarService;
 import com.mpp.gaskeun.service.ProviderService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.hibernate.PropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/provider")
@@ -22,32 +28,82 @@ import java.text.ParseException;
 public class ProviderController {
 
     @Autowired
+    private CarService carService;
+
+    @Autowired
     private ProviderService providerService;
 
-    @GetMapping("/register-car")
-    public String registerCar(Model model) {
-        CarDto dto = new CarDto();
+    @GetMapping("/info")
+    public String getProviderInfo(@AuthenticationPrincipal UserDetails user, Model model) {
+        if(!(user instanceof RentalProvider)) {
+            return "redirect:/";
+        }
 
-        model.addAttribute("carDto", dto);
-        model.addAttribute("colors", Color.values());
-        model.addAttribute("transmissions", Transmission.values());
-        model.addAttribute("locations", providerService.getAllLocations());
+        model.addAttribute("provider", user);
+        model.addAttribute("numCarsOwned", providerService.getNumberOfCarRegistered((RentalProvider) user));
+        return "provider_info";
+    }
+
+    @GetMapping("/edit")
+    public String updateProviderInfo(@AuthenticationPrincipal UserDetails user, Model model) {
+        if(!(user instanceof RentalProvider)) {
+            return "redirect:/";
+        }
+
+        UserDto userDto = new UserDto();
+        userDto.fillDto((RentalProvider) user);
+
+        model.addAttribute("userDto", userDto);
+        return "provider_edit";
+    }
+
+    @PostMapping("/edit")
+    public String updateProviderInfoPost(@AuthenticationPrincipal UserDetails user,
+                                         @ModelAttribute UserDto userDto,
+                                         Model model) {
+
+        if(!(user instanceof RentalProvider)) {
+            return "redirect:/";
+        }
+
+        try {
+            providerService.update((RentalProvider) user, userDto);
+        } catch (IllegalStateException e) {
+            userDto.fillDto((RentalProvider) user);
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("userDto", userDto);
+            return "provider_edit";
+        }
+
+        return "redirect:/provider/info";
+    }
+
+    @GetMapping("/register-car")
+    public String registerCar(@AuthenticationPrincipal UserDetails user, Model model) {
+
+        if (!(user instanceof RentalProvider))
+            return "redirect:/";
+
+        CarDto dto = new CarDto();
+        model.addAllAttributes(Map.of(
+                "carDto", dto,
+                "colors", Color.values(),
+                "transmissions", Transmission.values(),
+                "locations", carService.getAllLocations()
+        ));
+
         return "car_registration";
     }
 
     @PostMapping("/register-car")
-    public String registerCarPost(@AuthenticationPrincipal RentalProvider provider,
+    public String registerCarPost(@AuthenticationPrincipal UserDetails user,
                                   @ModelAttribute CarDto carDto,
-                                  @RequestParam("car-image")MultipartFile file,
+                                  @RequestParam("car-image") MultipartFile imageFile,
                                   Model model) throws IOException, ParseException {
 
-        log.info("Registering car");
-        byte[] image = Base64.encodeBase64(file.getBytes());
-        String base64Image = new String(image);
-        carDto.setBase64image(base64Image);
-
         try {
-            providerService.addCar(provider, carDto);
+            carDto.setImage(imageFile);
+            carService.addCar((RentalProvider) user, carDto);
         } catch (IllegalStateException e) {
             log.error(e.getMessage());
             model.addAttribute("error", e.getMessage());
@@ -56,31 +112,89 @@ public class ProviderController {
         return "redirect:/provider/register-car";
     }
 
-    @GetMapping("/update-car")
-    public String updateCar(@RequestParam("id") Long carId) {
+    @GetMapping("/update-car/{carId}")
+    public String updateCar(
+            @PathVariable("carId") long carId,
+            @AuthenticationPrincipal UserDetails provider,
+            Model model) {
 
-        return null;
+        if (!(provider instanceof RentalProvider))
+            return "redirect:/";
+
+        CarDto carDto = new CarDto();
+
+        try {
+            Car car = carService.getCarById((RentalProvider) provider, carId);
+            carDto.fillDto(car);
+            model.addAllAttributes(Map.of(
+                    "carDto", carDto,
+                    "colors", Color.values(),
+                    "transmissions", Transmission.values(),
+                    "locations", carService.getAllLocations()
+            ));
+            log.info("Car found {}", car.getLicensePlate());
+        } catch (IllegalStateException e) {
+            log.error(e.getMessage());
+            model.addAttribute("error", e.getMessage());
+        }
+
+        return "car_edit_listing";
+    }
+
+
+    @PostMapping("/update-car")
+    public String updateCarPost(
+            @AuthenticationPrincipal UserDetails user,
+            @RequestParam("car-image") MultipartFile imageFile,
+            @ModelAttribute CarDto carDto,
+            Model model) {
+
+        if (!(user instanceof RentalProvider))
+            return "redirect:/";
+
+        try {
+            log.info("Received car with license {}", carDto.getLicensePlate());
+            carDto.setImage(imageFile);
+            carService.updateCar((RentalProvider) user, carDto);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("carDto", carDto);
+
+            return "car_edit_listing";
+        }
+
+        return "redirect:/provider/car-detail/" + carDto.getLicensePlate();
     }
 
     @GetMapping("/car-detail/{licensePlate}")
     public String displayCar(
             @PathVariable("licensePlate") String licensePlate,
-            @AuthenticationPrincipal UserDetails provider,
+            @AuthenticationPrincipal UserDetails user,
             Model model) {
 
-        if(!(provider instanceof RentalProvider))
+        if (!(user instanceof RentalProvider))
             return "redirect:/";
 
         try {
-            Car car = providerService.getCarByLicensePlate((RentalProvider) provider, licensePlate);
-            log.info("Get: {}, Expected: {}", car.getLicensePlate(), licensePlate);
+            Car car = carService.getCarByLicensePlate((RentalProvider) user, licensePlate);
             model.addAttribute("car", car);
-
-        } catch (IllegalStateException e){
+        } catch (IllegalStateException | PropertyValueException e) {
             log.error(e.getMessage());
             model.addAttribute("error", e.getMessage());
         }
 
         return "car_display_provider";
+    }
+
+    @GetMapping("/cars")
+    public String displayAllCars(@AuthenticationPrincipal UserDetails user, Model model) {
+        if (!(user instanceof RentalProvider)) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("cars", carService.getAllCar((RentalProvider) user));
+
+        return "all_cars";
     }
 }
