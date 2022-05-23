@@ -4,19 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script defer th:src="@{/js/confirmOrder.js}"></script>
     <title>Order Details</title>
 </head>
 <body>
-    <p th:text="${order.getStartDate()}"></p>
-    <p th:text="${order.getOrderStatus()}"></p>
-    <p th:text="${order.getEndDate()}"></p>
-    <p th:text="${order.getCustomer().getName()}"></p>
-    <p th:text="${order.getCarProvider().getName()}"></p>
+    <main class="container" th:attr="data-order-id=${order.getId()}">
+        <p th:text="${order.getStartDate()}"></p>
+        <p id="status" th:text="${orderStatusCleaned}"></p>
+        <p th:if="${isRejected && !isProvider}" th:text="${order.getBookingMessage()}"></p>
+        <p th:text="${order.getEndDate()}"></p>
+        <p th:text="${order.getCustomer().getName()}"></p>
+        <p th:text="${order.getCarProvider().getName()}"></p>
+    
+        <div th:if="${isProvider && isPending}">
+            <div>
+                <label for="booking-msg">Details</label>
+                <textarea id="booking-msg"></textarea>
+            </div>
+            <button id="button-confirm" type="button">Confirm</button>
+            <button id="button-reject" type="button">Reject</button>
+        </div>
 
-    <div th:if="${isProvider}">
-        <button type="button">Confirm</button>
-        <button type="button">Reject</button>
-    </div>
+        <div>
+            <button id="button-pay" th:if="${isWaitingForPayment && isProvider}" type="button">Accept Payment</button>
+            <button id="button-complete" th:if="${isActive && !isProvider}" type="button">Complete</button>
+        </div>
+    </main>
 
 </body>
 </html>

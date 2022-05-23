@@ -5,13 +5,10 @@ import com.mpp.gaskeun.model.Order;
 import com.mpp.gaskeun.model.OrderStatus;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.repository.OrderRepository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.event.annotation.BeforeTestMethod;
 
@@ -48,7 +45,8 @@ class OrderServiceImplTest {
         car.setRentalProvider(rentalProvider);
         order.setCar(car);
 
-        boolean isOwner = (boolean) publicVerifyOrderOwnership.invoke(orderService, rentalProvider, order);
+
+        boolean isOwner = orderService.verifyOrderOwnership(rentalProvider, order);
 
         assertTrue(isOwner);
     }
@@ -56,46 +54,60 @@ class OrderServiceImplTest {
     @Test
     void whenOrderNullAndNotOwnedByProvider_mustReturnFalse() throws InvocationTargetException, IllegalAccessException {
         var rentalProvider = new RentalProvider();
-        boolean isOwner = (boolean) publicVerifyOrderOwnership.invoke(orderService, rentalProvider, null);
+        boolean isOwner = orderService.verifyOrderOwnership(rentalProvider, null);
         assertFalse(isOwner);
     }
 
     @Test
     void whenOrderNotNullAndNotOwnedByProvider_mustReturnFalse() throws InvocationTargetException, IllegalAccessException {
         var rentalProviderA = new RentalProvider();
+        rentalProviderA.setId(1);
+
         var rentalProviderB = new RentalProvider();
+        rentalProviderB.setId(2);
+
         var car = new Car();
         var order = new Order();
 
         car.setRentalProvider(rentalProviderA);
         order.setCar(car);
 
-        boolean isOwner = (boolean) publicVerifyOrderOwnership.invoke(orderService, rentalProviderB, order);
+        boolean isOwner = orderService.verifyOrderOwnership(rentalProviderB, order);
         assertFalse(isOwner);
     }
 
     @Test
-    void whenBookingMessageIsNullAndStatusRejected_shouldSaveObjectToDatabaseAndReturnCorrectly() {
+    void whenBookingMessageIsNullAndStatusRejected_throwsError() {
         String bookingMessage = null;
         var status = OrderStatus.REJECTED;
         var provider = new RentalProvider();
         var order = new Order();
 
-        var result = orderService.confirmOrRejectOrder(provider, order, status, bookingMessage);
-
-        verify(repository, times(1)).save(order);
-        assertEquals(status, result.getOrderStatus());
-        assertEquals(bookingMessage, result.getBookingMessage());
+        assertThrows(IllegalStateException.class, () -> {
+            orderService.setOrderStatus(provider, order, status, bookingMessage);
+        });
     }
 
     @Test
-    void whenBookingMessageIsEmptyAndStatusRejected() {
+    void whenBookingMessageIsEmptyAndStatusRejected_throwsError() {
         String bookingMessage = "";
         var status = OrderStatus.REJECTED;
         var provider = new RentalProvider();
         var order = new Order();
 
-        var result = orderService.confirmOrRejectOrder(provider, order, status, bookingMessage);
+        assertThrows(IllegalStateException.class, () -> {
+            orderService.setOrderStatus(provider, order, status, bookingMessage);
+        });
+    }
+
+    @Test
+    void whenBookingMessageNotEmptyAndStatusRejected_savesNewStatusToRepository() {
+        String bookingMessage = "Weeeee";
+        var status = OrderStatus.REJECTED;
+        var provider = new RentalProvider();
+        var order = new Order();
+
+        var result = orderService.setOrderStatus(provider, order, status, bookingMessage);
 
         verify(repository, times(1)).save(order);
         assertEquals(status, result.getOrderStatus());
@@ -103,22 +115,44 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void whenBookingMessageNotEmptyAndStatusRejected() {
+    void whenBookingMessageNullAndStatusWaitingForPayment_savesStatusToRepository() {
+        String bookingMessage = null;
+        var status = OrderStatus.WAITING_FOR_PAYMENT;
+        var provider = new RentalProvider();
+        var order = new Order();
 
+        var result = orderService.setOrderStatus(provider, order, status, bookingMessage);
+
+        verify(repository, times(1)).save(order);
+        assertEquals(status, result.getOrderStatus());
+        assertEquals(bookingMessage, result.getBookingMessage());
     }
 
     @Test
-    void whenBookingMessageNullAndStatusWaitingForPayment() {
+    void whenBookingMessageEmptyAndStatusWaitingForPayment_savesStatusToRepository() {
+        String bookingMessage = "";
+        var status = OrderStatus.WAITING_FOR_PAYMENT;
+        var provider = new RentalProvider();
+        var order = new Order();
 
+        var result = orderService.setOrderStatus(provider, order, status, bookingMessage);
+
+        verify(repository, times(1)).save(order);
+        assertEquals(status, result.getOrderStatus());
+        assertEquals(null, result.getBookingMessage());
     }
 
     @Test
-    void whenBookingMessageEmptyAndStatusWaitingForPayment() {
+    void whenBookingMessageNotEmptyAndStatusWaitingForPayment_savesStatusToRepository() {
+        String bookingMessage = "Bwrelebek";
+        var status = OrderStatus.REJECTED;
+        var provider = new RentalProvider();
+        var order = new Order();
 
-    }
+        var result = orderService.setOrderStatus(provider, order, status, bookingMessage);
 
-    @Test
-    void whenBookingMessageNotEmptyAndStatusWaitingForPayment() {
-
+        verify(repository, times(1)).save(order);
+        assertEquals(status, result.getOrderStatus());
+        assertEquals(bookingMessage, result.getBookingMessage());
     }
 }
