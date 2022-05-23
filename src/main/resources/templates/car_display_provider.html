@@ -60,8 +60,7 @@
         <br/>
 
         <img th:src="@{'data:image/png;base64,' + ${car.getPicture()}}" >
-
-        <button th:onclick="'window.location.href=\'/provider/update-car/' + ${car.getId()} + '\''">Edit</button>
+        <a th:href="@{/provider/update-car/{carId}(carId=${car.getId()})}">Edit</a>
     </div>
 </body>
 </html>

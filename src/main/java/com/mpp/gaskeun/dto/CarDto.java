@@ -38,17 +38,13 @@ public class CarDto {
         base64image = car.getPicture();
         description = car.getDescription();
         cityName = car.getLocationName();
-
-        log.info("IMG {}",base64image);
     }
 
     public void setImage(MultipartFile imageFile) throws IOException {
-        log.info("BEFORE {}", base64image.isBlank());
         if(imageFile != null && !imageFile.isEmpty()) {
             byte[] image = Base64.encodeBase64(imageFile.getBytes());
             this.base64image = new String(image);
         }
-        log.info("AFTER {}", base64image.isBlank());
     }
 
     public boolean isComplete() {

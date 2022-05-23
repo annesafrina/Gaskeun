@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rental Provider Details</title>
+</head>
+<body>
+    <h1>Rental Provider Details</h1>
+    <span>ID:</span><span th:text="${provider.id}"></span>
+    <br/>
+    <span>Email:</span><span th:text="${provider.email}"></span>
+    <br/>
+    <span>Name:</span><span th:text="${provider.name}"></span>
+    <br/>
+    <span>Performance Rating:</span><span th:text="${provider.performanceRating}"></span>
+    <br/>
+    <span>Registered Phone Number:</span><span th:text="${provider.phoneNumber}"></span>
+    <br/>
+    <span>Number of Cars Registered:</span><span th:text="${numCarsOwned}"></span><br/>
+
+    <a th:href="@{/provider/edit}">Edit</a>
+</body>
+</html>

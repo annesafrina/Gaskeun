@@ -75,4 +75,8 @@ public class Car {
     public String getColorName() {
         return color.toString();
     }
+
+    public boolean providerIsOwner(RentalProvider provider) {
+        return this.rentalProvider.equals(provider);
+    }
 }
