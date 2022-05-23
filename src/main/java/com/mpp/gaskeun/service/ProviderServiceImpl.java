@@ -1,13 +1,13 @@
 package com.mpp.gaskeun.service;
 
 import com.mpp.gaskeun.dto.CarDto;
+import com.mpp.gaskeun.exception.CarDoesNotExistException;
+import com.mpp.gaskeun.exception.IncompleteFormException;
+import com.mpp.gaskeun.exception.NotCarOwnerException;
 import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.LocationRepository;
-import com.mpp.gaskeun.repository.ProviderRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 @Slf4j
 public class ProviderServiceImpl implements ProviderService{
 
@@ -26,71 +25,95 @@ public class ProviderServiceImpl implements ProviderService{
     private LocationRepository locationRepository;
 
     @Autowired
-    private ProviderRepository providerRepository;
-
-    @Autowired
     private CarRepository carRepository;
 
-    @Override
-    public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException {
-        /* Logic implementation before adding car to the repository */
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        Car newCar = convertDtoToCar(carDto);
-        Date startDate = newCar.getAvailableStartDate();
-        Date endDate = newCar.getAvailableEndDate();
-
-        /* Check if the date range is invalid */
-        if(startDate.after(endDate)) {
-            throw new IllegalStateException("Available start date should not be after available end date");
-        }
-
-        if(carRepository.findCarByLicensePlate(newCar.getLicensePlate()).isPresent()) {
-            throw new IllegalStateException(
-                    String.format("Car with license plate %s has been registered",
-                            newCar.getLicensePlate()));
-        }
-
-        boolean todayIsInBetweenDateRange = new Date().after(startDate) && new Date().before(endDate);
-
-        newCar.setAvailable(todayIsInBetweenDateRange);
-        newCar.setRentalProvider(provider);
-
-        Car saved = carRepository.save(newCar);
-
-        log.info(saved.getLicensePlate());
-        return newCar;
+    public boolean isCurrentlyAvailable(CarDto carDto) throws ParseException {
+        Date today = new Date();
+        Date startDate = dateFormatter.parse(carDto.getAvailableStart());
+        Date endDate = dateFormatter.parse(carDto.getAvailableEnd());
+        return today.after(startDate) && today.before(endDate);
     }
 
     @Override
-    public Car deleteCar(RentalProvider provider, Car car) {
+    public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException {
+        if(isValidCarRegistration(carDto, true)) {
+            Car car = new Car();
+            initCarData(carDto, car);
+            car.setRentalProvider(provider);
+
+            log.info("Saved car {} in repository", car.getLicensePlate());
+            return carRepository.save(car);
+        }
+
         return null;
     }
 
     @Override
-    public Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalStateException {
-        Car car = carRepository.findCarByLicensePlate(licensePlate).orElseThrow(IllegalStateException::new);
+    public Car updateCar(RentalProvider provider, CarDto carDto) throws ParseException, CarDoesNotExistException {
+        if(isValidCarRegistration(carDto, false)) {
+            Car car = carRepository
+                    .findCarByLicensePlate(carDto.getLicensePlate())
+                    .orElseThrow(() -> new CarDoesNotExistException(carDto.getLicensePlate()));
+            initCarData(carDto, car);
 
-        if(!checkCarOwnership(provider, car)) {
-            throw new IllegalStateException(String.format("Car with license %s does not belong to %s",
-                    licensePlate, provider.getEmail()));
+            if(providerIsNotCarOwner(provider, car))
+                throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
+
+            log.info("Updated car {} in repository", car.getLicensePlate());
+            return carRepository.save(car);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Car deleteCar(RentalProvider provider, String licensePlate) {
+        Car car = carRepository
+                .findCarByLicensePlate(licensePlate)
+                .orElseThrow(() -> new CarDoesNotExistException(licensePlate));
+
+        if(providerIsNotCarOwner(provider, car))
+            throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
+
+        carRepository.delete(car);
+        log.info("Car {} deleted from repository", car.getLicensePlate());
+        return car;
+    }
+
+    @Override
+    public Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws NotCarOwnerException {
+        Car car = carRepository
+                .findCarByLicensePlate(licensePlate)
+                .orElseThrow(() -> new CarDoesNotExistException(licensePlate));
+
+        if(providerIsNotCarOwner(provider, car)) {
+           throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
         }
 
         return car;
     }
 
     @Override
-    public void addPolicy() {
+    public Car getCarById(RentalProvider provider, long id) throws NotCarOwnerException, CarDoesNotExistException {
+        Car car = carRepository
+                .findById(id)
+                .orElseThrow(() -> new CarDoesNotExistException(id));
 
+        if(providerIsNotCarOwner(provider, car)) {
+            throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
+        }
+
+        return car;
     }
 
     @Override
     public Location addLocation(Location location) {
         boolean exists = locationRepository.findByCityName(location.getCityName()).isPresent();
-
         if(location.getCityName().isBlank() || exists) {
             throw new IllegalStateException("Location has been registered or blank.");
         }
-
         return locationRepository.save(location);
     }
 
@@ -99,21 +122,38 @@ public class ProviderServiceImpl implements ProviderService{
         return locationRepository.findAll(Sort.by(Sort.Direction.ASC, "cityName"));
     }
 
-    private boolean checkCarOwnership(RentalProvider provider, Car car) {
-        return car.getRentalProvider().equals(provider);
+    private boolean isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalStateException {
+        Date startDate = dateFormatter.parse(carDto.getAvailableStart());
+        Date endDate = dateFormatter.parse(carDto.getAvailableEnd());
+
+        log.info("CarDto is valid? {}", carDto.isComplete());
+        if(!carDto.isComplete()) {
+            throw new IncompleteFormException();
+        }
+
+        if(startDate.after(endDate))
+            throw new IllegalStateException("Available start date should not be after available end date");
+
+        if(isNew && carRepository.findCarByLicensePlate(carDto.getLicensePlate()).isPresent())
+            throw new IllegalStateException(
+                    String.format("Car with license plate %s has been registered", carDto.getLicensePlate()));
+
+        return true;
+    }
+
+    private boolean providerIsNotCarOwner(RentalProvider provider, Car car) {
+        return !car.getRentalProvider().equals(provider);
     }
 
     /**
      * Popular Car entity with all attributes except
      * id, rating, isAvailable, and rentalProvider
      */
-    private Car convertDtoToCar(CarDto carDto) throws ParseException {
+    private void initCarData(CarDto carDto, Car car) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
         Location carLocation = locationRepository.findByCityName(carDto.getCityName())
-                .orElse(null);
+                .orElseThrow(() -> new IllegalStateException("Invalid City Name inserted"));
 
-        Car car = new Car();
         car.setLicensePlate(carDto.getLicensePlate());
         car.setCapacity(carDto.getCapacity());
         car.setColor(Color.valueOf(carDto.getColor()));
@@ -125,9 +165,7 @@ public class ProviderServiceImpl implements ProviderService{
         car.setLocation(carLocation);
         car.setPicture(carDto.getBase64image());
         car.setDescription(carDto.getDescription());
-
-        return car;
+        car.setAvailable(isCurrentlyAvailable(carDto));
     }
-
 
 }

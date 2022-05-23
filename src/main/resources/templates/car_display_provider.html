@@ -6,60 +6,62 @@
 </head>
 <body>
     <h3>Car Details</h3>
-    <label>Car ID:</label>
-    <span th:text="${car.getId()}"></span>
+    <div th:if="${car != null}">
+        <label>Car ID:</label>
+        <span th:text="${car.getId()}"></span>
 
-    <label>License Plate:</label>
-    <span th:text="${car.getLicensePlate()}"></span>
-    <br/>
+        <label>License Plate:</label>
+        <span th:text="${car.getLicensePlate()}"></span>
+        <br/>
 
-    <label>Capacity:</label>
-    <span th:text="${car.getCapacity()}"></span>
-    <br/>
+        <label>Capacity:</label>
+        <span th:text="${car.getCapacity()}"></span>
+        <br/>
 
-    <label>Color:</label>
-    <span th:text="${car.getColorName()}"></span>
-    <br/>
+        <label>Color:</label>
+        <span th:text="${car.getColorName()}"></span>
+        <br/>
 
-    <label>Transmission:</label>
-    <span th:text="${car.getTransmissionName()}"></span>
-    <br/>
+        <label>Transmission:</label>
+        <span th:text="${car.getTransmissionName()}"></span>
+        <br/>
 
-    <label>Rating:</label>
-    <span th:text="${car.getRating()}"></span>
-    <br/>
+        <label>Rating:</label>
+        <span th:text="${car.getRating()}"></span>
+        <br/>
 
-    <label>Availability Status:</label>
-    <span th:if="${car.isAvailable()}" th:text="Available"></span>
-    <span th:unless="${car.isAvailable()}" th:text="Not Available"></span>
-    <br/>
+        <label>Availability Status:</label>
+        <span th:if="${car.isAvailable()}" th:text="Available"></span>
+        <span th:unless="${car.isAvailable()}" th:text="Not Available"></span>
+        <br/>
 
-    <label>Available Start Date:</label>
-    <span th:text="${#dates.format(car.getAvailableStartDate(), 'dd-MM-yyyy')}"></span>
-    <br/>
+        <label>Available Start Date:</label>
+        <span th:text="${#dates.format(car.getAvailableStartDate(), 'dd-MM-yyyy')}"></span>
+        <br/>
 
-    <label>Available End Date:</label>
-    <span th:text="${#dates.format(car.getAvailableEndDate(), 'dd-MM-yyyy')}"></span>
-    <br/>
+        <label>Available End Date:</label>
+        <span th:text="${#dates.format(car.getAvailableEndDate(), 'dd-MM-yyyy')}"></span>
+        <br/>
 
-    <label>Price Rate:</label>
-    <span th:text="${car.getPriceRate()}"></span>
-    <br/>
+        <label>Price Rate:</label>
+        <span th:text="${car.getPriceRate()}"></span>
+        <br/>
 
-    <label>Model:</label>
-    <span th:text="${car.getModel()}"></span>
-    <br/>
+        <label>Model:</label>
+        <span th:text="${car.getModel()}"></span>
+        <br/>
 
-    <label>Location:</label>
-    <span th:text="${car.getLocationName()}"></span>
-    <br/>
+        <label>Location:</label>
+        <span th:text="${car.getLocationName()}"></span>
+        <br/>
 
-    <label>Description:</label>
-    <span th:text="${car.getDescription()}"></span>
-    <br/>
+        <label>Description:</label>
+        <span th:text="${car.getDescription()}"></span>
+        <br/>
 
-    <img th:src="@{'data:image/png;base64,' + ${car.getPicture()}}" >
+        <img th:src="@{'data:image/png;base64,' + ${car.getPicture()}}" >
 
-    <button th:onclick="'window.location.href=\'/provider/register-car?id=' + ${car.getId()} + '\''">Edit</button>
+        <button th:onclick="'window.location.href=\'/provider/update-car/' + ${car.getId()} + '\''">Edit</button>
+    </div>
 </body>
 </html>
