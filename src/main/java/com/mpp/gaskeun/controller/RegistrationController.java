@@ -41,17 +41,8 @@ public class RegistrationController {
             return "customer_registration";
         }
 
-        Customer newCustomer = new Customer();
-        newCustomer.setEmail(customerDto.getEmail());
-        newCustomer.setPassword(customerDto.getPassword());
-        newCustomer.setDrivingLicenseNumber(customerDto.getDriving_license());
-        newCustomer.setIdCardNumber(customerDto.getId_card());
-        newCustomer.setName(customerDto.getName());
-        newCustomer.setPhoneNumber(customerDto.getPhone_number());
-
         try {
-            authenticationService.register(newCustomer);
-
+            authenticationService.register(customerDto);
         } catch (IllegalStateException e) {
             model.addAttribute("error", e.getMessage());
             return "customer_registration";
@@ -74,13 +65,8 @@ public class RegistrationController {
             return "customer_registration";
         }
 
-        RentalProvider newProvider = new RentalProvider();
-        newProvider.setEmail(providerDto.getEmail());
-        newProvider.setName(providerDto.getName());
-        newProvider.setPassword(providerDto.getPassword());
-
         try {
-            authenticationService.register(newProvider);
+            authenticationService.register(providerDto);
         } catch (IllegalStateException e) {
             model.addAttribute("error", e.getMessage());
             return "provider_registration";

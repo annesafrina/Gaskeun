@@ -101,10 +101,6 @@ public class ProviderController {
                                   @RequestParam("car-image") MultipartFile imageFile,
                                   Model model) throws IOException, ParseException {
 
-        if (!(user instanceof RentalProvider)) {
-            return "redirect:/";
-        }
-
         try {
             carDto.setImage(imageFile);
             carService.addCar((RentalProvider) user, carDto);

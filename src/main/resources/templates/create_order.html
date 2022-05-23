@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Order</title>
+</head>
+<body>
+    <div>
+        <p th:if="${error != null}" th:text="${error}"></p>
+    </div>
+    <form action="/order/create" method="POST" th:object="${orderDto}">
+        <input type="hidden" th:field="*{carId}">
+        <div>
+            <input required id="start-date" type="date" th:field="*{startDate}">
+            <label for="start-date">Start Date</label>
+        </div>
+        <div>
+            <input required id="end-date" type="date" th:field="*{endDate}">
+            <label for="end-date">End Date</label>
+        </div>
+        <div>
+            <textarea required id="pickup-location" th:field="*{pickUpLocation}"></textarea>
+            <label for="pickup-location">Pickup Location</label>
+        </div>
+        <div>
+            <textarea required id="dropoff-location" th:field="*{dropOffLocation}"></textarea>
+            <label for="dropoff-location">Dropoff Location</label>
+        </div>
+        <button type="submit">Create Order</button>
+    </form>
+</body>
+</html>

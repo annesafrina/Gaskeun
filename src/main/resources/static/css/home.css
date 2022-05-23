@@ -61,7 +61,6 @@
     display: flex;
     background-color: white;
     width: fit-content;
-    height: fit-content;
     box-sizing: border-box;
     padding-right: 10px;
     height: 80px;
@@ -69,6 +68,7 @@
     border-radius: 50px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     margin: 0 4rem;
+    position: relative;
 }
 
 .custom-search__group {
