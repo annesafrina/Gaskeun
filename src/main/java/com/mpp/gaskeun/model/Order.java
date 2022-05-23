@@ -46,4 +46,5 @@ public class Order {
     public RentalProvider getCarProvider() {
         return this.car.getRentalProvider();
     }
+
 }

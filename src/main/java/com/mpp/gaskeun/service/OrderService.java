@@ -4,12 +4,10 @@ import com.mpp.gaskeun.dto.OrderDto;
 import com.mpp.gaskeun.model.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Date;
-
 public interface OrderService {
     Object[] validateOrder(Car car, Order order);
     Order createOrder(Customer customer, OrderDto orderDto) throws Exception;
     Order getOrder(long id, UserDetails user);
     void cancelOrder(Customer customer, Order order);
-    Order confirmOrRejectOrder(RentalProvider provider, Order order, OrderStatus status, String bookingMessage);
+    Order setOrderStatus(RentalProvider provider, Order order, OrderStatus status, String bookingMessage);
 }

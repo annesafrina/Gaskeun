@@ -2,6 +2,7 @@ package com.mpp.gaskeun.controller;
 
 import com.mpp.gaskeun.dto.ConfirmOrderDto;
 import com.mpp.gaskeun.dto.OrderDto;
+import com.mpp.gaskeun.exception.IllegalUserAccessException;
 import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.model.Order;
 import com.mpp.gaskeun.model.OrderStatus;
@@ -9,14 +10,15 @@ import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.NoSuchElementException;
 
 @Controller
 @Slf4j
@@ -58,20 +60,48 @@ public class OrderController {
     public String displayIndividualOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user, Model model) {
         Order order = orderService.getOrder(Long.parseLong(orderId), user);
         model.addAttribute("order", order);
+
         model.addAttribute("isProvider", user instanceof RentalProvider);
+        model.addAttribute("isRejected", order.getOrderStatus() == OrderStatus.REJECTED);
+        model.addAttribute("isPending", order.getOrderStatus() == OrderStatus.PENDING);
+        model.addAttribute("isWaitingForPayment", order.getOrderStatus() == OrderStatus.WAITING_FOR_PAYMENT);
+        model.addAttribute("isActive", order.getOrderStatus() == OrderStatus.ACTIVE);
+        model.addAttribute("orderStatusCleaned", order.getOrderStatus().toString().replaceAll("_", " "));
         return "order_details";
     }
 
-    @PostMapping("/confirm/{orderId}")
-    public String confirmOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, ConfirmOrderDto confirmOrderDto) {
-        Order order = orderService.getOrder(Long.parseLong(orderId), provider);
-        orderService.confirmOrRejectOrder(provider, order, OrderStatus.WAITING_FOR_PAYMENT, confirmOrderDto.getBookingMessage());
-        return "redirect:/display/" + orderId;
+    private ResponseEntity<?> confirmOrRejectUtils(long id, RentalProvider provider, ConfirmOrderDto confirmOrderDto, OrderStatus status) {
+       try {
+           Order order = orderService.getOrder(id, provider);
+           orderService.setOrderStatus(provider, order, status, confirmOrderDto.getBookingMessage());
+           return ResponseEntity.ok(order);
+       } catch (IllegalUserAccessException e) {
+           return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+       } catch (NoSuchElementException e) {
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+       } catch (IllegalStateException e) {
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+       }
     }
 
-    @PostMapping("/reject/{orderId}")
-    public String rejectOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, ConfirmOrderDto confirmOrderDto) {
-        Order order;
-        return "";
+
+    @PostMapping("/confirm/{orderId}")
+    public ResponseEntity<?> confirmOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), provider, confirmOrderDto, OrderStatus.WAITING_FOR_PAYMENT);
+    }
+
+    @PostMapping(value = "/reject/{orderId}")
+    public ResponseEntity<?> rejectOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), provider, confirmOrderDto, OrderStatus.REJECTED);
+    }
+
+    @PostMapping(value = "/pay/{orderId}")
+    public ResponseEntity<?> payOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), provider, confirmOrderDto, OrderStatus.ACTIVE);
+    }
+
+    @PostMapping(value = "/complete/{orderId}")
+    public ResponseEntity<?> completeOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), provider, confirmOrderDto, OrderStatus.COMPLETED);
     }
 }
