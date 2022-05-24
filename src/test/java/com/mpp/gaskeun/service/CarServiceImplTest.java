@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -273,9 +274,7 @@ class CarServiceImplTest {
     void whenLocationExists_mustNotSaveAndThrowIllegalArgumentException() {
         when(locationRepository.findByCityName(location.getCityName())).thenReturn(Optional.of(location));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            carService.addLocation(location);
-        });
+        assertThrows(IllegalArgumentException.class, () -> carService.addLocation(location));
     }
 
     @Test
@@ -283,9 +282,7 @@ class CarServiceImplTest {
         long carId = 0;
         when(carRepository.findById(carId)).thenReturn(Optional.empty());
 
-        assertThrows(CarDoesNotExistException.class, () -> {
-            carService.getCarById(firstProvider, carId);
-        });
+        assertThrows(CarDoesNotExistException.class, () -> carService.getCarById(firstProvider, carId));
     }
 
     @Test
@@ -297,9 +294,7 @@ class CarServiceImplTest {
 
         when(carRepository.findById(id)).thenReturn(Optional.of(car));
 
-        assertThrows(NotCarOwnerException.class, () -> {
-            carService.getCarById(secondProvider, id);
-        });
+        assertThrows(NotCarOwnerException.class, () -> carService.getCarById(secondProvider, id));
     }
 
     @Test
@@ -319,9 +314,7 @@ class CarServiceImplTest {
     void whenCarWithLicenseNotExists_mustThrowCarDoesNotExistException() {
         when(carRepository.findCarByLicensePlate(LICENSE_PLATE)).thenReturn(Optional.empty());
 
-        assertThrows(CarDoesNotExistException.class, () -> {
-           carService.getCarByLicensePlate(firstProvider, LICENSE_PLATE);
-        });
+        assertThrows(CarDoesNotExistException.class, () -> carService.getCarByLicensePlate(firstProvider, LICENSE_PLATE));
     }
 
     @Test
@@ -332,9 +325,7 @@ class CarServiceImplTest {
 
         when(carRepository.findCarByLicensePlate(LICENSE_PLATE)).thenReturn(Optional.of(car));
 
-        assertThrows(NotCarOwnerException.class, () -> {
-            carService.getCarByLicensePlate(secondProvider, LICENSE_PLATE);
-        });
+        assertThrows(NotCarOwnerException.class, () -> carService.getCarByLicensePlate(secondProvider, LICENSE_PLATE));
     }
 
     @Test
@@ -359,9 +350,7 @@ class CarServiceImplTest {
 
         isValidCarRegistration.setAccessible(true);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-           carService.addCar(firstProvider, carDto);
-        });
+        assertThrows(IllegalArgumentException.class, () -> carService.addCar(firstProvider, carDto));
     }
 
     @Test
@@ -374,9 +363,7 @@ class CarServiceImplTest {
     @Test
     void whenCarRegistrationIsInvalid_mustThrowIllegalArgumentException() {
         CarDto carDto = new CarDto();
-        assertThrows(IllegalArgumentException.class, () -> {
-           carService.updateCar(firstProvider, carDto);
-        });
+        assertThrows(IllegalArgumentException.class, () -> carService.updateCar(firstProvider, carDto));
     }
 
     @Test
@@ -386,9 +373,7 @@ class CarServiceImplTest {
 
         when(locationRepository.findByCityName(validCarDto.getCityName())).thenReturn(Optional.of(new Location()));
         when(carRepository.findCarByLicensePlate(validCarDto.getLicensePlate())).thenReturn(Optional.of(carNotOwned));
-        assertThrows(NotCarOwnerException.class, () -> {
-            carService.updateCar(firstProvider, validCarDto);
-        });
+        assertThrows(NotCarOwnerException.class, () -> carService.updateCar(firstProvider, validCarDto));
     }
 
     @Test
@@ -399,6 +384,28 @@ class CarServiceImplTest {
         when(locationRepository.findByCityName(validCarDto.getCityName())).thenReturn(Optional.of(new Location()));
         carService.updateCar(firstProvider, validCarDto);
         verify(carRepository, times(1)).save(any(Car.class));
+    }
+
+    @Test
+    void whenRepositoryEmpty_mustReturnEmptyList() {
+        when(locationRepository.findAll(Sort.by(Sort.Direction.ASC, "cityName"))).thenReturn(List.of());
+        assertEquals(List.of(), carService.getAllLocations());
+    }
+
+    @Test
+    void whenRepositoryNotEmpty_mustReturnAll() {
+        Location location1 = new Location();
+        location1.setCityName("A");
+
+        Location location2 = new Location();
+        location2.setCityName("B");
+
+        Location location3 = new Location();
+        location3.setCityName("C");
+
+        List<Location> locations = List.of(location1, location2, location3);
+        when(locationRepository.findAll(Sort.by(Sort.Direction.ASC, "cityName"))).thenReturn(locations);
+        assertEquals(locations, carService.getAllLocations());
     }
 
 

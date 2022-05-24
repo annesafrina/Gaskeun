@@ -26,6 +26,7 @@ public class UserDto {
     }
 
     public boolean isValid() {
-        return !name.isBlank() && !phone_number.isBlank();
+        return !(name == null || name.isBlank()) &&
+                !(phone_number == null || phone_number.isBlank());
     }
 }
