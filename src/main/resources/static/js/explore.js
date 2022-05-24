@@ -151,6 +151,9 @@ function displayCarList(json) {
         card.appendChild(modelName)
         card.appendChild(availableDate)
         currentRow.appendChild(card)
+        card.addEventListener("click", () => {
+            window.location.href = "/order/create/" + car.id
+        })
     })
 
     function dateParser(string) {
