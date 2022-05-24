@@ -33,7 +33,12 @@ public class SearchServiceImpl implements SearchService{
      * */
     @Override
     public List<Car> getCars() {
-        return null;
+        return carRepository.findAll();
+    }
+
+    @Override
+    public List<String> getCarNames() {
+        return carRepository.findAll().stream().map(Car::getModel).toList();
     }
 
     /**
@@ -67,6 +72,7 @@ public class SearchServiceImpl implements SearchService{
                 .filter(modelName.length() == 0 ? car -> true : car -> car.getModel().equalsIgnoreCase(modelName))
                 .toList();
     }
+
 
 
     private Order createDummyOrder(String startDate, String endDate) throws ParseException {
