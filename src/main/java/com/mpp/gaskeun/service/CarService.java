@@ -13,7 +13,7 @@ import java.util.List;
 public interface CarService {
     Car addCar(RentalProvider provider, CarDto carDto) throws ParseException;
     Car updateCar(RentalProvider provider, CarDto carDto) throws ParseException;
-    Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalStateException;
+    Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalArgumentException;
     Car getCarById(RentalProvider provider, long id) throws NotCarOwnerException, CarDoesNotExistException;
     Location addLocation(Location location);
     List<Location> getAllLocations();

@@ -68,7 +68,7 @@ public class ProviderController {
 
         try {
             providerService.update((RentalProvider) user, userDto);
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException e) {
             userDto.fillDto((RentalProvider) user);
             model.addAttribute("error", e.getMessage());
             model.addAttribute("userDto", userDto);
@@ -104,7 +104,7 @@ public class ProviderController {
         try {
             carDto.setImage(imageFile);
             carService.addCar((RentalProvider) user, carDto);
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
             model.addAttribute("error", e.getMessage());
         }
@@ -133,7 +133,7 @@ public class ProviderController {
                     "locations", carService.getAllLocations()
             ));
             log.info("Car found {}", car.getLicensePlate());
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
             model.addAttribute("error", e.getMessage());
         }
@@ -179,7 +179,7 @@ public class ProviderController {
         try {
             Car car = carService.getCarByLicensePlate((RentalProvider) user, licensePlate);
             model.addAttribute("car", car);
-        } catch (IllegalStateException | PropertyValueException e) {
+        } catch (IllegalArgumentException | PropertyValueException e) {
             log.error(e.getMessage());
             model.addAttribute("error", e.getMessage());
         }

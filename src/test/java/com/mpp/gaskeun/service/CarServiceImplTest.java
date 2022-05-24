@@ -201,13 +201,13 @@ class CarServiceImplTest {
     }
 
     @Test
-    void whenRegistrationStartDateEarlierThanEndDate_mustThrowIllegalStateException() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void whenRegistrationStartDateEarlierThanEndDate_mustThrowIllegalArgumentException() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
 
         isValidCarRegistration.setAccessible(true);
 
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             try {
                 isValidCarRegistration.invoke(carService, invalidDateCarDto, false);
             } catch (InvocationTargetException e) {
@@ -217,14 +217,14 @@ class CarServiceImplTest {
     }
 
     @Test
-    void whenRegistrationValidButCarAlreadyRegistered_mustReturnIllegalStateException() throws NoSuchMethodException {
+    void whenRegistrationValidButCarAlreadyRegistered_mustReturnIllegalArgumentException() throws NoSuchMethodException {
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
 
         isValidCarRegistration.setAccessible(true);
         when(carRepository.findCarByLicensePlate(validCarDto.getLicensePlate())).thenReturn(Optional.of(new Car()));
 
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             try {
                 isValidCarRegistration.invoke(carService, validCarDto, true);
             } catch (InvocationTargetException e) {
@@ -270,10 +270,10 @@ class CarServiceImplTest {
     }
 
     @Test
-    void whenLocationExists_mustNotSaveAndThrowIllegalStateException() {
+    void whenLocationExists_mustNotSaveAndThrowIllegalArgumentException() {
         when(locationRepository.findByCityName(location.getCityName())).thenReturn(Optional.of(location));
 
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             carService.addLocation(location);
         });
     }
@@ -352,14 +352,14 @@ class CarServiceImplTest {
     }
 
     @Test
-    void whenAddCarRegistrationIsNotValid_mustThrowIllegalStateException() throws NoSuchMethodException {
+    void whenAddCarRegistrationIsNotValid_mustThrowIllegalArgumentException() throws NoSuchMethodException {
         CarDto carDto = new CarDto();
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
 
         isValidCarRegistration.setAccessible(true);
 
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
            carService.addCar(firstProvider, carDto);
         });
     }
@@ -372,9 +372,9 @@ class CarServiceImplTest {
     }
 
     @Test
-    void whenCarRegistrationIsInvalid_mustThrowIllegalStateException() {
+    void whenCarRegistrationIsInvalid_mustThrowIllegalArgumentException() {
         CarDto carDto = new CarDto();
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
            carService.updateCar(firstProvider, carDto);
         });
     }
@@ -384,8 +384,9 @@ class CarServiceImplTest {
         Car carNotOwned = new Car();
         carNotOwned.setRentalProvider(secondProvider);
 
+        when(locationRepository.findByCityName(validCarDto.getCityName())).thenReturn(Optional.of(new Location()));
         when(carRepository.findCarByLicensePlate(validCarDto.getLicensePlate())).thenReturn(Optional.of(carNotOwned));
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(NotCarOwnerException.class, () -> {
             carService.updateCar(firstProvider, validCarDto);
         });
     }

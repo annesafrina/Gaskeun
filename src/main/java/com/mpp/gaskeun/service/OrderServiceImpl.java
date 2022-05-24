@@ -106,7 +106,7 @@ public class OrderServiceImpl implements OrderService{
 
         Object[] isValid = validateOrder(car, order);
         if (!(boolean) isValid[0]) {
-            throw new IllegalStateException(String.valueOf(isValid[1]));
+            throw new IllegalArgumentException(String.valueOf(isValid[1]));
         }
 
         order.setCar(car);
@@ -117,7 +117,7 @@ public class OrderServiceImpl implements OrderService{
         return orderRepository.save(order);
     }
 
-    public Order getOrder(long id, UserDetails user) throws NoSuchElementException, IllegalStateException {
+    public Order getOrder(long id, UserDetails user) throws NoSuchElementException, IllegalArgumentException {
         Order order = orderRepository.getById(id);
 
         if (user instanceof Customer customer) {
@@ -168,7 +168,7 @@ public class OrderServiceImpl implements OrderService{
         order.setOrderStatus(status);
 
         if (bookingMessage.length() != 0 && status == OrderStatus.REJECTED) {
-            throw new IllegalStateException("Please give a reason to reject the order.");
+            throw new IllegalArgumentException("Please give a reason to reject the order.");
         }
 
         if (bookingMessage.length() != 0) {

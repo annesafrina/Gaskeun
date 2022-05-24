@@ -37,7 +37,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalStateException {
+    public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
         if (isValidCarRegistration(carDto, true)) {
             log.info("ENTERED BOX");
             Car car = new Car();
@@ -52,7 +52,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car updateCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalStateException {
+    public Car updateCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
         if (isValidCarRegistration(carDto, false)) {
             Car car = carRepository
                     .findCarByLicensePlate(carDto.getLicensePlate())
@@ -71,7 +71,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalStateException {
+    public Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalArgumentException {
         Car car = carRepository
                 .findCarByLicensePlate(licensePlate)
                 .orElseThrow(() -> new CarDoesNotExistException(licensePlate));
@@ -84,7 +84,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car getCarById(RentalProvider provider, long id) throws IllegalStateException {
+    public Car getCarById(RentalProvider provider, long id) throws IllegalArgumentException {
         Car car = carRepository
                 .findById(id)
                 .orElseThrow(() -> new CarDoesNotExistException(id));
@@ -100,7 +100,7 @@ public class CarServiceImpl implements CarService {
     public Location addLocation(Location location) {
         boolean exists = locationRepository.findByCityName(location.getCityName()).isPresent();
         if (location.getCityName().isBlank() || exists) {
-            throw new IllegalStateException("Location has been registered or blank.");
+            throw new IllegalArgumentException("Location has been registered or blank.");
         }
         return locationRepository.save(location);
     }
@@ -117,7 +117,7 @@ public class CarServiceImpl implements CarService {
                 .toList();
     }
 
-    private boolean isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalStateException {
+    private boolean isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalArgumentException {
         if (!carDto.isComplete()) {
             throw new IncompleteFormException();
         }
@@ -126,10 +126,10 @@ public class CarServiceImpl implements CarService {
         Date endDate = dateFormatter.parse(carDto.getAvailableEnd());
 
         if (startDate.after(endDate))
-            throw new IllegalStateException("Available start date should not be after available end date");
+            throw new IllegalArgumentException("Available start date should not be after available end date");
 
         if (isNew && carRepository.findCarByLicensePlate(carDto.getLicensePlate()).isPresent())
-            throw new IllegalStateException(
+            throw new IllegalArgumentException(
                     String.format("Car with license plate %s has been registered", carDto.getLicensePlate()));
 
         return true;
@@ -142,7 +142,7 @@ public class CarServiceImpl implements CarService {
     private void initCarData(CarDto carDto, Car car) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Location carLocation = locationRepository.findByCityName(carDto.getCityName())
-                .orElseThrow(() -> new IllegalStateException("Invalid City Name inserted"));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid City Name inserted"));
 
         car.setLicensePlate(carDto.getLicensePlate());
         car.setCapacity(carDto.getCapacity());

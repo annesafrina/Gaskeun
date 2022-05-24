@@ -26,7 +26,7 @@ public class ExternalController {
 
         try {
             generatedLocation = carService.addLocation(newLocation);
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
