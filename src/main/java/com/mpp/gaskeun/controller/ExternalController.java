@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -18,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExternalController {
 
     @Autowired
-    private CarService providerService;
+    private CarService carService;
 
     @PostMapping("/location")
     public ResponseEntity<?> addLocation(@RequestBody LocationDto locationDto) {
@@ -28,11 +25,20 @@ public class ExternalController {
         Location generatedLocation;
 
         try {
-            generatedLocation = providerService.addLocation(newLocation);
+            generatedLocation = carService.addLocation(newLocation);
         } catch (IllegalStateException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(generatedLocation, HttpStatus.OK);
+    }
+
+    @GetMapping("/all-locations")
+    public ResponseEntity<?> getAllLocation() {
+        return ResponseEntity.ok(
+                carService.getAllLocations().stream()
+                        .map(Location::getCityName)
+                        .toList()
+        );
     }
 }
