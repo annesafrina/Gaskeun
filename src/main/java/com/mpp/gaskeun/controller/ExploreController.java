@@ -23,10 +23,7 @@ public class ExploreController {
     SearchService searchService;
 
     @GetMapping("")
-    public String getCars(Model model) {
-//        List<Car> allCars = searchService.getCars();
-//        model.addAttribute("allCars", allCars);
-
+    public String getCars() {
         return "explore";
     }
 
