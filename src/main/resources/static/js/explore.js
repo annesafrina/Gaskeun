@@ -59,10 +59,24 @@ addEventListener("load", load)
 
 
 function filterData(queryParams) {
-    document.querySelector(".car-list").innerHTML = ""
+    if (window.location.search.length) {
+        // to handle cases when the user explores from the home page
+        queryParams = new URLSearchParams(window.location.search)
+        history.replaceState({}, document.title, "/explore");
+
+        let entries = queryParams.entries()
+        let currentEntry = entries.next()
+        while (!currentEntry.done) {
+            const formElement = document.getElementsByName(currentEntry.value[0])[0]
+            formElement.value = currentEntry.value[1]
+            currentEntry = entries.next()
+        }
+    }
+    const carList = document.querySelector(".car-list")
+    carList.innerHTML = ""
     const loader = document.createElement("div")
     loader.classList.add("lds-dual-ring")
-    document.body.appendChild(loader)
+    carList.appendChild(loader)
     fetch(`/explore/api/?${queryParams}`)
         .then(data => data.json())
         .then(json => {
@@ -81,10 +95,9 @@ function displayCarList(json) {
         if (lastRow.children.length < 4) {
             currentRow = lastRow
         } else {
+            console.log("ADDED HERE")
             carList.appendChild(currentRow)
         }
-    } else {
-        carList.appendChild(currentRow)
     }
     json.forEach((car, i) => {
         if (currentRow.children.length % 4 === 0) {
@@ -113,7 +126,6 @@ function displayCarList(json) {
         let picture = document.createElement("div")
         picture.classList.add("picture")
         let image = new Image()
-        console.log(car.picture)
         image.src = `data:image/png;base64,${car.picture}`
         picture.appendChild(image)
 
@@ -151,6 +163,9 @@ function displayCarList(json) {
         card.appendChild(modelName)
         card.appendChild(availableDate)
         currentRow.appendChild(card)
+        card.addEventListener("click", () => {
+            window.location.href = "/order/create/" + car.id
+        })
     })
 
     function dateParser(string) {
