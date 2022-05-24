@@ -7,6 +7,8 @@ import com.mpp.gaskeun.exception.NotCarOwnerException;
 import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.LocationRepository;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -18,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-@Slf4j
+@Slf4j @Setter @Getter
 public class CarServiceImpl implements CarService {
 
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -37,6 +39,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalStateException {
         if (isValidCarRegistration(carDto, true)) {
+            log.info("ENTERED BOX");
             Car car = new Car();
             initCarData(carDto, car);
             car.setRentalProvider(provider);
@@ -65,20 +68,6 @@ public class CarServiceImpl implements CarService {
         }
 
         return null;
-    }
-
-    @Override
-    public Car deleteCar(RentalProvider provider, String licensePlate) {
-        Car car = carRepository
-                .findCarByLicensePlate(licensePlate)
-                .orElseThrow(() -> new CarDoesNotExistException(licensePlate));
-
-        if (!car.providerIsOwner(provider))
-            throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
-
-        carRepository.delete(car);
-        log.info("Car {} deleted from repository", car.getLicensePlate());
-        return car;
     }
 
     @Override
@@ -129,12 +118,12 @@ public class CarServiceImpl implements CarService {
     }
 
     private boolean isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalStateException {
-        Date startDate = dateFormatter.parse(carDto.getAvailableStart());
-        Date endDate = dateFormatter.parse(carDto.getAvailableEnd());
-
         if (!carDto.isComplete()) {
             throw new IncompleteFormException();
         }
+
+        Date startDate = dateFormatter.parse(carDto.getAvailableStart());
+        Date endDate = dateFormatter.parse(carDto.getAvailableEnd());
 
         if (startDate.after(endDate))
             throw new IllegalStateException("Available start date should not be after available end date");

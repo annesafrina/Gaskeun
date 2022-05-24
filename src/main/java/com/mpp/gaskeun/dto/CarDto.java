@@ -48,16 +48,16 @@ public class CarDto {
     }
 
     public boolean isComplete() {
-        return !licensePlate.isBlank() &&
+        return !(licensePlate == null || licensePlate.isBlank()) &&
                 capacity > 0 &&
-                !transmission.isBlank() &&
+                !(transmission == null || transmission.isBlank()) &&
                 priceRate > 0 &&
-                !color.isBlank() &&
-                !model.isBlank() &&
-                !availableStart.isBlank() &&
-                !availableEnd.isBlank() &&
-                !base64image.isBlank() &&
-                !description.isBlank() &&
-                !cityName.isBlank();
+                !(color == null || color.isBlank()) &&
+                !(model == null || model.isBlank()) &&
+                !(availableStart == null || availableStart.isBlank()) &&
+                !(availableEnd == null || availableEnd.isBlank()) &&
+                !(base64image == null || base64image.isBlank()) &&
+                !(description == null || description.isBlank()) &&
+                !(cityName == null || cityName.isBlank());
     }
 }
