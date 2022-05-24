@@ -1,5 +1,6 @@
 package com.mpp.gaskeun.dto;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 

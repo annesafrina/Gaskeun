@@ -117,9 +117,8 @@ public class OrderServiceImpl implements OrderService{
         return orderRepository.save(order);
     }
 
-    public Order getOrder(long id, UserDetails user) throws NoSuchElementException, IllegalArgumentException {
-        Order order = orderRepository.getById(id);
-
+    public Order getOrder(long id, UserDetails user) throws NoSuchElementException, IllegalStateException {
+        Order order = orderRepository.findById(id).get();
         if (user instanceof Customer customer) {
             handleIllegalCustomer(order, customer);
         } else if (user instanceof RentalProvider provider) {
@@ -163,19 +162,27 @@ public class OrderServiceImpl implements OrderService{
      * @return The edited order
      */
     @Override
-    public Order confirmOrRejectOrder(RentalProvider provider, Order order, OrderStatus status, String bookingMessage) {
+    public Order setOrderStatus(RentalProvider provider, Order order, OrderStatus status, String bookingMessage) {
 
         order.setOrderStatus(status);
 
-        if (bookingMessage.length() != 0 && status == OrderStatus.REJECTED) {
-            throw new IllegalArgumentException("Please give a reason to reject the order.");
+        bookingMessage = (bookingMessage == null) ? "" : bookingMessage;
+
+        if (bookingMessage.length() == 0 && status == OrderStatus.REJECTED) {
+            throw new IllegalStateException("Please give a reason to reject the order.");
         }
+
 
         if (bookingMessage.length() != 0) {
             order.setBookingMessage(bookingMessage);
         }
+        System.out.println(bookingMessage);
 
-        return orderRepository.save(order);
+        log.info(String.format("Order status changed to %s", status));
+
+        orderRepository.save(order);
+
+        return order;
     }
 
 
@@ -186,6 +193,9 @@ public class OrderServiceImpl implements OrderService{
      * @return true if the car used in the order belongs to the provider, false if otherwise
      */
     public boolean verifyOrderOwnership(RentalProvider provider, Order order) {
+        if (order == null) {
+            return false;
+        }
         RentalProvider actualProvider = order.getCarProvider();
         return actualProvider.getId() == provider.getId();
     }
