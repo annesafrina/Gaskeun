@@ -25,8 +25,19 @@ public class UserDto {
         return password != null && !password.isBlank();
     }
 
-    public boolean isValid() {
+    public boolean containNameAndPhoneNumber() {
         return !(name == null || name.isBlank()) &&
                 !(phone_number == null || phone_number.isBlank());
+    }
+
+    public boolean isComplete() {
+        return !(email == null || email.isBlank()) &&
+                !(phone_number == null || phone_number.isBlank()) &&
+                !(name == null || name.isBlank()) &&
+                !(password == null || password.length() < 8);
+    }
+
+    public boolean passwordMatches() {
+        return password != null && password.equals(passwordConfirmation);
     }
 }

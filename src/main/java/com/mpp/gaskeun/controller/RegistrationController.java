@@ -36,10 +36,6 @@ public class RegistrationController {
 
     @PostMapping("/customer")
     public String registerCustomerPost(@ModelAttribute CustomerDto customerDto, Model model) {
-        if(!customerDto.getPassword().equals(customerDto.getPasswordConfirmation())) {
-            model.addAttribute("error", "Password does not match");
-            return "customer_registration";
-        }
 
         try {
             authenticationService.register(customerDto);
@@ -60,10 +56,6 @@ public class RegistrationController {
 
     @PostMapping("/provider")
     public String registerProviderPost(@ModelAttribute UserDto providerDto, Model model) {
-        if(!providerDto.getPassword().equals(providerDto.getPasswordConfirmation())) {
-            model.addAttribute("error", "Password does not match");
-            return "customer_registration";
-        }
 
         try {
             authenticationService.register(providerDto);
