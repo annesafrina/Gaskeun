@@ -22,17 +22,16 @@ public class ExploreController {
     @Autowired
     SearchService searchService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String getCars(Model model) {
-        List<Car> allCars = searchService.getCars();
-        model.addAttribute("allCars", allCars);
+//        List<Car> allCars = searchService.getCars();
+//        model.addAttribute("allCars", allCars);
 
         return "explore";
     }
 
     @GetMapping("/api")
     public ResponseEntity<List<Car>> getCars(
-            Model model,
             @RequestParam(defaultValue = "0", name = "budget") long maxPrice,
             @RequestParam(defaultValue = "") String startDate,
             @RequestParam(defaultValue = "") String endDate,
@@ -43,5 +42,10 @@ public class ExploreController {
         List<Car> allCars = searchService.getCars(cityName, startDate, endDate, -1, transmissionType, 0, maxPrice, modelName);
 
         return ResponseEntity.ok(allCars);
+    }
+
+    @GetMapping("/api/model-names")
+    public ResponseEntity<List<String>> getCarNames() {
+        return ResponseEntity.ok(searchService.getCarNames());
     }
 }

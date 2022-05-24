@@ -33,7 +33,12 @@ public class SearchServiceImpl implements SearchService{
      * */
     @Override
     public List<Car> getCars() {
-        return null;
+        return carRepository.findAll();
+    }
+
+    @Override
+    public List<String> getCarNames() {
+        return carRepository.findAll().stream().map(Car::getModel).toList();
     }
 
     /**
@@ -69,6 +74,7 @@ public class SearchServiceImpl implements SearchService{
     }
 
 
+
     private Order createDummyOrder(String startDate, String endDate) throws ParseException {
         Date parsedStartDate = null, parsedEndDate = null;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -85,7 +91,12 @@ public class SearchServiceImpl implements SearchService{
             cal.setTime(parsedStartDate);
             cal.add(Calendar.DATE, 1);
             parsedEndDate = cal.getTime();
+        } else {
+            parsedStartDate = format.parse(startDate);
+            parsedEndDate = format.parse(endDate);
         }
+
+        log.info("SETTING DUMMY ORDER DATE");
 
         Order dummyOrder = new Order();
         dummyOrder.setStartDate(parsedStartDate);
