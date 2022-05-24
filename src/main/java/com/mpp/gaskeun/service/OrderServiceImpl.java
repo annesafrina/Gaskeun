@@ -106,7 +106,7 @@ public class OrderServiceImpl implements OrderService{
 
         Object[] isValid = validateOrder(car, order);
         if (!(boolean) isValid[0]) {
-            throw new IllegalStateException(String.valueOf(isValid[1]));
+            throw new IllegalArgumentException(String.valueOf(isValid[1]));
         }
 
         order.setCar(car);

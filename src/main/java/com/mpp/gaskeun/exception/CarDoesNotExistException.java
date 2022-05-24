@@ -1,6 +1,6 @@
 package com.mpp.gaskeun.exception;
 
-public class CarDoesNotExistException extends IllegalStateException{
+public class CarDoesNotExistException extends IllegalArgumentException{
     public CarDoesNotExistException(String license) {
         super(String.format("Car with license plate %s not found", license));
     }

@@ -7,6 +7,8 @@ import com.mpp.gaskeun.exception.NotCarOwnerException;
 import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.LocationRepository;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -18,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-@Slf4j
+@Slf4j @Setter @Getter
 public class CarServiceImpl implements CarService {
 
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -35,8 +37,9 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalStateException {
+    public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
         if (isValidCarRegistration(carDto, true)) {
+            log.info("ENTERED BOX");
             Car car = new Car();
             initCarData(carDto, car);
             car.setRentalProvider(provider);
@@ -49,7 +52,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car updateCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalStateException {
+    public Car updateCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
         if (isValidCarRegistration(carDto, false)) {
             Car car = carRepository
                     .findCarByLicensePlate(carDto.getLicensePlate())
@@ -68,21 +71,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car deleteCar(RentalProvider provider, String licensePlate) {
-        Car car = carRepository
-                .findCarByLicensePlate(licensePlate)
-                .orElseThrow(() -> new CarDoesNotExistException(licensePlate));
-
-        if (!car.providerIsOwner(provider))
-            throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
-
-        carRepository.delete(car);
-        log.info("Car {} deleted from repository", car.getLicensePlate());
-        return car;
-    }
-
-    @Override
-    public Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalStateException {
+    public Car getCarByLicensePlate(RentalProvider provider, String licensePlate) throws IllegalArgumentException {
         Car car = carRepository
                 .findCarByLicensePlate(licensePlate)
                 .orElseThrow(() -> new CarDoesNotExistException(licensePlate));
@@ -95,7 +84,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car getCarById(RentalProvider provider, long id) throws IllegalStateException {
+    public Car getCarById(RentalProvider provider, long id) throws IllegalArgumentException {
         Car car = carRepository
                 .findById(id)
                 .orElseThrow(() -> new CarDoesNotExistException(id));
@@ -111,7 +100,7 @@ public class CarServiceImpl implements CarService {
     public Location addLocation(Location location) {
         boolean exists = locationRepository.findByCityName(location.getCityName()).isPresent();
         if (location.getCityName().isBlank() || exists) {
-            throw new IllegalStateException("Location has been registered or blank.");
+            throw new IllegalArgumentException("Location has been registered or blank.");
         }
         return locationRepository.save(location);
     }
@@ -128,19 +117,19 @@ public class CarServiceImpl implements CarService {
                 .toList();
     }
 
-    private boolean isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalStateException {
-        Date startDate = dateFormatter.parse(carDto.getAvailableStart());
-        Date endDate = dateFormatter.parse(carDto.getAvailableEnd());
-
+    private boolean isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalArgumentException {
         if (!carDto.isComplete()) {
             throw new IncompleteFormException();
         }
 
+        Date startDate = dateFormatter.parse(carDto.getAvailableStart());
+        Date endDate = dateFormatter.parse(carDto.getAvailableEnd());
+
         if (startDate.after(endDate))
-            throw new IllegalStateException("Available start date should not be after available end date");
+            throw new IllegalArgumentException("Available start date should not be after available end date");
 
         if (isNew && carRepository.findCarByLicensePlate(carDto.getLicensePlate()).isPresent())
-            throw new IllegalStateException(
+            throw new IllegalArgumentException(
                     String.format("Car with license plate %s has been registered", carDto.getLicensePlate()));
 
         return true;
@@ -153,7 +142,7 @@ public class CarServiceImpl implements CarService {
     private void initCarData(CarDto carDto, Car car) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Location carLocation = locationRepository.findByCityName(carDto.getCityName())
-                .orElseThrow(() -> new IllegalStateException("Invalid City Name inserted"));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid City Name inserted"));
 
         car.setLicensePlate(carDto.getLicensePlate());
         car.setCapacity(carDto.getCapacity());

@@ -39,11 +39,11 @@ public class ProviderServiceImpl implements ProviderService{
 
         if(userDto.containsPassword()) {
             if(!encoder.matches(userDto.getOldPassword(), provider.getPassword())) {
-                throw new IllegalStateException("Password does not match current password");
+                throw new IllegalArgumentException("Password does not match current password");
             }
 
             if(!userDto.getPassword().equals(userDto.getPasswordConfirmation())) {
-                throw new IllegalStateException("New password does not match");
+                throw new IllegalArgumentException("New password does not match");
                 
             } else {
                 provider.setPassword(encoder.encode(userDto.getPassword()));

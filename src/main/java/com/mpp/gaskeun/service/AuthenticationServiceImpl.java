@@ -45,7 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public UserDetails register(UserDto userDto) throws IllegalStateException {
+    public UserDetails register(UserDto userDto) throws IllegalArgumentException {
         log.info("Register {}", userDto.getEmail());
         boolean exists = getMatchingUserFromUsername(userDto.getEmail()) != null;
 
@@ -62,7 +62,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
 
         } else {
-            throw new IllegalStateException(String.format("Email %s already exists", userDto.getEmail()));
+            throw new IllegalArgumentException(String.format("Email %s already exists", userDto.getEmail()));
         }
     }
 

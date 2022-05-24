@@ -43,7 +43,7 @@ public class RegistrationController {
 
         try {
             authenticationService.register(customerDto);
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "customer_registration";
         }
@@ -67,7 +67,7 @@ public class RegistrationController {
 
         try {
             authenticationService.register(providerDto);
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "provider_registration";
         }
