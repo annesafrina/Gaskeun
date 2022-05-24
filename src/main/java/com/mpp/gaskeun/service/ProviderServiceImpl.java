@@ -33,7 +33,7 @@ public class ProviderServiceImpl implements ProviderService{
 
     @Override
     public RentalProvider update(RentalProvider provider, UserDto userDto) {
-        if(!userDto.isValid()) {
+        if(!userDto.containNameAndPhoneNumber()) {
             throw new IncompleteFormException();
         }
 

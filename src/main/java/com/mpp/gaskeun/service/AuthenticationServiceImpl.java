@@ -2,7 +2,9 @@ package com.mpp.gaskeun.service;
 
 import com.mpp.gaskeun.dto.CustomerDto;
 import com.mpp.gaskeun.dto.UserDto;
+import com.mpp.gaskeun.exception.IncompleteFormException;
 import com.mpp.gaskeun.model.Customer;
+import com.mpp.gaskeun.model.OrderStatus;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.repository.CustomerRepository;
 import com.mpp.gaskeun.repository.ProviderRepository;
@@ -42,11 +44,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         provider.setEmail(userDto.getEmail());
         provider.setName(userDto.getName());
         provider.setPassword(userDto.getPassword());
+        provider.setPhoneNumber(userDto.getPhone_number());
     }
 
     @Override
     public UserDetails register(UserDto userDto) throws IllegalArgumentException {
         log.info("Register {}", userDto.getEmail());
+
+        if(!userDto.isComplete()) {
+            throw new IncompleteFormException();
+        }
+
+        if(!userDto.passwordMatches()) {
+            throw new IllegalArgumentException("Password does not match confirmation");
+        }
+
         boolean exists = getMatchingUserFromUsername(userDto.getEmail()) != null;
 
         if(!exists) {
