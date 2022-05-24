@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" th:href="@{/css/explore.css}" type="text/css">
     <script defer th:src="@{/js/explore.js}"></script>
+    <script defer src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="blob"></div>
@@ -33,7 +34,7 @@
                 <input id="endDate" name="endDate" type="date" class="custom-search__input">
                 </div>
                 <div class="custom-button__container stretch">
-                <button class="custom-search__button"><i class="fa fa-search"></i></button>
+                <button type="submit" class="custom-search__button"><i class="fa fa-search"></i></button>
                 <div style="width: 10px;"></div>
                 <button id="filter-button" class="custom-search__button"><i class="fa-solid fa-filter"></i></button>
                 </div>
@@ -77,6 +78,9 @@
                             </div>
                         </div>
                     </div>
+                    <div style="display: flex; justify-content: center; align-items: center; margin-top: 1rem">
+                    <button type="submit" class="custom-search__button"><i class="fa fa-search"></i></button>
+                    </div>
                 </div>
             </form>
         </section>
@@ -104,7 +108,6 @@
     <div class="explore-filter"></div>
     <div class="car-list">
         <!-- maximum 4 mobil per row please -->
-
     </div>
 </body>
 

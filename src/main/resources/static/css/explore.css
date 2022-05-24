@@ -2,6 +2,35 @@
 	text-decoration: underline;
 }
 
+.lds-dual-ring {
+    position: absolute;
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #375A7F;
+    border-color: #375A7F transparent #375A7F transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .car-list {
     width: 100%;
     height: fit-content;
@@ -79,6 +108,8 @@
 }
 .car-list__card .picture {
     grid-area: pic;
+    object-fit: cover;
+    object-position: center;
 }
 .car-list__card .transmission {
     grid-area: trm;

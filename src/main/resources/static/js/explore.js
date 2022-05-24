@@ -58,12 +58,16 @@ function select(item) {
 addEventListener("load", load)
 
 
-function filterData() {
-    const queryParams = new URLSearchParams(location.search)
-    fetch(`/explore/api/${queryParams}`)
+function filterData(queryParams) {
+    document.querySelector(".car-list").innerHTML = ""
+    const loader = document.createElement("div")
+    loader.classList.add("lds-dual-ring")
+    document.body.appendChild(loader)
+    fetch(`/explore/api/?${queryParams}`)
         .then(data => data.json())
         .then(json => {
             displayCarList(json)
+            loader.remove()
         })
 }
 
@@ -71,9 +75,19 @@ function displayCarList(json) {
     let carList = document.querySelector(".car-list")
     let currentRow = document.createElement("div")
     currentRow.classList.add("car-list__row")
-    carList.appendChild(currentRow)
+    let rows = document.querySelectorAll(".car-list__row")
+    if (rows.length) {
+        let lastRow = rows[rows.length - 1]
+        if (lastRow.children.length < 4) {
+            currentRow = lastRow
+        } else {
+            carList.appendChild(currentRow)
+        }
+    } else {
+        carList.appendChild(currentRow)
+    }
     json.forEach((car, i) => {
-        if (i % 4 === 0) {
+        if (currentRow.children.length % 4 === 0) {
             currentRow = document.createElement("div")
             currentRow.classList.add("car-list__row")
             carList.appendChild(currentRow)
@@ -83,18 +97,66 @@ function displayCarList(json) {
 
         let availableDate = document.createElement("div")
         availableDate.classList.add("available-date")
-        const parsedDate = new Date(Date.parse(car.availableStartDate))
-        availableDate.innerText = ""
+        availableDate.innerText = dateParser(car.availableStartDate)
 
+        let modelName = document.createElement("div")
+        modelName.classList.add("model")
+        modelName.innerText = car.model
+
+        let capacity = document.createElement("div")
+        capacity.classList.add("capacity")
+        capacity.innerText = car.capacity
+
+        let picture = document.createElement("div")
+        picture.classList.add("picture")
+        let image = new Image()
+        console.log(car.picture)
+        image.src = `data:image/png;base64,${car.picture}`
+        picture.appendChild(image)
+
+        let transmission = document.createElement("div")
+        transmission.classList.add("transmission")
+        transmission.innerText = car.transmission
+
+        let location = document.createElement("div")
+        location.classList.add("location")
+        location.innerText = car.location.cityName
+
+        let rate = document.createElement("div")
+        rate.classList.add("rate")
+        rate.innerText = "Rp " + car.priceRate
+
+        card.appendChild(rate)
+        card.appendChild(location)
+        card.appendChild(transmission)
+        card.appendChild(picture)
+        card.appendChild(capacity)
+        card.appendChild(modelName)
         card.appendChild(availableDate)
         currentRow.appendChild(card)
     })
+
+    function dateParser(string) {
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+        const parsedDate = new Date(Date.parse(string))
+
+        return `${parsedDate.getDate()}, ${months[parsedDate.getMonth()]} ${parsedDate.getFullYear()}`
+    }
 }
 
+
+
 function load() {
+    const form = $(".custom-search")
     populateAvailableCarModels()
     populateAvailableLocations()
-    filterData()
+    filterData(form.serialize())
+    document.querySelector(".custom-search").addEventListener("submit", (e) => {
+        e.preventDefault();
+        filterData(form.serialize())
+        document.querySelector(".custom-search__filters").classList.remove("open")
+    })
 }
 
 function populateAvailableCarModels() {
@@ -109,5 +171,11 @@ function populateAvailableCarModels() {
 
 
 function populateAvailableLocations() {
-
+    fetch(`/api/all-locations`)
+        .then(data => data.json())
+        .then(json => {
+            json.forEach(loc => {
+                locationSuggestions.push(loc)
+            })
+        })
 }
