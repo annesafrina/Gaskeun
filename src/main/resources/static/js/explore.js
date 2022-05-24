@@ -97,7 +97,7 @@ function displayCarList(json) {
 
         let availableDate = document.createElement("div")
         availableDate.classList.add("available-date")
-        availableDate.innerText = dateParser(car.availableStartDate)
+        availableDate.innerText = `Available from ${dateParser(car.availableStartDate)}`
 
         let modelName = document.createElement("div")
         modelName.classList.add("model")
@@ -105,7 +105,10 @@ function displayCarList(json) {
 
         let capacity = document.createElement("div")
         capacity.classList.add("capacity")
-        capacity.innerText = car.capacity
+        capacity.innerHTML = `
+        <i class="fa-solid fa-user-group"></i>
+        ${car.capacity}
+        `
 
         let picture = document.createElement("div")
         picture.classList.add("picture")
@@ -116,16 +119,30 @@ function displayCarList(json) {
 
         let transmission = document.createElement("div")
         transmission.classList.add("transmission")
-        transmission.innerText = car.transmission
+        transmission.innerHTML = `
+        <i class="fa-solid fa-gears"></i>
+        ${car.transmission}
+        `
 
         let location = document.createElement("div")
         location.classList.add("location")
-        location.innerText = car.location.cityName
+        location.innerHTML = `
+        <i class="fa-solid fa-location-dot"></i>
+        ${car.location.cityName}
+        `
+
+        let rating = document.createElement("div")
+        rating.classList.add("stars")
+        rating.innerHTML = `
+        <i class="fa-solid fa-star"></i>
+        ${parseFloat(car.rating)}
+        `
 
         let rate = document.createElement("div")
         rate.classList.add("rate")
-        rate.innerText = "Rp " + car.priceRate
+        rate.innerText = "Rp " + car.priceRate + " /day"
 
+        card.appendChild(rating)
         card.appendChild(rate)
         card.appendChild(location)
         card.appendChild(transmission)

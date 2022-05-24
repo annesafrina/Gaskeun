@@ -91,7 +91,12 @@ public class SearchServiceImpl implements SearchService{
             cal.setTime(parsedStartDate);
             cal.add(Calendar.DATE, 1);
             parsedEndDate = cal.getTime();
+        } else {
+            parsedStartDate = format.parse(startDate);
+            parsedEndDate = format.parse(endDate);
         }
+
+        log.info("SETTING DUMMY ORDER DATE");
 
         Order dummyOrder = new Order();
         dummyOrder.setStartDate(parsedStartDate);
