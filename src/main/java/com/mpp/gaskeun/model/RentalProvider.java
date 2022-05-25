@@ -7,11 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name="Rental_Provider")
+@Table(name = "Rental_Provider")
 @Getter
 @Setter
 public class RentalProvider implements UserDetails {
@@ -20,22 +19,22 @@ public class RentalProvider implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name="email", unique=true, nullable=false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name="password", nullable=false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name="name", nullable=false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name="phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name="performance_rating")
+    @Column(name = "performance_rating")
     private double performanceRating;
 
-    @Column(name="number_of_reviews")
+    @Column(name = "number_of_reviews")
     private int numberOfReviews = 0;
 
     @Override

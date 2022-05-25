@@ -93,11 +93,11 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public Order createOrder(Customer customer, OrderDto orderDto) throws Exception{
+    public Order createOrder(Customer customer, OrderDto orderDto) throws NoSuchElementException, ParseException {
         Car car;
 
         try {
-            car = carRepository.findById(Long.parseLong(orderDto.getCarId())).get();
+            car = carRepository.findById(Long.parseLong(orderDto.getCarId())).orElseThrow(NoSuchElementException::new);
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException(String.format("Car with id %s is not found", orderDto.getCarId()));
         }
@@ -118,7 +118,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     public Order getOrder(long id, UserDetails user) throws NoSuchElementException, IllegalStateException {
-        Order order = orderRepository.findById(id).get();
+        Order order = orderRepository.findById(id).orElseThrow(NoSuchElementException::new);
         if (user instanceof Customer customer) {
             handleIllegalCustomer(order, customer);
         } else if (user instanceof RentalProvider provider) {
@@ -176,7 +176,6 @@ public class OrderServiceImpl implements OrderService{
         if (bookingMessage.length() != 0) {
             order.setBookingMessage(bookingMessage);
         }
-        System.out.println(bookingMessage);
 
         log.info(String.format("Order status changed to %s", status));
 

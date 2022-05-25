@@ -7,7 +7,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "customer_review")
-@Getter @Setter
+@Getter
+@Setter
 public class CustomerReview {
     @Id
     private long id;

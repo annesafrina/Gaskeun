@@ -51,7 +51,7 @@ public class ProviderServiceImpl implements ProviderService{
         }
 
         provider.setName(userDto.getName());
-        provider.setPhoneNumber(userDto.getPhone_number());
+        provider.setPhoneNumber(userDto.getPhoneNumber());
         return providerRepository.save(provider);
     }
 }

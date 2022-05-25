@@ -115,7 +115,7 @@ class ProviderServiceImplTest {
         String oldPassword = firstProvider.getPassword();
 
         validUserDto.setName(newName);
-        validUserDto.setPhone_number(phoneNumber);
+        validUserDto.setPhoneNumber(phoneNumber);
 
         providerService.update(firstProvider, validUserDto);
 
@@ -135,7 +135,7 @@ class ProviderServiceImplTest {
         String newPasswordConfirmation = "password123";
 
         validUserDto.setName(newName);
-        validUserDto.setPhone_number(phoneNumber);
+        validUserDto.setPhoneNumber(phoneNumber);
         validUserDto.setOldPassword(oldPasswordPlain);
         validUserDto.setPassword(newPassword);
         validUserDto.setPasswordConfirmation(newPasswordConfirmation);
@@ -154,7 +154,7 @@ class ProviderServiceImplTest {
         String newPasswordConfirmation = "differentPassword";
 
         validUserDto.setName(newName);
-        validUserDto.setPhone_number(phoneNumber);
+        validUserDto.setPhoneNumber(phoneNumber);
         validUserDto.setOldPassword(oldPasswordPlain);
         validUserDto.setPassword(newPassword);
         validUserDto.setPasswordConfirmation(newPasswordConfirmation);
@@ -174,7 +174,7 @@ class ProviderServiceImplTest {
         String encryptedNewPassword = "encryptedNewPassword";
 
         validUserDto.setName(newName);
-        validUserDto.setPhone_number(phoneNumber);
+        validUserDto.setPhoneNumber(phoneNumber);
         validUserDto.setOldPassword(oldPasswordPlain);
         validUserDto.setPassword(newPassword);
         validUserDto.setPasswordConfirmation(newPasswordConfirmation);

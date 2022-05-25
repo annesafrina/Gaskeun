@@ -9,6 +9,10 @@ import java.util.List;
 
 public class OrderUtils {
 
+    private OrderUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static List<DateRange> findUnavailableDates(List<Order> orderList) {
         List<DateRange> unavailableDates = new ArrayList<>();
 
