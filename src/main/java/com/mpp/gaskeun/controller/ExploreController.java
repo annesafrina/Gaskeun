@@ -5,6 +5,9 @@ import com.mpp.gaskeun.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +26,11 @@ public class ExploreController {
     SearchService searchService;
 
     @GetMapping("")
-    public String getCars() {
+    public String getCars(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication == null || authentication instanceof AnonymousAuthenticationToken;
+        model.addAttribute("loggedIn", isLoggedIn);
+
         return "explore";
     }
 
