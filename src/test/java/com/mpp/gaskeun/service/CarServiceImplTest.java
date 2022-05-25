@@ -183,47 +183,39 @@ class CarServiceImplTest {
     }
 
     @Test
-    void whenRegistrationIsNotComplete_mustThrowIncompleteFormException() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void whenRegistrationIsNotComplete_mustReturnFalseWithCorrectString() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         CarDto notCompleteDto = new CarDto();
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
         isValidCarRegistration.setAccessible(true);
 
-        InvocationTargetException exception = assertThrows(InvocationTargetException.class,
-                () -> isValidCarRegistration.invoke(carService, notCompleteDto, true));
-
-        assert exception.getCause() instanceof IncompleteFormException;
+        Object[] isValid = (Object[]) isValidCarRegistration.invoke(carService, notCompleteDto, true);
+        assertFalse((boolean) isValid[0]);
+        assertEquals("Form contains invalid/incomplete data", isValid[1]);
     }
 
     @Test
-    void whenRegistrationStartDateEarlierThanEndDate_mustThrowIllegalArgumentException() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void whenRegistrationStartDateEarlierThanEndDate_mustReturnFalseWithCorrectString() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
-
         isValidCarRegistration.setAccessible(true);
-
-        InvocationTargetException exception = assertThrows(InvocationTargetException.class,
-                () -> isValidCarRegistration.invoke(carService, invalidDateCarDto, false));
-
-        assert exception.getCause() instanceof IllegalArgumentException;
-        assertEquals("Available start date should not be after available end date",
-                exception.getCause().getMessage());
+        Object[] isValid = (Object[]) isValidCarRegistration.invoke(carService, invalidDateCarDto, false);
+        assertFalse((boolean) isValid[0]);
+        assertEquals("Available start date should not be after available end date", isValid[1]);
     }
 
     @Test
-    void whenRegistrationValidButCarAlreadyRegistered_mustReturnIllegalArgumentException() throws NoSuchMethodException {
+    void whenRegistrationValidButCarAlreadyRegistered_mustReturnFalseWithCorrectString() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
-
         isValidCarRegistration.setAccessible(true);
         when(carRepository.findCarByLicensePlate(validCarDto.getLicensePlate())).thenReturn(Optional.of(new Car()));
 
-        InvocationTargetException exception = assertThrows(InvocationTargetException.class,
-                () -> isValidCarRegistration.invoke(carService, validCarDto, true));
+        Object[] isValid = (Object[]) isValidCarRegistration.invoke(carService, validCarDto, true);
 
-        assert exception.getCause() instanceof IllegalArgumentException;
+        assertFalse((boolean) isValid[0]);
         assertEquals(String.format("Car with license plate %s has been registered",
-                validCarDto.getLicensePlate()), exception.getCause().getMessage());
+                validCarDto.getLicensePlate()), isValid[1]);
     }
 
     @Test
