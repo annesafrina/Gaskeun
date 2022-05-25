@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><!-- TYPE --> Review</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}" type="text/css"/>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+            integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" th:href="@{/css/review.css}" type="text/css"/>
+    <script defer th:src="@{/js/ratingSlider.js}"></script>
+    <script defer th:src="@{/js/reviewValidation.js}"></script>
+  </head>
+
+  <body>
+    <main id="main">
+      <div class="section__review">
+        <div class="header">
+          <h1>How was your USER_TYPE<!-- USER TYPE --><span id="question">?</span></h1>
+        </div>
+        <form action="" class="review">
+          <div class="rating-section">
+            <label for="">Rate your experience:</label>
+            <div id="rating-slider">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+            </div>
+          </div>
+          <input type="hidden" id="rating" name="rating" />
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Tell us more..."
+          ></textarea>
+          <button type="submit" class="submit-review">Submit</button>
+        </form>
+      </div>
+      <div class="section__user-info">
+        <div class="info-header">USER_TYPE</div>
+        <div class="user-profile"><i class="fa-solid fa-user fa-6x"></i></div>
+        <div class="user-name">NAME</div>
+      </div>
+    </main>
+  </body>
+</html>
