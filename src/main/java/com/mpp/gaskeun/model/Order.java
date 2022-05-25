@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Setter
 @Getter
@@ -50,4 +51,16 @@ public class Order {
         return this.car.getRentalProvider();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return id == order.id && isVerified == order.isVerified && Objects.equals(bookingMessage, order.bookingMessage) && Objects.equals(createdDate, order.createdDate) && Objects.equals(startDate, order.startDate) && Objects.equals(endDate, order.endDate) && Objects.equals(pickupLocation, order.pickupLocation) && Objects.equals(dropoffLocation, order.dropoffLocation) && Objects.equals(customer, order.customer) && Objects.equals(car, order.car) && orderStatus == order.orderStatus;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, bookingMessage, isVerified, createdDate, startDate, endDate, pickupLocation, dropoffLocation, customer, car, orderStatus);
+    }
 }

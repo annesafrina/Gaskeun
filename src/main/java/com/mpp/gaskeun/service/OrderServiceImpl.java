@@ -6,6 +6,7 @@ import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.OrderRepository;
 import com.mpp.gaskeun.utils.OrderUtils;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
+@Setter
 public class OrderServiceImpl implements OrderService{
 
     @Autowired
