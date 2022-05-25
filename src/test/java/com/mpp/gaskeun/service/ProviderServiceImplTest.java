@@ -1,6 +1,5 @@
 package com.mpp.gaskeun.service;
 
-import com.mpp.gaskeun.dto.CarDto;
 import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.exception.IncompleteFormException;
 import com.mpp.gaskeun.model.Car;
@@ -17,7 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,7 +59,6 @@ class ProviderServiceImplTest {
         secondProvider.setId(2);
         secondProvider.setEmail("pesan@email.com");
     }
-
 
     @Test
     void whenRepoEmptyAndProviderDoesNotOwnAnyCar_mustReturn0() {

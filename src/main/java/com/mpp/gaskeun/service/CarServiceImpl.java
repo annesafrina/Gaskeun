@@ -38,36 +38,29 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
-        if (isValidCarRegistration(carDto, true)) {
-            log.info("ENTERED BOX");
-            Car car = new Car();
-            initCarData(carDto, car);
-            car.setRentalProvider(provider);
+        isValidCarRegistration(carDto, true);
+        Car car = new Car();
+        initCarData(carDto, car);
+        car.setRentalProvider(provider);
 
-            log.info("Saved car {} in repository", car.getLicensePlate());
-            return carRepository.save(car);
-        }
-
-        return null;
+        log.info("Saved car {} in repository", car.getLicensePlate());
+        return carRepository.save(car);
     }
 
     @Override
     public Car updateCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
-        if (isValidCarRegistration(carDto, false)) {
-            Car car = carRepository
-                    .findCarByLicensePlate(carDto.getLicensePlate())
-                    .orElseThrow(() -> new CarDoesNotExistException(carDto.getLicensePlate()));
+        isValidCarRegistration(carDto, false);
+        Car car = carRepository
+                .findCarByLicensePlate(carDto.getLicensePlate())
+                .orElseThrow(() -> new CarDoesNotExistException(carDto.getLicensePlate()));
 
-            initCarData(carDto, car);
+        initCarData(carDto, car);
 
-            if (!car.providerIsOwner(provider))
-                throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
+        if (!car.providerIsOwner(provider))
+            throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
 
-            log.info("Updated car {} in repository", car.getLicensePlate());
-            return carRepository.save(car);
-        }
-
-        return null;
+        log.info("Updated car {} in repository", car.getLicensePlate());
+        return carRepository.save(car);
     }
 
     @Override
@@ -120,10 +113,9 @@ public class CarServiceImpl implements CarService {
                 .toList();
     }
 
-    private boolean isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalArgumentException {
-        if (!carDto.isComplete()) {
+    private void isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalArgumentException {
+        if (!carDto.isComplete())
             throw new IncompleteFormException();
-        }
 
         Date startDate = dateFormatter.parse(carDto.getAvailableStart());
         Date endDate = dateFormatter.parse(carDto.getAvailableEnd());
@@ -134,8 +126,6 @@ public class CarServiceImpl implements CarService {
         if (isNew && carRepository.findCarByLicensePlate(carDto.getLicensePlate()).isPresent())
             throw new IllegalArgumentException(
                     String.format("Car with license plate %s has been registered", carDto.getLicensePlate()));
-
-        return true;
     }
 
     /**

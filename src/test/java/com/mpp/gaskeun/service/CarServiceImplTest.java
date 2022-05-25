@@ -12,9 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 
 import java.lang.reflect.InvocationTargetException;
@@ -181,8 +179,7 @@ class CarServiceImplTest {
 
         when(carRepository.findCarByLicensePlate(validCarDto.getLicensePlate())).thenReturn(Optional.empty());
 
-        boolean isValid = (boolean) isValidCarRegistration.invoke(carService, validCarDto, true);
-        assertTrue(isValid);
+        assertDoesNotThrow(() -> isValidCarRegistration.invoke(carService, validCarDto, true));
     }
 
     @Test
@@ -192,13 +189,10 @@ class CarServiceImplTest {
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
         isValidCarRegistration.setAccessible(true);
 
-        assertThrows(IncompleteFormException.class, () -> {
-            try {
-                isValidCarRegistration.invoke(carService, notCompleteDto, true);
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            }
-        });
+        InvocationTargetException exception = assertThrows(InvocationTargetException.class,
+                () -> isValidCarRegistration.invoke(carService, notCompleteDto, true));
+
+        assert exception.getCause() instanceof IncompleteFormException;
     }
 
     @Test
@@ -208,13 +202,12 @@ class CarServiceImplTest {
 
         isValidCarRegistration.setAccessible(true);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            try {
-                isValidCarRegistration.invoke(carService, invalidDateCarDto, false);
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            }
-        });
+        InvocationTargetException exception = assertThrows(InvocationTargetException.class,
+                () -> isValidCarRegistration.invoke(carService, invalidDateCarDto, false));
+
+        assert exception.getCause() instanceof IllegalArgumentException;
+        assertEquals("Available start date should not be after available end date",
+                exception.getCause().getMessage());
     }
 
     @Test
@@ -225,13 +218,12 @@ class CarServiceImplTest {
         isValidCarRegistration.setAccessible(true);
         when(carRepository.findCarByLicensePlate(validCarDto.getLicensePlate())).thenReturn(Optional.of(new Car()));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            try {
-                isValidCarRegistration.invoke(carService, validCarDto, true);
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            }
-        });
+        InvocationTargetException exception = assertThrows(InvocationTargetException.class,
+                () -> isValidCarRegistration.invoke(carService, validCarDto, true));
+
+        assert exception.getCause() instanceof IllegalArgumentException;
+        assertEquals(String.format("Car with license plate %s has been registered",
+                validCarDto.getLicensePlate()), exception.getCause().getMessage());
     }
 
     @Test
@@ -407,7 +399,6 @@ class CarServiceImplTest {
         when(locationRepository.findAll(Sort.by(Sort.Direction.ASC, "cityName"))).thenReturn(locations);
         assertEquals(locations, carService.getAllLocations());
     }
-
 
 
 }
