@@ -11,16 +11,10 @@ p
 @src/main/java/com/mpp/gaskeun/controller/ProviderController.java,b\f\bf79b71cb55402dbc689c43411519a2a8dfc3f42
 w
 Gsrc/main/java/com/mpp/gaskeun/exception/IllegalUserAccessException.java,3\a\3a5534540761c82a4026f75b109323b4ade7d86d
-e
-5src/main/java/com/mpp/gaskeun/service/CarService.java,4\2\423b8232ccdf4d4ea9edd78db58c49386f56cb7a
 p
 @src/main/java/com/mpp/gaskeun/controller/ExternalController.java,2\d\2dceba0c1ac6b4bbda0da12ddb7a56fc6260f043
 t
 Dsrc/main/java/com/mpp/gaskeun/controller/RegistrationController.java,7\0\70f87e09bec4375d45033bd234e0d46c87e05206
-f
-6src/main/java/com/mpp/gaskeun/dto/ConfirmOrderDto.java,d\8\d8d86bca6f95e305593329f6cbceee99e276167d
-b
-2src/main/java/com/mpp/gaskeun/dto/CustomerDto.java,f\f\ffa098052398a5aae460293ae9925151a09ae87c
 b
 2src/main/java/com/mpp/gaskeun/dto/LocationDto.java,d\f\df2a4e24e53330303555eca0e51c9fd0d9b9a9d3
 _
@@ -43,8 +37,6 @@ b
 2src/main/java/com/mpp/gaskeun/model/DateRange.java,f\c\fcc644982760c6ed7c99c61327fc7b4d0c77c5c2
 a
 1src/main/java/com/mpp/gaskeun/model/Location.java,8\4\8469b6d7423fdf39ec39d8b93cdc365aad2aee60
-d
-4src/main/java/com/mpp/gaskeun/model/OrderStatus.java,3\7\373f9e5d87e431ee561c3ae23a1b421dc6f611ae
 c
 3src/main/java/com/mpp/gaskeun/model/PriceRange.java,b\f\bf4e813b8b8e9e52311b464240eb372248f29227
 g
@@ -67,8 +59,6 @@ t
 Dsrc/main/java/com/mpp/gaskeun/security/config/WebSecurityConfig.java,9\e\9e4feb81752ff18eb36229174adece927da6dd70
 n
 >src/main/java/com/mpp/gaskeun/service/CustomerServiceImpl.java,2\7\27b97ade10c018e9931af97e3636224cac9e6fea
-g
-7src/main/java/com/mpp/gaskeun/service/OrderService.java,4\4\441e3efbed193685dced1998ab15a69e4d2bbe28
 j
 :src/main/java/com/mpp/gaskeun/service/ProviderService.java,a\3\a3600664981952fde1fbfc7fbace4e6bda7df200
 h
@@ -79,5 +69,3 @@ l
 <src/main/java/com/mpp/gaskeun/service/SearchServiceImpl.java,4\3\436cce84877a56c8aaeaa19ab0cde87a7a50009f
 c
 3src/main/java/com/mpp/gaskeun/utils/OrderUtils.java,0\d\0d0077ac0f06a03441051d4044cb8fb5a0368fd3
-o
-?src/test/java/com/mpp/gaskeun/service/OrderServiceImplTest.java,6\5\652200207a9979e351171b6cc85bfd063fbaa0c7
