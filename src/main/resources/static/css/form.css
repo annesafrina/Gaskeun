@@ -204,7 +204,9 @@
 .form-input__text:focus,
 .form-input__text:focus-visible,
 .form-input__select:focus,
-.form-input__select:focus-visible {
+.form-input__select:focus-visible,
+.form-input__textarea:focus,
+.form-input__textarea:focus-visible {
     outline: none;
 }
 

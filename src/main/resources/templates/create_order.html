@@ -10,6 +10,12 @@
     <div>
         <p th:if="${error != null}" th:text="${error}"></p>
     </div>
+
+    <h2 th:text="${car.getModel()}"></h2>
+    <p th:text="${car.getTransmission()}"></p>
+    <p th:text="${car.getCapacity()}"></p>
+    <img th:src="@{'data:image/png;base64,' + ${base64Image}}" >
+
     <form action="/order/create" method="POST" th:object="${orderDto}">
         <input type="hidden" th:field="*{carId}">
         <div>

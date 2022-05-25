@@ -3,10 +3,8 @@ package com.mpp.gaskeun.controller;
 import com.mpp.gaskeun.dto.ConfirmOrderDto;
 import com.mpp.gaskeun.dto.OrderDto;
 import com.mpp.gaskeun.exception.IllegalUserAccessException;
-import com.mpp.gaskeun.model.Customer;
-import com.mpp.gaskeun.model.Order;
-import com.mpp.gaskeun.model.OrderStatus;
-import com.mpp.gaskeun.model.RentalProvider;
+import com.mpp.gaskeun.model.*;
+import com.mpp.gaskeun.service.CarService;
 import com.mpp.gaskeun.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +26,20 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private CarService carService;
+
     @GetMapping("/create/{carId}")
     public String displayCreateOrder(Model model, @PathVariable("carId") String carId, @AuthenticationPrincipal Customer customer) {
         OrderDto orderDto = new OrderDto();
         orderDto.setCarId(carId);
 
+        Car car = carService.getCarByIdAllowAnyone(Long.parseLong(carId));
+        String base64String = car.getPicture();
+
         model.addAttribute("orderDto", orderDto);
+        model.addAttribute("car", car);
+        model.addAttribute("base64Image", base64String);
         return "create_order";
     }
 
