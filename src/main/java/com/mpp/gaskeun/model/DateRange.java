@@ -6,7 +6,8 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Setter @Getter
+@Setter
+@Getter
 @AllArgsConstructor
 public class DateRange {
     private Date startingDate;

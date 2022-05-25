@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @RequestMapping("/api")
@@ -34,7 +36,7 @@ public class ExternalController {
     }
 
     @GetMapping("/all-locations")
-    public ResponseEntity<?> getAllLocation() {
+    public ResponseEntity<List<String>> getAllLocation() {
         return ResponseEntity.ok(
                 carService.getAllLocations().stream()
                         .map(Location::getCityName)

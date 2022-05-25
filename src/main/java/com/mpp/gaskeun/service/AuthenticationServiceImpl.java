@@ -4,7 +4,6 @@ import com.mpp.gaskeun.dto.CustomerDto;
 import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.exception.IncompleteFormException;
 import com.mpp.gaskeun.model.Customer;
-import com.mpp.gaskeun.model.OrderStatus;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.repository.CustomerRepository;
 import com.mpp.gaskeun.repository.ProviderRepository;
@@ -34,17 +33,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private void initDataCustomer(CustomerDto customerDto, Customer customer) {
         customer.setEmail(customerDto.getEmail());
         customer.setPassword(customerDto.getPassword());
-        customer.setDrivingLicenseNumber(customerDto.getDriving_license());
-        customer.setIdCardNumber(customerDto.getId_card());
+        customer.setDrivingLicenseNumber(customerDto.getDrivingLicense());
+        customer.setIdCardNumber(customerDto.getIdCard());
         customer.setName(customerDto.getName());
-        customer.setPhoneNumber(customerDto.getPhone_number());
+        customer.setPhoneNumber(customerDto.getPhoneNumber());
     }
 
     private void initDataProvider(UserDto userDto, RentalProvider provider) {
         provider.setEmail(userDto.getEmail());
         provider.setName(userDto.getName());
         provider.setPassword(userDto.getPassword());
-        provider.setPhoneNumber(userDto.getPhone_number());
+        provider.setPhoneNumber(userDto.getPhoneNumber());
     }
 
     @Override

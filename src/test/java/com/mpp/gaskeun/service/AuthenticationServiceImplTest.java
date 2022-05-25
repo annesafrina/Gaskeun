@@ -94,7 +94,7 @@ class AuthenticationServiceImplTest {
         validUserDto.setName("name");
         validUserDto.setPassword("password1");
         validUserDto.setPasswordConfirmation("password2");
-        validUserDto.setPhone_number("08123456789");
+        validUserDto.setPhoneNumber("08123456789");
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> authenticationService.register(validUserDto));
@@ -108,7 +108,7 @@ class AuthenticationServiceImplTest {
         validUserDto.setName("name");
         validUserDto.setPassword("password1");
         validUserDto.setPasswordConfirmation("password1");
-        validUserDto.setPhone_number("08123456789");
+        validUserDto.setPhoneNumber("08123456789");
 
         when(providerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.of(new RentalProvider()));
 
@@ -125,7 +125,7 @@ class AuthenticationServiceImplTest {
         validUserDto.setName("name");
         validUserDto.setPassword("password1");
         validUserDto.setPasswordConfirmation("password1");
-        validUserDto.setPhone_number("08123456789");
+        validUserDto.setPhoneNumber("08123456789");
 
         when(customerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.empty());
         when(providerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.empty());
@@ -136,7 +136,7 @@ class AuthenticationServiceImplTest {
 
         assertEquals(validUserDto.getEmail(), savedUser.getEmail());
         assertEquals(validUserDto.getName(), savedUser.getName());
-        assertEquals(validUserDto.getPhone_number(), savedUser.getPhoneNumber());
+        assertEquals(validUserDto.getPhoneNumber(), savedUser.getPhoneNumber());
 
         System.out.println();
         assert encoder.matches(validUserDto.getPassword(), savedUser.getPassword());
@@ -155,9 +155,9 @@ class AuthenticationServiceImplTest {
         validUserDto.setName("name");
         validUserDto.setPassword("password1");
         validUserDto.setPasswordConfirmation("password2");
-        validUserDto.setPhone_number("08123456789");
-        validUserDto.setId_card("ID_CARD");
-        validUserDto.setDriving_license("DRIVING_LICENSE");
+        validUserDto.setPhoneNumber("08123456789");
+        validUserDto.setIdCard("ID_CARD");
+        validUserDto.setDrivingLicense("DRIVING_LICENSE");
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> authenticationService.register(validUserDto));
@@ -172,9 +172,9 @@ class AuthenticationServiceImplTest {
         validUserDto.setName("name");
         validUserDto.setPassword("password1");
         validUserDto.setPasswordConfirmation("password1");
-        validUserDto.setPhone_number("08123456789");
-        validUserDto.setId_card("ID_CARD");
-        validUserDto.setDriving_license("DRIVING_LICENSE");
+        validUserDto.setPhoneNumber("08123456789");
+        validUserDto.setIdCard("ID_CARD");
+        validUserDto.setDrivingLicense("DRIVING_LICENSE");
 
 
         when(customerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.of(new Customer()));
@@ -194,9 +194,9 @@ class AuthenticationServiceImplTest {
         validUserDto.setName("name");
         validUserDto.setPassword("password1");
         validUserDto.setPasswordConfirmation("password1");
-        validUserDto.setPhone_number("08123456789");
-        validUserDto.setId_card("ID_CARD");
-        validUserDto.setDriving_license("DRIVING_LICENSE");
+        validUserDto.setPhoneNumber("08123456789");
+        validUserDto.setIdCard("ID_CARD");
+        validUserDto.setDrivingLicense("DRIVING_LICENSE");
 
         when(customerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.empty());
         when(providerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.empty());
@@ -207,9 +207,9 @@ class AuthenticationServiceImplTest {
 
         assertEquals(validUserDto.getEmail(), savedUser.getEmail());
         assertEquals(validUserDto.getName(), savedUser.getName());
-        assertEquals(validUserDto.getPhone_number(), savedUser.getPhoneNumber());
-        assertEquals(validUserDto.getDriving_license(), savedUser.getDrivingLicenseNumber());
-        assertEquals(validUserDto.getId_card(), savedUser.getIdCardNumber());
+        assertEquals(validUserDto.getPhoneNumber(), savedUser.getPhoneNumber());
+        assertEquals(validUserDto.getDrivingLicense(), savedUser.getDrivingLicenseNumber());
+        assertEquals(validUserDto.getIdCard(), savedUser.getIdCardNumber());
 
         assert encoder.matches(validUserDto.getPassword(), savedUser.getPassword());
     }
