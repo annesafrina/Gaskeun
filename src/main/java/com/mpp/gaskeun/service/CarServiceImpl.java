@@ -38,7 +38,12 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
-        isValidCarRegistration(carDto, true);
+        Object[] isValid = isValidCarRegistration(carDto, true);
+
+        if(!(boolean) isValid[0]) {
+            throw new IllegalArgumentException(String.valueOf(isValid[1]));
+        }
+
         Car car = new Car();
         initCarData(carDto, car);
         car.setRentalProvider(provider);
@@ -49,7 +54,11 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car updateCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
-        isValidCarRegistration(carDto, false);
+        Object[] isValid = isValidCarRegistration(carDto, false);
+        if(!(boolean) isValid[0]) {
+            throw new IllegalArgumentException(String.valueOf(isValid[1]));
+        }
+
         Car car = carRepository
                 .findCarByLicensePlate(carDto.getLicensePlate())
                 .orElseThrow(() -> new CarDoesNotExistException(carDto.getLicensePlate()));
@@ -113,19 +122,31 @@ public class CarServiceImpl implements CarService {
                 .toList();
     }
 
-    private void isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalArgumentException {
-        if (!carDto.isComplete())
-            throw new IncompleteFormException();
+    private Object[] isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalArgumentException {
+        Object[] isValid = {true, null};
+
+        if (!carDto.isComplete()) {
+            isValid[0] = false;
+            isValid[1] = "Form contains invalid/incomplete data";
+            return isValid;
+        }
 
         Date startDate = dateFormatter.parse(carDto.getAvailableStart());
         Date endDate = dateFormatter.parse(carDto.getAvailableEnd());
 
-        if (startDate.after(endDate))
-            throw new IllegalArgumentException("Available start date should not be after available end date");
+        if (startDate.after(endDate)) {
+            isValid[0] = false;
+            isValid[1] = "Available start date should not be after available end date";
+            return isValid;
+        }
 
-        if (isNew && carRepository.findCarByLicensePlate(carDto.getLicensePlate()).isPresent())
-            throw new IllegalArgumentException(
-                    String.format("Car with license plate %s has been registered", carDto.getLicensePlate()));
+        if (isNew && carRepository.findCarByLicensePlate(carDto.getLicensePlate()).isPresent()) {
+            isValid[0] = false;
+            isValid[1] = String.format("Car with license plate %s has been registered", carDto.getLicensePlate());
+            return isValid;
+        }
+
+        return isValid;
     }
 
     /**

@@ -21,6 +21,9 @@ public class Order {
     @Column(name = "is_verified", nullable = false)
     private boolean isVerified;
 
+    @Column(name = "created_date", nullable = false)
+    private Date createdDate = new Date();
+
     @Column(name = "start_date", nullable = false)
     private Date startDate;
 
