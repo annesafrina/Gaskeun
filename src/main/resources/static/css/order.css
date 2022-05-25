@@ -1,0 +1,87 @@
+.car-header {
+    background-color: var(--pastel-blue);
+
+    padding: 1rem;
+
+    box-shadow: 2px 13px 9px -5px rgba(0, 0, 0, 0.24);
+}
+
+.header__grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 13ch);
+    grid-template-areas:
+    "image title title"
+    "image transmission capacity";
+
+    place-items: center;
+    gap: 1rem;
+}
+
+.header__title {
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+.header__text {
+    display: flex;
+    gap: 1rem;
+}
+
+.header__image {
+    height: 100px;
+    width: 150px;
+    object-fit: cover;
+}
+
+.header__grid .image {
+    grid-area: image;
+}
+
+.header__grid .header__title {
+    grid-area: title;
+}
+
+.header__grid .transmission {
+    grid-area: transmission;
+}
+
+.header__grid .capacity {
+    grid-area: capacity;
+}
+
+.create-order-field {
+    padding: 2rem;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+
+    place-items: center;
+}
+
+.form-text__textareadiv {
+    width: 70%;
+}
+
+.bottom-row {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 1rem;
+}
+
+.price-show__price {
+    font-size: 1.5rem;
+}
+
+@media only screen and (max-width: 660px) {
+    .create-order-field {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header__grid {
+        gap: 3rem;
+    }
+}

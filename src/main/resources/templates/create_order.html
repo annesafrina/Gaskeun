@@ -1,40 +1,105 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+            integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link th:href="@{/css/global.css}" rel="stylesheet" />
+    <link th:href="@{/css/form.css}" rel="stylesheet" />
+    <link th:href="@{/css/order.css}" rel="stylesheet" />
+
+    <script defer th:src="@{/js/createOrder.js}"></script>
+
     <title>Create Order</title>
 </head>
 <body>
-    <div>
-        <p th:if="${error != null}" th:text="${error}"></p>
+<div>
+    <p th:if="${error != null}" th:text="${error}"></p>
+</div>
+
+<main>
+    <div class="car-header">
+        <div class="header__grid">
+            <h2 class="header__title" th:text="${car.getModel()}"></h2>
+            <div class="header__text transmission">
+                <p th:text="${car.getTransmission()}"></p>
+                <i class="fa-solid fa-gears"></i>
+            </div>
+            <div class="header__text capacity">
+                <p th:text="${car.getCapacity()}"></p>
+                <i class="fa-solid fa-user-group"></i>
+            </div>
+            <img
+                    th:src="@{'data:image/png;base64,' + ${base64Image}}"
+                    src="gaskeun-regis.jpg"
+                    class="header__image image"
+            />
+            <input id="price-per-day" type="hidden" th:value="${car.getPriceRate()}" />
+        </div>
     </div>
 
-    <h2 th:text="${car.getModel()}"></h2>
-    <p th:text="${car.getTransmission()}"></p>
-    <p th:text="${car.getCapacity()}"></p>
-    <img th:src="@{'data:image/png;base64,' + ${base64Image}}" >
-
     <form action="/order/create" method="POST" th:object="${orderDto}">
-        <input type="hidden" th:field="*{carId}">
-        <div>
-            <input required id="start-date" type="date" th:field="*{startDate}">
-            <label for="start-date">Start Date</label>
+        <input type="hidden" th:field="*{carId}" />
+        <div class="create-order-field">
+            <div class="form-text">
+                <div class="form-input">
+                    <input
+                            class="form-input__text"
+                            required
+                            id="start-date"
+                            type="date"
+                            th:field="*{startDate}"
+                    />
+                    <label class="form-label" for="start-date">Start Date</label>
+                </div>
+            </div>
+            <div class="form-text">
+                <div class="form-input">
+                    <input
+                            class="form-input__text"
+                            required
+                            id="end-date"
+                            type="date"
+                            th:field="*{endDate}"
+                    />
+                    <label class="form-label" for="end-date">End Date</label>
+                </div>
+            </div>
+            <div class="form-text form-text__textareadiv">
+                <label for="pickup-location">Where from?</label>
+                <textarea
+                        class="form-input__textarea"
+                        required
+                        id="pickup-location"
+                        th:field="*{pickUpLocation}"
+                ></textarea>
+            </div>
+            <div class="form-text form-text__textareadiv">
+                <label for="dropoff-location">Where to?</label>
+                <textarea
+                        class="form-input__textarea"
+                        required
+                        id="dropoff-location"
+                        th:field="*{dropOffLocation}"
+                ></textarea>
+            </div>
         </div>
-        <div>
-            <input required id="end-date" type="date" th:field="*{endDate}">
-            <label for="end-date">End Date</label>
+        <div class="bottom-row">
+            <div class="price-show">
+                <p>Total cost</p>
+                <h2>Rp. <span class="price-show__price">0</span></h2>
+            </div>
+            <button type="submit" class="button button-cyan">Create Order</button>
         </div>
-        <div>
-            <textarea required id="pickup-location" th:field="*{pickUpLocation}"></textarea>
-            <label for="pickup-location">Pickup Location</label>
-        </div>
-        <div>
-            <textarea required id="dropoff-location" th:field="*{dropOffLocation}"></textarea>
-            <label for="dropoff-location">Dropoff Location</label>
-        </div>
-        <button type="submit">Create Order</button>
     </form>
+</main>
 </body>
 </html>
