@@ -85,15 +85,18 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car getCarById(RentalProvider provider, long id) throws IllegalArgumentException {
-        Car car = carRepository
-                .findById(id)
-                .orElseThrow(() -> new CarDoesNotExistException(id));
+        Car car = getCarByIdAllowAnyone(id);
 
         if (!car.providerIsOwner(provider)) {
             throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
         }
 
         return car;
+    }
+
+    @Override
+    public Car getCarByIdAllowAnyone(long id) {
+        return carRepository.findById(id).orElseThrow(() -> new CarDoesNotExistException(id));
     }
 
     @Override
