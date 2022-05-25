@@ -35,6 +35,9 @@ public class RentalProvider implements UserDetails {
     @Column(name="performance_rating")
     private double performanceRating;
 
+    @Column(name="number_of_reviews")
+    private int numberOfReviews = 0;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

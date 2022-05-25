@@ -65,6 +65,9 @@ public class Car {
     @ManyToOne
     private Location location;
 
+    @Column(name = "number_of_reviews")
+    private int numberOfReviews = 0;
+
     public String getLocationName() {
         return location.getCityName();
     }

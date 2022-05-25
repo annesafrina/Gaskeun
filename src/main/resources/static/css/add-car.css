@@ -1,0 +1,202 @@
+:root {
+    box-sizing: border-box;
+
+    --pastel-blue: hsl(172, 72%, 69%);
+    --pastel-blue-dark: hsl(172, 72%, 60%);
+    --medium-gray: hsl(0, 0%, 77%);
+    --medium-gray-dark: hsl(0, 0%, 80%);
+    --turquoise-green: hsl(176, 86%, 26%);
+
+    font-family: "Poppins", sans-serif;
+}
+
+.add-car-display {
+    min-height: 100vh;
+
+    display: flex;
+}
+
+.display--left {
+    width: 50%;
+    position: relative;
+}
+
+.display--right {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 1rem;
+}
+
+.display--left {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/img/gaskeun-regis.jpg");
+    background-size: cover;
+}
+
+.display__title {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.blob {
+    clip-path: circle(70% at 0 100%);
+    height: 50vh;
+    width: 50vh;
+    position: absolute;
+
+    bottom: 0;
+    background-color: var(--pastel-blue);
+}
+
+.blob--black {
+    background-color: black;
+}
+
+.add-car__field {
+    width: 100%;
+
+    display: flex;
+}
+
+/* Form */
+.display--header {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    padding: 0 1rem;
+
+    gap: 1rem;
+}
+
+.display__field {
+    display: grid;
+    place-items: center;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    grid-template-areas:
+    "model model"
+    "plate plate"
+    "capacity pricerate"
+    "transmission colour"
+    "location location"
+    "startdate enddate"
+    "file file"
+    "description description"
+    "buttons buttons";
+
+    gap: 0 3rem;
+}
+
+.display__field .model {
+    grid-area: model;
+}
+
+.display__field .plate {
+    grid-area: plate;
+}
+
+.display__field .capacity {
+    grid-area: capacity;
+}
+
+.display__field .price-rate {
+    grid-area: pricerate;
+}
+
+.display__field .colour {
+    grid-area: colour;
+}
+
+.display__field .start-date {
+    grid-area: startdate;
+}
+
+.display__field .end-date {
+    grid-area: enddate;
+}
+
+.display__field .file {
+    grid-area: file;
+}
+
+.display__field .transmission {
+    grid-area: transmission;
+}
+
+.display__field .submit {
+    grid-area: submit;
+}
+
+.display__field .location {
+    grid-area: location;
+}
+
+.display__field .description {
+    grid-area: description;
+}
+
+.display__field .buttons {
+    grid-area: buttons;
+
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+@media only screen and (max-width: 1277px) {
+    .add-car-display {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .display--left {
+        width: 100%;
+        height: 40vh;
+
+        background-position: 50% 50%;
+        box-shadow: 2px 13px 9px -5px rgba(0, 0, 0, 0.24);
+    }
+
+    .display--right {
+        width: 95%;
+    }
+
+    .blob {
+        clip-path: circle(40% at 0 100%);
+    }
+}
+
+@media only screen and (max-width: 731px) {
+    :root {
+        font-size: 10pt;
+    }
+
+    .add-car-display {
+        overflow-x: hidden;
+    }
+
+    .display__field {
+        grid-template-columns: 2fr;
+        grid-template-areas:
+      "model model"
+      "plate plate"
+      "capacity capacity"
+      "pricerate pricerate"
+      "transmission transmission"
+      "colour colour"
+      "location location"
+      "startdate startdate"
+      "enddate enddate"
+      "file file"
+      "description description"
+      "buttons buttons";
+    }
+}

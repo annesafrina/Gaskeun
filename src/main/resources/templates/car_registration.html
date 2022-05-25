@@ -1,57 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+            integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/form.css}" />
+    <link rel="stylesheet" th:href="@{/css/add-car.css}" />
+
+    <script defer th:src="@{/js/addCar.js}"></script>
     <title>Car Registration</title>
 </head>
 <body>
-    <form action="/provider/register-car" method="post" enctype="multipart/form-data" th:object="${carDto}">
-        <label>License Plate</label>
-        <input type="text" class="form-control" placeholder="License Plate" th:field="*{licensePlate}"><br/>
+<main>
+    <form
+            class="add-car-display"
+            action="/provider/register-car"
+            method="post"
+            enctype="multipart/form-data"
+            th:object="${carDto}"
+    >
+        <div class="display--left">
+            <div class="blob blob--left blob--black"></div>
+        </div>
+        <div class="display--right">
+            <div class="display--header">
+                <h2 class="display__title">Get your car on the road.</h2>
+                <p class="display__text">
+                    Join the Gaskeun family and get your car on the road.
+                </p>
+            </div>
 
-        <label>Capacity</label>
-        <input type="number" class="form-control" placeholder="Capacity" th:field="*{capacity}"><br/>
+            <div class="display__field">
+                <div class="form-text model">
+                    <div class="form-input">
+                        <input
+                                id="model"
+                                class="form-input__text"
+                                type="text"
+                                placeholder=" "
+                                th:field="*{model}"
+                        />
+                        <label for="model" class="form-label">Model</label>
+                    </div>
+                </div>
 
-        <label>Model</label>
-        <input type="text" class="form-control" placeholder="Model" th:field="*{model}"><br/>
+                <div class="form-text plate">
+                    <div class="form-input">
+                        <input
+                                type="text"
+                                id="model"
+                                class="form-input__text"
+                                placeholder=" "
+                                th:field="*{licensePlate}"
+                        />
+                        <label for="model" class="form-label">License Plate</label>
+                    </div>
+                </div>
 
-        <label>Price Rate</label>
-        <input type="number" class="form-control" placeholder="Price Rate" th:field="*{priceRate}"><br/>
+                <div class="form-text capacity">
+                    <div class="form-input">
+                        <input
+                                type="number"
+                                min="0"
+                                id="capacity"
+                                class="form-input__text"
+                                placeholder=" "
+                                value="0"
+                                th:field="*{capacity}"
+                        />
+                        <i class="fa-solid form-icon fa-user-group"></i>
+                        <label for="capacity" class="form-label">Capacity</label>
+                    </div>
+                </div>
 
-        <label>Price Rate</label>
-        <select name="Transmission" th:field="*{transmission}">
-            <option th:each="transmission: ${transmissions}"
-                    th:value="${transmission.toString()}"
-                    th:text="${transmission.toString().toLowerCase()}"></option>
-        </select><br/>
+                <div class="form-text price-rate">
+                    <div class="form-input">
+                        <input
+                                type="number"
+                                min="0"
+                                class="form-input__text"
+                                id="pricerate"
+                                placeholder=" "
+                                value="0"
+                                th:field="*{priceRate}"
+                        />
+                        <i class="fa-solid form-icon fa-money-bill"></i>
+                        <label for="pricerate" class="form-label">Price Rate</label>
+                    </div>
+                </div>
 
-        <label>Color</label>
-        <select name="Color" th:field="*{color}">
-            <option th:each="color: ${colors}"
-                    th:value="${color.toString()}"
-                    th:text="${color.toString().toLowerCase()}"></option>
-        </select><br/>
+                <div class="form-text transmission">
+                    <label class="form-label--static">Transmission</label>
+                    <div class="form-select">
+                        <select
+                                class="form-input__select"
+                                name="Transmission"
+                                th:field="*{transmission}"
+                        >
+                            <option
+                                    class="form-input__option"
+                                    th:each="transmission: ${transmissions}"
+                                    th:value="${transmission.toString()}"
+                                    th:text="${transmission.toString().toLowerCase()}"
+                            ></option>
+                        </select>
+                    </div>
+                </div>
 
-        <label>Available Start Date</label>
-        <input type="date" th:field="*{availableStart}"><br/>
+                <div class="form-text colour">
+                    <label class="form-label--static">Color</label>
+                    <div class="form-select">
+                        <select
+                                class="form-input__select"
+                                name="Color"
+                                th:field="*{color}"
+                        >
+                            <option
+                                    class="form-input__option"
+                                    th:each="color: ${colors}"
+                                    th:value="${color.toString()}"
+                                    th:text="${color.toString().toLowerCase()}"
+                            ></option>
+                        </select>
+                    </div>
+                </div>
 
-        <label>Available End Date</label>
-        <input type="date" th:field="*{availableEnd}"><br/>
+                <div class="form-text location">
+                    <label class="form-label--static">Location</label>
+                    <div class="form-select">
+                        <select class="form-input__select" name="Location" th:field="*{cityName}">
+                            <option
+                                    class = "form-input__option"
+                                    th:each="location: ${locations}"
+                                    th:value="${location.getCityName()}"
+                                    th:text="${location.getCityName()}"
+                            ></option></select
+                        >
+                    </div>
 
-        <label>Location</label>
-        <select name="Location" th:field="*{cityName}">
-                <option th:each="location: ${locations}"
-                        th:value="${location.getCityName()}"
-                        th:text="${location.getCityName()}"></option>
-        </select><br/>
+                </div>
 
-        <label>Car Description</label><br/>
-        <textarea th:field="*{description}"></textarea><br/>
+                <div class="form-text start-date">
+                    <div class="form-input">
+                        <input
+                                id="start-date"
+                                class="form-input__text"
+                                placeholder=" "
+                                type="date"
+                                th:field="*{availableStart}"
+                        />
+                        <label for="start-date" class="form-label"
+                        >Available Start Date</label
+                        >
+                    </div>
+                </div>
 
-        <input type="file" name="car-image" accept="image/jpeg, image/png" />
+                <div class="form-text end-date">
+                    <div class="form-input">
+                        <input
+                                id="end-date"
+                                class="form-input__text"
+                                type="date"
+                                th:field="*{availableEnd}"
+                        />
+                        <label for="end-date" class="form-label"
+                        >Available End Date</label
+                        >
+                    </div>
+                </div>
 
-        <button type="submit">Submit</button>
+                <div class="form-text file">
+                    <label for="file" class="form-input__file">
+                        <p id="file-name">Upload a picture</p>
+                        <i class="fa-solid fa-images form-icon"></i>
+                    </label>
+                    <input
+                            class="form-input__file-hide"
+                            type="file"
+                            id="file"
+                            name="car-image"
+                            accept="image/jpeg, image/png"
+                    />
+                </div>
+
+                <div class="form-text description">
+                    <label class="form-label--static">Car Description</label>
+                    <textarea
+                            class="form-input__textarea"
+                            th:field="*{description}"
+                    ></textarea>
+                </div>
+
+                <div class="form-text buttons">
+                    <a class="button button-red back" href="/provider/cars">Back</a>
+                    <button class="button button-cyan submit" type="submit">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
     </form>
-
+</main>
 </body>
 </html>

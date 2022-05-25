@@ -38,6 +38,9 @@ public class Customer implements UserDetails {
     @Column(name="rating")
     private double rating;
 
+    @Column(name="number_of_reviews")
+    private int numberOfReviews = 0;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
