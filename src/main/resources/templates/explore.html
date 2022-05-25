@@ -85,7 +85,7 @@
             </form>
         </section>
         <div class="nav-section stretch">
-            <a href="" class="anchor-pill-button">JOIN NOW!</a>
+            <a th:if="${loggedIn} "href="" class="anchor-pill-button">JOIN NOW!</a>
         </div>
         <section class="nav-section user-actions">
             <a href="" class="nav-link"><i class="fa-solid fa-gear"></i></a>
@@ -101,7 +101,7 @@
             <a href="" class="drawer-link">User Settings <i class="fa-solid fa-gear"></i></a>
             <a href="" class="drawer-link">My Profile <i class="fa-regular fa-user"></i></a>
             <div class="drawer-link">
-                <a href="" class="anchor-pill-button">JOIN NOW!</a>
+                <a th:if="${loggedIn}" href="" class="anchor-pill-button">JOIN NOW!</a>
             </div>
         </div>
     </nav>
