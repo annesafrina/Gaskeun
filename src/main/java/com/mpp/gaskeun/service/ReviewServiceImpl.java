@@ -38,18 +38,22 @@ public class ReviewServiceImpl implements ReviewService {
         review = reviewDto.getReview();
         review.setOrder(order);
         review.setRating(reviewDto.getRating());
-        review.setDescription(review.getDescription());
+        review.setDescription(reviewDto.getDescription());
         review.updateRevieweeRating();
+        review.updateOrderReviewers();
 
         reviewRepository.save(review);
         return review;
     }
 
     @Override
-    public Order validateOrderReviewable(Long id, UserDetails user) {
+    public Order validateOrderReviewable(Long id, UserDetails user, ReviewType reviewType) {
         try {
             Order order = validateOrderExists(id);
-            if (!(validateOrderIsCompleted(order) && orderOwnedByUser(order, user))) {
+            boolean orderCompleted = validateOrderIsCompleted(order);
+            boolean orderRelatedToUser = orderOwnedByUser(order, user);
+            boolean reviewForOrderExists = reviewForOrderDoesNotExist(order, reviewType);
+            if (!(orderCompleted && orderRelatedToUser) || reviewForOrderExists) {
                 throw new OrderNotReviewableException(id);
             }
             return order;
@@ -57,6 +61,17 @@ public class ReviewServiceImpl implements ReviewService {
         } catch (OrderDoesNotExistException e) {
             throw new OrderNotReviewableException(id);
         }
+    }
+
+    private boolean reviewForOrderDoesNotExist(Order order, ReviewType reviewType) {
+        if (reviewType == ReviewType.CAR) {
+            return order.isCarIsReviewed();
+        } else if (reviewType == ReviewType.PROVIDER) {
+            return order.isProviderIsReviewed();
+        } else if (reviewType == ReviewType.CUSTOMER) {
+            return order.isCustomerIsReviewed();
+        }
+        return false;
     }
 
     private boolean validateOrderIsCompleted(Order order) {

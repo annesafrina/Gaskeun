@@ -16,4 +16,9 @@ public class ProviderReview extends Review {
         provider.setNumberOfReviews(provider.getNumberOfReviews() + 1);
         provider.setPerformanceRating(ratingSum/provider.getNumberOfReviews());
     }
+
+    @Override
+    public void updateOrderReviewers() {
+        this.order.setProviderIsReviewed(true);
+    }
 }
