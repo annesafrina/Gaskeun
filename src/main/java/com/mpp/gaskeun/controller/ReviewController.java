@@ -1,9 +1,12 @@
 package com.mpp.gaskeun.controller;
 
 import com.mpp.gaskeun.dto.*;
+import com.mpp.gaskeun.exception.OrderDoesNotExistException;
+import com.mpp.gaskeun.exception.OrderNotReviewableException;
 import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.service.OrderService;
 import com.mpp.gaskeun.service.ReviewService;
+import com.mpp.gaskeun.utils.DateParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,19 +27,27 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @GetMapping("/create/car/{orderId}")
-    public String getCarReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user,
-                               @PathVariable("description") String description, @PathVariable("rating") double rating) {
-
+    public String getCarReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user) {
+        Order order;
         if(!(user instanceof Customer)) {
+            return "redirect:/";
+        }
+
+        try {
+            Long parsedOrderId = Long.parseLong(orderId);
+            order = reviewService.validateOrderReviewable(parsedOrderId, user);
+
+        } catch (NumberFormatException | OrderNotReviewableException e) {
             return "redirect:/";
         }
 
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setOrderId(orderId);
-        reviewDto.setDescription(description);
-        reviewDto.setRating(rating);
 
-        model.addAttribute("orderDto", reviewDto);
+        model.addAttribute("orderStartDate", DateParser.parse(order.getStartDate()));
+        model.addAttribute("orderEndDate", DateParser.parse(order.getEndDate()));
+        model.addAttribute("order", order);
+        model.addAttribute("reviewDto", reviewDto);
         return "car_review";
     }
 
