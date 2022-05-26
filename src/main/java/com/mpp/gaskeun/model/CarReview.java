@@ -2,24 +2,20 @@ package com.mpp.gaskeun.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
 @Entity
+@DiscriminatorValue("car")
 @Table(name = "car_review")
-@Getter
-@Setter
-public class CarReview {
-    @Id
-    private long id;
-
-    @OneToOne
-    @MapsId
-    private Order order;
-
-    @Column(name = "rating", nullable = false)
-    private double rating;
-
-    @Column(name = "description")
-    private String description;
+public class CarReview extends Review {
+    @Override
+    public void updateRevieweeRating() {
+        Car car = this.order.getCar();
+        double ratingSum = getRating() + car.getRating();
+        car.setNumberOfReviews(car.getNumberOfReviews() + 1);
+        car.setRating(ratingSum/car.getNumberOfReviews());
+    }
 }

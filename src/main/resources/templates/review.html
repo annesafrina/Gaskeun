@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><!-- TYPE --> Review</title>
+    <title th:text="${reviewType} + ' Review'"></title>
     <link rel="stylesheet" th:href="@{/css/global.css}" type="text/css"/>
     <link
             rel="stylesheet"
@@ -22,11 +22,11 @@
     <main id="main">
       <div class="section__review">
         <div class="header">
-          <h1>How was your USER_TYPE<!-- USER TYPE --><span id="question">?</span></h1>
+          <h1><span th:text="'How was your ' + ${reviewType}"></span><span id="question">?</span></h1>
         </div>
-        <form action="" class="review">
+        <form method="POST" th:action="'/review/create/' + ${reviewType.toLowerCase()}" class="review" th:object="${reviewDto}">
           <div class="rating-section">
-            <label for="">Rate your experience:</label>
+            <label for="rating-slider">Rate your experience:</label>
             <div id="rating-slider">
               <i class="fa-solid fa-star"></i>
               <i class="fa-solid fa-star"></i>
@@ -35,19 +35,22 @@
               <i class="fa-solid fa-star"></i>
             </div>
           </div>
-          <input type="hidden" id="rating" name="rating" />
+          <input type="hidden" name="orderId" th:field="*{orderId}">
+          <input type="hidden" id="rating" name="rating" th:field="*{rating}" />
           <textarea
             id="description"
             name="description"
             placeholder="Tell us more..."
+            th:field="*{description}"
           ></textarea>
           <button type="submit" class="submit-review">Submit</button>
         </form>
       </div>
       <div class="section__user-info">
-        <div class="info-header">USER_TYPE</div>
+        <div class="info-header" th:text="${reviewType.toUpperCase()}"></div>
         <div class="user-profile"><i class="fa-solid fa-user fa-6x"></i></div>
-        <div class="user-name">NAME</div>
+        <div class="user-name" th:if="${reviewType == 'Customer'}" th:text="${order.getCustomer().getName().toUpperCase()}"></div>
+        <div class="user-name" th:unless="${reviewType == 'Customer'}" th:text="${order.getCarProvider().getName().toUpperCase()}"></div>
       </div>
     </main>
   </body>

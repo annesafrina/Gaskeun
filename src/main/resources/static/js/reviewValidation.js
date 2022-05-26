@@ -21,6 +21,7 @@ form.addEventListener("submit", (e) => {
       toast.remove();
     });
   } else {
+    form.querySelector("#rating").value = currentSelectedRating;
     form.submit();
   }
 });

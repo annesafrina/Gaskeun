@@ -1,25 +1,17 @@
 package com.mpp.gaskeun.model;
 
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
+@DiscriminatorValue("customer")
 @Table(name = "customer_review")
-@Getter
-@Setter
-public class CustomerReview {
-    @Id
-    private long id;
-
-    @OneToOne
-    @MapsId
-    private Order order;
-
-    @Column(name = "rating", nullable = false)
-    private double rating;
-
-    @Column(name = "description")
-    private String description;
+public class CustomerReview extends Review{
+    @Override
+    public void updateRevieweeRating() {
+        Customer customer = this.order.getCustomer();
+        double ratingSum = getRating() + customer.getRating();
+        customer.setNumberOfReviews(customer.getNumberOfReviews() + 1);
+        customer.setRating(ratingSum/customer.getNumberOfReviews());
+    }
 }
