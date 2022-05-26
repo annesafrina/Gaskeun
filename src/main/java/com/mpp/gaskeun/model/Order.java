@@ -47,6 +47,10 @@ public class Order {
     @Column(name = "order_status", nullable = false)
     private OrderStatus orderStatus;
 
+    public boolean customerIsOwner(Customer customer) {
+        return this.customer.equals(customer);
+    }
+
     public RentalProvider getCarProvider() {
         return this.car.getRentalProvider();
     }
