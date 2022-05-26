@@ -7,6 +7,7 @@ async function handleResponse(response) {
         const statusText = document.querySelector("#status");
         const statusDisplayed = jsonResponse.orderStatus
         statusText.innerText = statusDisplayed.replaceAll("_", " ");
+        statusText.style = CSS_MAP[statusDisplayed];
 
         const successMessageDiv = document.createElement("div");
         const successMessage = document.createElement("p");
@@ -23,12 +24,18 @@ async function handleResponse(response) {
         }
 
 
-        const main = document.querySelector(".container");
+        const carHeader = document.querySelector(".car-header");
         successMessageDiv.classList.add("toast");
+        const cross = document.createElement("div");
+        cross.innerHTML = "<i class=\"fa-solid fa-xmark close-error\"></i>";
+        cross.addEventListener("click", () => {
+            successMessageDiv.remove();
+        });
         successMessageDiv.classList.add("toast-success");
         
         successMessageDiv.appendChild(successMessage);
-        main.appendChild(successMessageDiv);
+        successMessageDiv.appendChild(cross);
+        carHeader.appendChild(successMessageDiv);
 
         return true;
 
@@ -53,15 +60,26 @@ async function handleResponse(response) {
         const main = document.querySelector(".container");
         errorMessageDiv.classList.add("toast");
         errorMessageDiv.classList.add("toast-error");
-        
+
+        const cross = document.createElement("div");
+        cross.innerHTML = "<i class=\"fa-solid fa-xmark close-error\"></i>";
+        cross.addEventListener("click", () => {
+            errorMessageDiv.remove();
+        });
+
         errorMessageDiv.appendChild(errorMessage);
+        errorMessageDiv.appendChild(cross);
         main.appendChild(errorMessageDiv);
 
         return false;
     }
 }
 
+const API_ROUTE = "http://localhost:8090";
+
 async function createRejection (bookingDetails, main) {
+
+
     const detailValue = bookingDetails.value;
     const orderId = main.dataset.orderId;
 
@@ -111,7 +129,7 @@ async function activateOrder(main) {
 async function completeOrder(main) {
     const orderId = main.dataset.orderId;
 
-    const response = await fetch(`${API_ROUTE}/order/complete/${orderId}`, {
+    const response = await fetch(`/order/complete/${orderId}`, {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -122,7 +140,14 @@ async function completeOrder(main) {
     return await handleResponse(response);
 }
 
-const API_ROUTE = "http://localhost:8090"
+const CSS_MAP = {
+    "PENDING" : "background-color: #ECE4B7;",
+    "ACTIVE" : "background-color: #33CA7F; color: white;",
+    "WAITING_FOR_PAYMENT" : "background-color: #7DCFB6;",
+    "CANCELLED" : "background-color: #FC9F5B;",
+    "REJECTED" : "background-color: #D50000; color: white;",
+    "COMPLETED" : "background-color: #00CFC1; color: white;"
+}
 
 const bookingDetails = document.querySelector("#booking-msg");
 const confirmBtn = document.querySelector("#button-confirm");
@@ -134,11 +159,13 @@ const main = document.querySelector(".container");
 if (rejectBtn != null) {
     rejectBtn.addEventListener("click", async (e) => {
         e.preventDefault();
+        rejectBtn.innerHTML = "<div class=\"lds-dual-ring\"></div>";
         const isValid = await createRejection(bookingDetails, main);
 
         if (isValid) {
-            e.target.parentElement.remove();
+            e.target.parentElement.parentElement.remove();
         }
+        rejectBtn.innerHTML = "Reject";
     });
 }
 
@@ -146,32 +173,38 @@ if (rejectBtn != null) {
 if (confirmBtn != null) {
     confirmBtn.addEventListener("click", async (e) => {
         e.preventDefault();
+        confirmBtn.innerHTML = "<div class=\"lds-dual-ring\"></div>";
         const isValid = await createConfirmation(main);
         
         if (isValid) {
-            e.target.parentElement.remove();
+            e.target.parentElement.parentElement.remove();
         }
+        confirmBtn.innerHTML = "Confirm";
     });
 }    
 
 if (payBtn != null) {
     payBtn.addEventListener("click", async (e) => {
         e.preventDefault();
+        payBtn.innerHTML = "<div class=\"lds-dual-ring\"></div>";
         const isValid = await activateOrder(main);
 
         if (isValid) {
             e.target.remove();
         }
+        payBtn.innerHTML = "Accept Payment";
     })   
 }
 
 if (completeBtn != null) {
     completeBtn.addEventListener("click", async (e) => {
         e.preventDefault();
+        completeBtn.innerHTML = "<div class=\"lds-dual-ring\"></div>";
         const isValid = await completeOrder(main);
         
         if (isValid) {
             e.target.remove();
         }
+        completeBtn.innerHTML = "Complete";
     })
 }
