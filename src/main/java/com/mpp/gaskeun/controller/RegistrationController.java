@@ -2,8 +2,6 @@ package com.mpp.gaskeun.controller;
 
 import com.mpp.gaskeun.dto.CustomerDto;
 import com.mpp.gaskeun.dto.UserDto;
-import com.mpp.gaskeun.model.Customer;
-import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.service.AuthenticationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

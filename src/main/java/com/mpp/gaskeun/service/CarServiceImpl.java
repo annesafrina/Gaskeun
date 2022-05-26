@@ -38,36 +38,38 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
-        if (isValidCarRegistration(carDto, true)) {
-            log.info("ENTERED BOX");
-            Car car = new Car();
-            initCarData(carDto, car);
-            car.setRentalProvider(provider);
+        Object[] isValid = isValidCarRegistration(carDto, true);
 
-            log.info("Saved car {} in repository", car.getLicensePlate());
-            return carRepository.save(car);
+        if(!(boolean) isValid[0]) {
+            throw new IllegalArgumentException(String.valueOf(isValid[1]));
         }
 
-        return null;
+        Car car = new Car();
+        initCarData(carDto, car);
+        car.setRentalProvider(provider);
+
+        log.info("Saved car {} in repository", car.getLicensePlate());
+        return carRepository.save(car);
     }
 
     @Override
     public Car updateCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
-        if (isValidCarRegistration(carDto, false)) {
-            Car car = carRepository
-                    .findCarByLicensePlate(carDto.getLicensePlate())
-                    .orElseThrow(() -> new CarDoesNotExistException(carDto.getLicensePlate()));
-
-            initCarData(carDto, car);
-
-            if (!car.providerIsOwner(provider))
-                throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
-
-            log.info("Updated car {} in repository", car.getLicensePlate());
-            return carRepository.save(car);
+        Object[] isValid = isValidCarRegistration(carDto, false);
+        if(!(boolean) isValid[0]) {
+            throw new IllegalArgumentException(String.valueOf(isValid[1]));
         }
 
-        return null;
+        Car car = carRepository
+                .findCarByLicensePlate(carDto.getLicensePlate())
+                .orElseThrow(() -> new CarDoesNotExistException(carDto.getLicensePlate()));
+
+        initCarData(carDto, car);
+
+        if (!car.providerIsOwner(provider))
+            throw new NotCarOwnerException(provider.getEmail(), car.getLicensePlate());
+
+        log.info("Updated car {} in repository", car.getLicensePlate());
+        return carRepository.save(car);
     }
 
     @Override
@@ -120,22 +122,31 @@ public class CarServiceImpl implements CarService {
                 .toList();
     }
 
-    private boolean isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalArgumentException {
+    private Object[] isValidCarRegistration(CarDto carDto, boolean isNew) throws ParseException, IllegalArgumentException {
+        Object[] isValid = {true, null};
+
         if (!carDto.isComplete()) {
-            throw new IncompleteFormException();
+            isValid[0] = false;
+            isValid[1] = "Form contains invalid/incomplete data";
+            return isValid;
         }
 
         Date startDate = dateFormatter.parse(carDto.getAvailableStart());
         Date endDate = dateFormatter.parse(carDto.getAvailableEnd());
 
-        if (startDate.after(endDate))
-            throw new IllegalArgumentException("Available start date should not be after available end date");
+        if (startDate.after(endDate)) {
+            isValid[0] = false;
+            isValid[1] = "Available start date should not be after available end date";
+            return isValid;
+        }
 
-        if (isNew && carRepository.findCarByLicensePlate(carDto.getLicensePlate()).isPresent())
-            throw new IllegalArgumentException(
-                    String.format("Car with license plate %s has been registered", carDto.getLicensePlate()));
+        if (isNew && carRepository.findCarByLicensePlate(carDto.getLicensePlate()).isPresent()) {
+            isValid[0] = false;
+            isValid[1] = String.format("Car with license plate %s has been registered", carDto.getLicensePlate());
+            return isValid;
+        }
 
-        return true;
+        return isValid;
     }
 
     /**

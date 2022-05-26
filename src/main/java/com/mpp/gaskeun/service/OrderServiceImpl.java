@@ -6,6 +6,7 @@ import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.OrderRepository;
 import com.mpp.gaskeun.utils.OrderUtils;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,12 +14,14 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
+@Setter
 public class OrderServiceImpl implements OrderService{
 
     @Autowired
@@ -37,7 +40,6 @@ public class OrderServiceImpl implements OrderService{
         order.setEndDate(formatter.parse(orderDto.getEndDate()));
 
         return order;
-
     }
 
     @Override
@@ -59,6 +61,19 @@ public class OrderServiceImpl implements OrderService{
         if (!isValidDuringDate(car, order)) {
             isValid[0] = false;
             isValid[1] = "The car has already been booked for the selected date.";
+            return isValid;
+        }
+
+        if(!orderStartIsMaximum30Days(order)) {
+            isValid[0] = false;
+            isValid[1] = "The car should only be book at most 30 days from now";
+            return isValid;
+        }
+
+        if(!orderLengthIsMaximum30Days(order)) {
+            isValid[0] = false;
+            isValid[1] = "Orders length is at most 30 days";
+            return isValid;
         }
 
         return isValid;
@@ -93,11 +108,11 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public Order createOrder(Customer customer, OrderDto orderDto) throws Exception{
+    public Order createOrder(Customer customer, OrderDto orderDto) throws NoSuchElementException, ParseException {
         Car car;
 
         try {
-            car = carRepository.findById(Long.parseLong(orderDto.getCarId())).get();
+            car = carRepository.findById(Long.parseLong(orderDto.getCarId())).orElseThrow(NoSuchElementException::new);
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException(String.format("Car with id %s is not found", orderDto.getCarId()));
         }
@@ -118,7 +133,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     public Order getOrder(long id, UserDetails user) throws NoSuchElementException, IllegalStateException {
-        Order order = orderRepository.findById(id).get();
+        Order order = orderRepository.findById(id).orElseThrow(NoSuchElementException::new);
         if (user instanceof Customer customer) {
             handleIllegalCustomer(order, customer);
         } else if (user instanceof RentalProvider provider) {
@@ -143,7 +158,15 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public void cancelOrder(Customer customer, Order order) {
+        if(!verifyOrderOwnership(customer, order)) {
+            throw new IllegalUserAccessException(order.getId(), customer.getEmail());
+        }
 
+        if(!isWithin2DaysAfterCreation(order)) {
+            throw new IllegalArgumentException("Cancellation period has ended");
+        }
+
+        order.setOrderStatus(OrderStatus.CANCELLED);
     }
 
     /**
@@ -176,7 +199,6 @@ public class OrderServiceImpl implements OrderService{
         if (bookingMessage.length() != 0) {
             order.setBookingMessage(bookingMessage);
         }
-        System.out.println(bookingMessage);
 
         log.info(String.format("Order status changed to %s", status));
 
@@ -185,6 +207,14 @@ public class OrderServiceImpl implements OrderService{
         return order;
     }
 
+    private boolean verifyOrderOwnership(Customer customer, Order order) {
+        if(order == null) {
+            return false;
+        }
+
+        Customer owningCustomer = order.getCustomer();
+        return owningCustomer.getId() == customer.getId();
+    }
 
     /**
      * Verifies whether an order is destined to a rental provider
@@ -199,4 +229,34 @@ public class OrderServiceImpl implements OrderService{
         RentalProvider actualProvider = order.getCarProvider();
         return actualProvider.getId() == provider.getId();
     }
+
+    private boolean orderStartIsMaximum30Days(Order order) {
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, 30);
+        Date thirtyDaysFromNow = calendar.getTime();
+        return order.getStartDate().before(thirtyDaysFromNow);
+    }
+
+    private boolean orderLengthIsMaximum30Days(Order order) {
+        Date startDate = order.getStartDate();
+        Date endDate = order.getEndDate();
+
+        long difference = endDate.getTime() - startDate.getTime();
+        long differenceInDays = (difference / (1000 * 60 * 60 * 24)) % 365;
+        return differenceInDays <= 30;
+    }
+
+    private boolean isWithin2DaysAfterCreation(Order order) {
+        Date createdDate = order.getCreatedDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(createdDate);
+        calendar.add(Calendar.DATE, 2);
+        Date twoDaysAfterCreation = calendar.getTime();
+
+        return new Date().before(twoDaysAfterCreation);
+    }
+
+
 }

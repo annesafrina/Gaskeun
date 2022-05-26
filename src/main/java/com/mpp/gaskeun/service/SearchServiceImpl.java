@@ -1,9 +1,13 @@
 package com.mpp.gaskeun.service;
 
-import com.mpp.gaskeun.model.*;
+import com.mpp.gaskeun.model.Car;
+import com.mpp.gaskeun.model.Location;
+import com.mpp.gaskeun.model.Order;
+import com.mpp.gaskeun.model.Transmission;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.LocationRepository;
-import com.mpp.gaskeun.utils.OrderUtils;
+
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +17,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
+@Setter
 @Service
 @Slf4j
-public class SearchServiceImpl implements SearchService{
+public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private CarRepository carRepository;
@@ -27,10 +31,12 @@ public class SearchServiceImpl implements SearchService{
 
     @Autowired
     private OrderServiceImpl orderService;
+
     /**
      * Method to return all cars in the database provided by any car provider
+     *
      * @return List of all cars provided in the database
-     * */
+     */
     @Override
     public List<Car> getCars() {
         return carRepository.findAll();
@@ -42,18 +48,18 @@ public class SearchServiceImpl implements SearchService{
     }
 
     /**
-     * @param cityName=The required location (city) where the cars should be stationed
-     * @param startDate=The starting date where the car should be available: The car should not be part of any order
-     *                 in this date range (orderStartDate <= endDate and orderEndDate >= startDate)
-     * @param endDate=The end date where the car should be available: The car should not be part of any order
-     *                in this date range (orderStartDate <= endDate and orderEndDate >= startDate)
-     * @param carCapacity=Required car capacity
+     * @param cityName=The          required location (city) where the cars should be stationed
+     * @param startDate=The         starting date where the car should be available: The car should not be part of any order
+     *                              in this date range (orderStartDate <= endDate and orderEndDate >= startDate)
+     * @param endDate=The           end date where the car should be available: The car should not be part of any order
+     *                              in this date range (orderStartDate <= endDate and orderEndDate >= startDate)
+     * @param carCapacity=Required  car capacity
      * @param transmission=Required car transmission
-     * @param maxPrice=The price of the car must be within this range (minPrice <= price <= maxPrice)
-     * @param minPrice=The price of the car must be within this range (minPrice <= price <= maxPrice)
-     * @param modelName=The model name of the car
+     * @param maxPrice=The          price of the car must be within this range (minPrice <= price <= maxPrice)
+     * @param minPrice=The          price of the car must be within this range (minPrice <= price <= maxPrice)
+     * @param modelName=The         model name of the car
      * @return A list of cars matching the required filter.
-     *
+     * <p>
      * Note: It is unnecessary for all field to be filled. If the value of a field is null (not provided by user), the field
      * will be neglected in the filtration process. That is, all cars that corresponds to any of the possible values of the
      * neglected field will be included as long as it complies to the remaining filters.
@@ -74,9 +80,9 @@ public class SearchServiceImpl implements SearchService{
     }
 
 
-
     private Order createDummyOrder(String startDate, String endDate) throws ParseException {
-        Date parsedStartDate = null, parsedEndDate = null;
+        Date parsedStartDate;
+        Date parsedEndDate;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         if (startDate.length() == 0 && endDate.length() == 0) {
@@ -95,8 +101,6 @@ public class SearchServiceImpl implements SearchService{
             parsedStartDate = format.parse(startDate);
             parsedEndDate = format.parse(endDate);
         }
-
-        log.info("SETTING DUMMY ORDER DATE");
 
         Order dummyOrder = new Order();
         dummyOrder.setStartDate(parsedStartDate);

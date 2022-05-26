@@ -27,6 +27,9 @@ import java.util.Map;
 @Slf4j
 public class ProviderController {
 
+    public static final String REDIRECT = "redirect:/";
+    public static final String ERROR_ATTRIB_NAME = "error";
+    public static final String CAR_DTO_ATTRIB_NAME = "carDto";
     @Autowired
     private CarService carService;
 
@@ -35,8 +38,8 @@ public class ProviderController {
 
     @GetMapping("/info")
     public String getProviderInfo(@AuthenticationPrincipal UserDetails user, Model model) {
-        if(!(user instanceof RentalProvider)) {
-            return "redirect:/";
+        if (!(user instanceof RentalProvider)) {
+            return REDIRECT;
         }
 
         model.addAttribute("provider", user);
@@ -46,8 +49,8 @@ public class ProviderController {
 
     @GetMapping("/edit")
     public String updateProviderInfo(@AuthenticationPrincipal UserDetails user, Model model) {
-        if(!(user instanceof RentalProvider)) {
-            return "redirect:/";
+        if (!(user instanceof RentalProvider)) {
+            return REDIRECT;
         }
 
         UserDto userDto = new UserDto();
@@ -62,15 +65,15 @@ public class ProviderController {
                                          @ModelAttribute UserDto userDto,
                                          Model model) {
 
-        if(!(user instanceof RentalProvider)) {
-            return "redirect:/";
+        if (!(user instanceof RentalProvider)) {
+            return REDIRECT;
         }
 
         try {
             providerService.update((RentalProvider) user, userDto);
         } catch (IllegalArgumentException e) {
             userDto.fillDto((RentalProvider) user);
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
             model.addAttribute("userDto", userDto);
             return "provider_edit";
         }
@@ -82,11 +85,11 @@ public class ProviderController {
     public String registerCar(@AuthenticationPrincipal UserDetails user, Model model) {
 
         if (!(user instanceof RentalProvider))
-            return "redirect:/";
+            return REDIRECT;
 
         CarDto dto = new CarDto();
         model.addAllAttributes(Map.of(
-                "carDto", dto,
+                CAR_DTO_ATTRIB_NAME, dto,
                 "colors", Color.values(),
                 "transmissions", Transmission.values(),
                 "locations", carService.getAllLocations()
@@ -106,7 +109,7 @@ public class ProviderController {
             carService.addCar((RentalProvider) user, carDto);
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
         }
 
         return "redirect:/provider/register-car";
@@ -119,7 +122,7 @@ public class ProviderController {
             Model model) {
 
         if (!(provider instanceof RentalProvider))
-            return "redirect:/";
+            return REDIRECT;
 
         CarDto carDto = new CarDto();
 
@@ -127,7 +130,7 @@ public class ProviderController {
             Car car = carService.getCarById((RentalProvider) provider, carId);
             carDto.fillDto(car);
             model.addAllAttributes(Map.of(
-                    "carDto", carDto,
+                    CAR_DTO_ATTRIB_NAME, carDto,
                     "colors", Color.values(),
                     "transmissions", Transmission.values(),
                     "locations", carService.getAllLocations()
@@ -135,7 +138,7 @@ public class ProviderController {
             log.info("Car found {}", car.getLicensePlate());
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
         }
 
         return "car_edit_listing";
@@ -150,7 +153,7 @@ public class ProviderController {
             Model model) {
 
         if (!(user instanceof RentalProvider))
-            return "redirect:/";
+            return REDIRECT;
 
         try {
             log.info("Received car with license {}", carDto.getLicensePlate());
@@ -158,8 +161,8 @@ public class ProviderController {
             carService.updateCar((RentalProvider) user, carDto);
         } catch (Exception e) {
             log.error(e.getMessage());
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("carDto", carDto);
+            model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
+            model.addAttribute(CAR_DTO_ATTRIB_NAME, carDto);
 
             return "car_edit_listing";
         }
@@ -174,14 +177,14 @@ public class ProviderController {
             Model model) {
 
         if (!(user instanceof RentalProvider))
-            return "redirect:/";
+            return REDIRECT;
 
         try {
             Car car = carService.getCarByLicensePlate((RentalProvider) user, licensePlate);
             model.addAttribute("car", car);
         } catch (IllegalArgumentException | PropertyValueException e) {
             log.error(e.getMessage());
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
         }
 
         return "car_display_provider";
@@ -190,7 +193,7 @@ public class ProviderController {
     @GetMapping("/cars")
     public String displayAllCars(@AuthenticationPrincipal UserDetails user, Model model) {
         if (!(user instanceof RentalProvider)) {
-            return "redirect:/";
+            return REDIRECT;
         }
 
         model.addAttribute("cars", carService.getAllCar((RentalProvider) user));

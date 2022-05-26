@@ -1,6 +1,5 @@
 package com.mpp.gaskeun.service;
 
-import com.mpp.gaskeun.dto.CarDto;
 import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.exception.IncompleteFormException;
 import com.mpp.gaskeun.model.Car;
@@ -17,7 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,7 +59,6 @@ class ProviderServiceImplTest {
         secondProvider.setId(2);
         secondProvider.setEmail("pesan@email.com");
     }
-
 
     @Test
     void whenRepoEmptyAndProviderDoesNotOwnAnyCar_mustReturn0() {
@@ -116,7 +115,7 @@ class ProviderServiceImplTest {
         String oldPassword = firstProvider.getPassword();
 
         validUserDto.setName(newName);
-        validUserDto.setPhone_number(phoneNumber);
+        validUserDto.setPhoneNumber(phoneNumber);
 
         providerService.update(firstProvider, validUserDto);
 
@@ -136,7 +135,7 @@ class ProviderServiceImplTest {
         String newPasswordConfirmation = "password123";
 
         validUserDto.setName(newName);
-        validUserDto.setPhone_number(phoneNumber);
+        validUserDto.setPhoneNumber(phoneNumber);
         validUserDto.setOldPassword(oldPasswordPlain);
         validUserDto.setPassword(newPassword);
         validUserDto.setPasswordConfirmation(newPasswordConfirmation);
@@ -155,7 +154,7 @@ class ProviderServiceImplTest {
         String newPasswordConfirmation = "differentPassword";
 
         validUserDto.setName(newName);
-        validUserDto.setPhone_number(phoneNumber);
+        validUserDto.setPhoneNumber(phoneNumber);
         validUserDto.setOldPassword(oldPasswordPlain);
         validUserDto.setPassword(newPassword);
         validUserDto.setPasswordConfirmation(newPasswordConfirmation);
@@ -175,7 +174,7 @@ class ProviderServiceImplTest {
         String encryptedNewPassword = "encryptedNewPassword";
 
         validUserDto.setName(newName);
-        validUserDto.setPhone_number(phoneNumber);
+        validUserDto.setPhoneNumber(phoneNumber);
         validUserDto.setOldPassword(oldPasswordPlain);
         validUserDto.setPassword(newPassword);
         validUserDto.setPasswordConfirmation(newPasswordConfirmation);

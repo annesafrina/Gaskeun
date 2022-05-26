@@ -1,7 +1,6 @@
 package com.mpp.gaskeun.security.config;
 
 import com.mpp.gaskeun.service.AuthenticationService;
-import com.mpp.gaskeun.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

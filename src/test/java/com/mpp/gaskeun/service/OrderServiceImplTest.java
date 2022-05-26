@@ -27,17 +27,8 @@ class OrderServiceImplTest {
     @Mock
     private OrderRepository repository;
 
-    private Method publicVerifyOrderOwnership;
-
-    @BeforeTestMethod()
-    void setVisibility() throws NoSuchMethodException {
-        Class<?>[] parameters = {RentalProvider.class, Order.class};
-        publicVerifyOrderOwnership = orderService.getClass().getDeclaredMethod("verifyOrderOwnership", parameters);
-        publicVerifyOrderOwnership.setAccessible(true);
-    }
-
     @Test
-    void whenOrderIsNotNullAndAssignedToProvider_mustReturnTrue() throws InvocationTargetException, IllegalAccessException {
+    void whenOrderIsNotNullAndAssignedToProvider_mustReturnTrue() {
         var rentalProvider = new RentalProvider();
         var car = new Car();
         var order = new Order();
@@ -52,14 +43,14 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void whenOrderNullAndNotOwnedByProvider_mustReturnFalse() throws InvocationTargetException, IllegalAccessException {
+    void whenOrderNullAndNotOwnedByProvider_mustReturnFalse() {
         var rentalProvider = new RentalProvider();
         boolean isOwner = orderService.verifyOrderOwnership(rentalProvider, null);
         assertFalse(isOwner);
     }
 
     @Test
-    void whenOrderNotNullAndNotOwnedByProvider_mustReturnFalse() throws InvocationTargetException, IllegalAccessException {
+    void whenOrderNotNullAndNotOwnedByProvider_mustReturnFalse() {
         var rentalProviderA = new RentalProvider();
         rentalProviderA.setId(1);
 
@@ -139,7 +130,7 @@ class OrderServiceImplTest {
 
         verify(repository, times(1)).save(order);
         assertEquals(status, result.getOrderStatus());
-        assertEquals(null, result.getBookingMessage());
+        assertNull(result.getBookingMessage());
     }
 
     @Test

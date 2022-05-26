@@ -12,9 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 
 import java.lang.reflect.InvocationTargetException;
@@ -181,57 +179,43 @@ class CarServiceImplTest {
 
         when(carRepository.findCarByLicensePlate(validCarDto.getLicensePlate())).thenReturn(Optional.empty());
 
-        boolean isValid = (boolean) isValidCarRegistration.invoke(carService, validCarDto, true);
-        assertTrue(isValid);
+        assertDoesNotThrow(() -> isValidCarRegistration.invoke(carService, validCarDto, true));
     }
 
     @Test
-    void whenRegistrationIsNotComplete_mustThrowIncompleteFormException() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void whenRegistrationIsNotComplete_mustReturnFalseWithCorrectString() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         CarDto notCompleteDto = new CarDto();
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
         isValidCarRegistration.setAccessible(true);
 
-        assertThrows(IncompleteFormException.class, () -> {
-            try {
-                isValidCarRegistration.invoke(carService, notCompleteDto, true);
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            }
-        });
+        Object[] isValid = (Object[]) isValidCarRegistration.invoke(carService, notCompleteDto, true);
+        assertFalse((boolean) isValid[0]);
+        assertEquals("Form contains invalid/incomplete data", isValid[1]);
     }
 
     @Test
-    void whenRegistrationStartDateEarlierThanEndDate_mustThrowIllegalArgumentException() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void whenRegistrationStartDateEarlierThanEndDate_mustReturnFalseWithCorrectString() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
-
         isValidCarRegistration.setAccessible(true);
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            try {
-                isValidCarRegistration.invoke(carService, invalidDateCarDto, false);
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            }
-        });
+        Object[] isValid = (Object[]) isValidCarRegistration.invoke(carService, invalidDateCarDto, false);
+        assertFalse((boolean) isValid[0]);
+        assertEquals("Available start date should not be after available end date", isValid[1]);
     }
 
     @Test
-    void whenRegistrationValidButCarAlreadyRegistered_mustReturnIllegalArgumentException() throws NoSuchMethodException {
+    void whenRegistrationValidButCarAlreadyRegistered_mustReturnFalseWithCorrectString() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
-
         isValidCarRegistration.setAccessible(true);
         when(carRepository.findCarByLicensePlate(validCarDto.getLicensePlate())).thenReturn(Optional.of(new Car()));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            try {
-                isValidCarRegistration.invoke(carService, validCarDto, true);
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            }
-        });
+        Object[] isValid = (Object[]) isValidCarRegistration.invoke(carService, validCarDto, true);
+
+        assertFalse((boolean) isValid[0]);
+        assertEquals(String.format("Car with license plate %s has been registered",
+                validCarDto.getLicensePlate()), isValid[1]);
     }
 
     @Test
@@ -407,7 +391,6 @@ class CarServiceImplTest {
         when(locationRepository.findAll(Sort.by(Sort.Direction.ASC, "cityName"))).thenReturn(locations);
         assertEquals(locations, carService.getAllLocations());
     }
-
 
 
 }
