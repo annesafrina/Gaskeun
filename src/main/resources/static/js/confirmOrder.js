@@ -140,6 +140,20 @@ async function completeOrder(main) {
     return await handleResponse(response);
 }
 
+async function cancelOrder(main) {
+    const orderId = main.dataset.orderId;
+
+    const response = await fetch(`/order/cancel/${orderId}`, {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({})
+    });
+
+    return await handleResponse(response);
+}
+
 const CSS_MAP = {
     "PENDING" : "background-color: #ECE4B7;",
     "ACTIVE" : "background-color: #33CA7F; color: white;",
@@ -154,6 +168,7 @@ const confirmBtn = document.querySelector("#button-confirm");
 const rejectBtn = document.querySelector("#button-reject");
 const payBtn = document.querySelector("#button-pay");
 const completeBtn = document.querySelector("#button-complete");
+const cancelBtn = document.querySelector("#button-cancel");
 const main = document.querySelector(".container");
 
 if (rejectBtn != null) {
@@ -206,5 +221,18 @@ if (completeBtn != null) {
             e.target.remove();
         }
         completeBtn.innerHTML = "Complete";
+    })
+}
+
+if (cancelBtn != null) {
+    cancelBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        cancelBtn.innerHTML = "<div class=\"lds-dual-ring\"></div>";
+        const isValid = await cancelOrder(main);
+
+        if (isValid) {
+            e.target.remove();
+        }
+        cancelBtn.innerHTML = "Complete";
     })
 }

@@ -75,6 +75,10 @@
                 ></p>
             </div>
 
+            <div th:if="${!isProvider && isWaitingForPayment}">
+                <button type="button" id="button-cancel" class="button button-red">Cancel</button>
+            </div>
+
         </div>
 
         <div class="contact-details">
