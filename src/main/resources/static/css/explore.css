@@ -1,5 +1,33 @@
 .active-link {
-    text-decoration: underline;
+	text-decoration: underline;
+}
+
+.lds-dual-ring {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    margin-left: 50vw;
+    transform: translateX(-100%);
+}
+.lds-dual-ring:after {
+    z-index: -1;
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #375A7F;
+    border-color: #375A7F transparent #375A7F transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .car-list {
@@ -36,6 +64,7 @@
     transform-origin: 0 0;
     transition: all 300ms ease-out;
     background-color: white;
+    z-index: 1;
     /* box-shadow: 1px 21px 19px -9px rgba(0, 0, 0, 0.75);
     -webkit-box-shadow: 1px 21px 19px -9px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 1px 21px 19px -9px rgba(0, 0, 0, 0.75); */
@@ -52,7 +81,7 @@
     width: clamp(300px, 25vw, 425px);
     justify-self: center;
     display: grid;
-    grid-template-rows: repeat(7, 1fr);
+    grid-template-rows: repeat(8, 1fr);
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 5px;
     grid-template-areas:
@@ -60,40 +89,90 @@
     "name pic"
     "cap pic"
     "trm pic"
-    "rate rate"
-    "rate rate"
+    "none pic"
+    "star rate"
+    "star rate"
     "loc loc"
 ;
     padding: 1rem;
     box-sizing: border-box;
+    transition: transform 300ms;
     cursor: pointer;
+}
+.car-list__card:hover {
+    transform: translateY(-5%);
 }
 
 .car-list__card .available-date {
     grid-area: date;
+    font-weight: bold;
+    font-size: clamp(10px, 3vw, 15px);
 }
 .car-list__card .model {
     grid-area: name;
+    color: #375A7F;
+    font-weight: 900;
+    font-size: clamp(14px, 5vw, 28px);
 }
 .car-list__card .capacity {
     grid-area: cap;
 }
+
+.car-list__card .capacity, .car-list__card .transmission {
+    align-self: center;
+    font-size: clamp(8px, 5vw, 20px);
+    font-weight: 600;
+    padding-top: 1vw;
+}
 .car-list__card .picture {
     grid-area: pic;
+    border-radius: 10px;
 }
 .car-list__card .transmission {
     grid-area: trm;
 }
 .car-list__card .location {
-    grid-area: loc
+    grid-area: loc;
+    justify-self: flex-end;
+    font-size: clamp(4px, 3vw, 14px);
 }
 .car-list__card .rate {
     grid-area: rate;
+    align-self: center;
+    justify-self: flex-end;
+    font-weight: 700;
+    font-size: clamp(12px, 5vw, 24px);
+}
+.car-list__card .stars {
+    grid-area: star;
+    align-self: center;
+    font-size: clamp(12px, 5vw, 24px);
+    font-weight: 900;
+}
+.car-list__card .stars i {
+    color: darkgoldenrod;
 }
 
 .car-list__card .picture img{
     width: 100%;
     height: 100%;
+    border-radius: 10px;
+}
+
+
+@media only screen and (max-width: 524px) {
+    .car-list__card {
+        grid-template-rows: repeat(7, 1fr);
+        grid-template-areas:
+    "date date"
+    "name pic"
+    "cap pic"
+    "trm pic"
+    "star rate"
+    "star rate"
+    "loc loc";
+    }
+
 }
 
 .custom-search__filters h4 {
@@ -279,7 +358,7 @@ input[type="radio"]{
     }
     .car-list__card {
         width: clamp(200px, 70vw, 400px);
-        height: clamp(100px, 50vw, 300px);
+        height: clamp(fit-content, 50vw, 300px);
     }
     .trans-type {
         flex-direction: column;
