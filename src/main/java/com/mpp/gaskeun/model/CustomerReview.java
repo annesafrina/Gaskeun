@@ -14,4 +14,9 @@ public class CustomerReview extends Review{
         customer.setNumberOfReviews(customer.getNumberOfReviews() + 1);
         customer.setRating(ratingSum/customer.getNumberOfReviews());
     }
+
+    @Override
+    public void updateOrderReviewers() {
+        this.order.setCustomerIsReviewed(true);
+    }
 }

@@ -1,10 +1,5 @@
 package com.mpp.gaskeun.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 
 @Entity
@@ -17,5 +12,10 @@ public class CarReview extends Review {
         double ratingSum = getRating() + car.getRating();
         car.setNumberOfReviews(car.getNumberOfReviews() + 1);
         car.setRating(ratingSum/car.getNumberOfReviews());
+    }
+
+    @Override
+    public void updateOrderReviewers() {
+        this.order.setCarIsReviewed(true);
     }
 }

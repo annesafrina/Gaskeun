@@ -7,6 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Date;
 
 public interface ReviewService {
-    Order validateOrderReviewable(Long id, UserDetails user);
+    Order validateOrderReviewable(Long id, UserDetails user, ReviewType reviewType);
     Review submitReview(ReviewDto reviewDto) throws Exception;
 }

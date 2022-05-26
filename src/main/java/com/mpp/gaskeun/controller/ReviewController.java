@@ -35,7 +35,7 @@ public class ReviewController {
 
         try {
             Long parsedOrderId = Long.parseLong(orderId);
-            order = reviewService.validateOrderReviewable(parsedOrderId, user);
+            order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.CAR);
 
         } catch (NumberFormatException | OrderNotReviewableException e) {
             return "redirect:/";
@@ -66,7 +66,7 @@ public class ReviewController {
         } catch (Exception e) {
             log.error(e.getMessage());
             Long parsedOrderId = Long.parseLong(reviewDto.getOrderId());
-            Order order = reviewService.validateOrderReviewable(parsedOrderId, user);
+            Order order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.CAR);
             model.addAttribute("error", e.getMessage());
             model.addAttribute("order", order);
             model.addAttribute("reviewDto", reviewDto);
@@ -85,7 +85,7 @@ public class ReviewController {
 
         try {
             Long parsedOrderId = Long.parseLong(orderId);
-            order = reviewService.validateOrderReviewable(parsedOrderId, user);
+            order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.CUSTOMER);
 
         } catch (NumberFormatException | OrderNotReviewableException e) {
             return "redirect:/";
@@ -114,7 +114,7 @@ public class ReviewController {
             reviewService.submitReview(reviewDto);
         } catch (Exception e) {
             Long parsedOrderId = Long.parseLong(reviewDto.getOrderId());
-            Order order = reviewService.validateOrderReviewable(parsedOrderId, user);
+            Order order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.CUSTOMER);
             model.addAttribute("error", e.getMessage());
             model.addAttribute("reviewType", "customer");
             model.addAttribute("order", order);
@@ -134,7 +134,7 @@ public class ReviewController {
 
         try {
             Long parsedOrderId = Long.parseLong(orderId);
-            order = reviewService.validateOrderReviewable(parsedOrderId, user);
+            order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.PROVIDER);
 
         } catch (NumberFormatException | OrderNotReviewableException e) {
             return "redirect:/";
@@ -163,7 +163,7 @@ public class ReviewController {
             reviewService.submitReview(reviewDto);
         } catch (Exception e) {
             Long parsedOrderId = Long.parseLong(reviewDto.getOrderId());
-            Order order = reviewService.validateOrderReviewable(parsedOrderId, user);
+            Order order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.PROVIDER);
             model.addAttribute("error", e.getMessage());
             model.addAttribute("reviewType", "Provider");
             model.addAttribute("order", order);

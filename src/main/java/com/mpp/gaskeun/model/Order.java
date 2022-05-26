@@ -47,6 +47,15 @@ public class Order {
     @Column(name = "order_status", nullable = false)
     private OrderStatus orderStatus;
 
+    @Column(name = "car_is_reviewed", nullable = false)
+    private boolean carIsReviewed = false;
+
+    @Column(name = "customer_is_reviewed", nullable = false)
+    private boolean customerIsReviewed = false;
+
+    @Column(name = "provider_is_reviewed", nullable = false)
+    private boolean providerIsReviewed = false;
+
     public boolean customerIsOwner(Customer customer) {
         return this.customer.equals(customer);
     }

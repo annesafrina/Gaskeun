@@ -26,4 +26,6 @@ public abstract class Review {
     private String description;
 
     public abstract void updateRevieweeRating();
+
+    public abstract void updateOrderReviewers();
 }
