@@ -71,11 +71,10 @@ class OrderServiceImplTest {
     void whenBookingMessageIsNullAndStatusRejected_throwsError() {
         String bookingMessage = null;
         var status = OrderStatus.REJECTED;
-        var provider = new RentalProvider();
         var order = new Order();
 
         assertThrows(IllegalStateException.class, () -> {
-            orderService.setOrderStatus(provider, order, status, bookingMessage);
+            orderService.setOrderStatus(order, status, bookingMessage);
         });
     }
 
@@ -83,11 +82,10 @@ class OrderServiceImplTest {
     void whenBookingMessageIsEmptyAndStatusRejected_throwsError() {
         String bookingMessage = "";
         var status = OrderStatus.REJECTED;
-        var provider = new RentalProvider();
         var order = new Order();
 
         assertThrows(IllegalStateException.class, () -> {
-            orderService.setOrderStatus(provider, order, status, bookingMessage);
+            orderService.setOrderStatus(order, status, bookingMessage);
         });
     }
 
@@ -98,7 +96,7 @@ class OrderServiceImplTest {
         var provider = new RentalProvider();
         var order = new Order();
 
-        var result = orderService.setOrderStatus(provider, order, status, bookingMessage);
+        var result = orderService.setOrderStatus(order, status, bookingMessage);
 
         verify(repository, times(1)).save(order);
         assertEquals(status, result.getOrderStatus());
@@ -109,10 +107,9 @@ class OrderServiceImplTest {
     void whenBookingMessageNullAndStatusWaitingForPayment_savesStatusToRepository() {
         String bookingMessage = null;
         var status = OrderStatus.WAITING_FOR_PAYMENT;
-        var provider = new RentalProvider();
         var order = new Order();
 
-        var result = orderService.setOrderStatus(provider, order, status, bookingMessage);
+        var result = orderService.setOrderStatus(order, status, bookingMessage);
 
         verify(repository, times(1)).save(order);
         assertEquals(status, result.getOrderStatus());
@@ -123,10 +120,9 @@ class OrderServiceImplTest {
     void whenBookingMessageEmptyAndStatusWaitingForPayment_savesStatusToRepository() {
         String bookingMessage = "";
         var status = OrderStatus.WAITING_FOR_PAYMENT;
-        var provider = new RentalProvider();
         var order = new Order();
 
-        var result = orderService.setOrderStatus(provider, order, status, bookingMessage);
+        var result = orderService.setOrderStatus(order, status, bookingMessage);
 
         verify(repository, times(1)).save(order);
         assertEquals(status, result.getOrderStatus());
@@ -137,10 +133,9 @@ class OrderServiceImplTest {
     void whenBookingMessageNotEmptyAndStatusWaitingForPayment_savesStatusToRepository() {
         String bookingMessage = "Bwrelebek";
         var status = OrderStatus.REJECTED;
-        var provider = new RentalProvider();
         var order = new Order();
 
-        var result = orderService.setOrderStatus(provider, order, status, bookingMessage);
+        var result = orderService.setOrderStatus(order, status, bookingMessage);
 
         verify(repository, times(1)).save(order);
         assertEquals(status, result.getOrderStatus());

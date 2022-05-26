@@ -42,7 +42,7 @@ public class RegistrationController {
             return "customer_registration";
         }
 
-        return "redirect:/registration/customer";
+        return "redirect:/login";
     }
 
     @GetMapping("/provider")
@@ -62,7 +62,7 @@ public class RegistrationController {
             return "provider_registration";
         }
 
-        return "redirect:/registration/provider";
+        return "redirect:/login";
     }
 }
 

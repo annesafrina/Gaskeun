@@ -185,7 +185,7 @@ public class OrderServiceImpl implements OrderService{
      * @return The edited order
      */
     @Override
-    public Order setOrderStatus(RentalProvider provider, Order order, OrderStatus status, String bookingMessage) {
+    public Order setOrderStatus(Order order, OrderStatus status, String bookingMessage) {
 
         order.setOrderStatus(status);
 
