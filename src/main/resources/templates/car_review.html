@@ -24,7 +24,7 @@
         <div class="header">
           <h1>How was your journey<span id="question">?</span></h1>
         </div>
-        <form action="" class="review" th:object="${reviewDto}">
+        <form action="/review/create/car" method="POST" class="review" th:object="${reviewDto}">
           <div class="rating-section">
             <label for="rating-slider">Rate your experience:</label>
             <div id="rating-slider">

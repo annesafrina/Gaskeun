@@ -60,83 +60,93 @@ public class ReviewController {
 
         log.info("Creating Car Review");
 
-        CarReview carReview = new CarReview();
-        carReview.setDescription(reviewDto.getDescription());
-        carReview.setRating(reviewDto.getRating());
-        carReview.setId(Long.parseLong(reviewDto.getOrderId()));
         try {
-            reviewService.submitCarReviewAndRating((Customer) user, reviewDto, carReview);
-
+            reviewDto.setReviewType(ReviewType.CAR);
+            reviewService.submitReview(reviewDto);
         } catch (Exception e) {
             log.error(e.getMessage());
+            Long parsedOrderId = Long.parseLong(reviewDto.getOrderId());
+            Order order = reviewService.validateOrderReviewable(parsedOrderId, user);
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("order", order);
             model.addAttribute("reviewDto", reviewDto);
             return "car_review";
         }
 
-
-//        return "redirect:/order/display/" + review.getId();
-        return  "redirect:/index/";
+        return  "redirect:/";
     }
 
     @GetMapping("/create/customer/{orderId}")
-    public String getCustomerReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user,
-                                    @PathVariable("description") String description, @PathVariable("rating") double rating) {
+    public String getCustomerReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user) {
+        Order order;
         if(!(user instanceof RentalProvider)) {
+            return "redirect:/";
+        }
+
+        try {
+            Long parsedOrderId = Long.parseLong(orderId);
+            order = reviewService.validateOrderReviewable(parsedOrderId, user);
+
+        } catch (NumberFormatException | OrderNotReviewableException e) {
             return "redirect:/";
         }
 
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setOrderId(orderId);
-        reviewDto.setDescription(description);
-        reviewDto.setRating(rating);
 
-
-        model.addAttribute("orderDto", reviewDto);
-        return "car_review";
+        model.addAttribute("reviewType", "Customer");
+        model.addAttribute("order", order);
+        model.addAttribute("reviewDto", reviewDto);
+        return "review";
     }
 
     @PostMapping("/create/customer")
-    public String postCreateCustomerReview(ReviewDto reviewDto, @AuthenticationPrincipal UserDetails user, Model model
-    ) {
+    public String postCreateCustomerReview(ReviewDto reviewDto, @AuthenticationPrincipal UserDetails user, Model model) {
+
         if(!(user instanceof RentalProvider)) {
             return "redirect:/";
         }
 
-        log.info("Creating Car Review");
+        log.info("Creating Provider Review");
 
-        CustomerReview customerReview = new CustomerReview();
-        customerReview.setDescription(reviewDto.getDescription());
-        customerReview.setRating(reviewDto.getRating());
-        customerReview.setId(Long.parseLong(reviewDto.getOrderId()));
         try {
-            reviewService.submitCustomerReviewAndRating((RentalProvider) user, reviewDto, customerReview);
+            reviewDto.setReviewType(ReviewType.CUSTOMER);
+            reviewService.submitReview(reviewDto);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            Long parsedOrderId = Long.parseLong(reviewDto.getOrderId());
+            Order order = reviewService.validateOrderReviewable(parsedOrderId, user);
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("reviewType", "customer");
+            model.addAttribute("order", order);
             model.addAttribute("reviewDto", reviewDto);
-            return "car_review";
+            return "review";
         }
 
-
-//        return "redirect:/order/display/" + review.getId();
-        return  "redirect:/index/";
+        return  "redirect:/";
     }
 
     @GetMapping("/create/provider/{orderId}")
-    public String getProviderReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user,
-                                    @PathVariable("description") String description, @PathVariable("rating") double rating) {
+    public String getProviderReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user) {
+        Order order;
         if(!(user instanceof Customer)) {
             return "redirect:/";
         }
 
+        try {
+            Long parsedOrderId = Long.parseLong(orderId);
+            order = reviewService.validateOrderReviewable(parsedOrderId, user);
+
+        } catch (NumberFormatException | OrderNotReviewableException e) {
+            return "redirect:/";
+        }
+
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setOrderId(orderId);
-        reviewDto.setDescription(description);
-        reviewDto.setRating(rating);
 
-        model.addAttribute("orderDto", reviewDto);
-        return "car_review";
+        model.addAttribute("reviewType", "Provider");
+        model.addAttribute("order", order);
+        model.addAttribute("reviewDto", reviewDto);
+        return "review";
     }
 
     @PostMapping("/create/provider")
@@ -146,25 +156,24 @@ public class ReviewController {
             return "redirect:/";
         }
 
-        log.info("Creating Car Review");
+        log.info("Creating Provider Review");
 
-        ProviderReview providerReview = new ProviderReview();
-        providerReview.setDescription(reviewDto.getDescription());
-        providerReview.setRating(reviewDto.getRating());
-        providerReview.setId(Long.parseLong(reviewDto.getOrderId()));
         try {
-            reviewService.submitProviderReviewAndRating((Customer) user, reviewDto, providerReview);
+            reviewDto.setReviewType(ReviewType.PROVIDER);
+            reviewService.submitReview(reviewDto);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            Long parsedOrderId = Long.parseLong(reviewDto.getOrderId());
+            Order order = reviewService.validateOrderReviewable(parsedOrderId, user);
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("reviewType", "Provider");
+            model.addAttribute("order", order);
             model.addAttribute("reviewDto", reviewDto);
-            return "car_review";
+            return "review";
         }
 
-
-//        return "redirect:/order/display/" + review.getId();
-        return  "redirect:/index/";
+        return  "redirect:/";
     }
+
 
 }
 

@@ -18,90 +18,31 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 @Slf4j
 public class ReviewServiceImpl implements ReviewService {
-
-    @Autowired
-    private CarReviewRepository carReviewRepository;
-
-    @Autowired
-    private CustomerReviewRepository customerReviewRepository;
-
     @Autowired
     private OrderRepository orderRepository;
 
     @Autowired
-    private CarRepository carRepository;
-
-    @Autowired
-    private ProviderRepository providerRepository;
-
-    @Autowired
-    private ProviderReviewRepository providerReviewRepository;
-
+    private ReviewRepository reviewRepository;
 
     @Override
-    public boolean validateOrderIsCompleted(Order order) {
-        return isComplete(order);
-    }
-
-    @Override
-    public CarReview submitCarReviewAndRating(Customer customer, ReviewDto reviewDto, CarReview car_review) throws Exception {
+    public Review submitReview(ReviewDto reviewDto) {
         Order order;
-        Car car;
+        Review review;
 
         try {
             order = orderRepository.findById(Long.parseLong(reviewDto.getOrderId())).get();
-            car = order.getCar();
-
-        } catch (NoSuchElementException e) {
+        } catch (NumberFormatException | NoSuchElementException e) {
             throw new NoSuchElementException(String.format("Order with id %s is not found", reviewDto.getOrderId()));
         }
 
-        if (validateOrderIsCompleted(order)){
-            car.setNumberOfReviews(car.getNumberOfReviews() + 1);
-            car.setRating(car.getRating() / car.getNumberOfReviews());
-            return carReviewRepository.save(car_review);
-        }
-        return car_review;
-    }
+        review = reviewDto.getReview();
+        review.setOrder(order);
+        review.setRating(reviewDto.getRating());
+        review.setDescription(review.getDescription());
+        review.updateRevieweeRating();
 
-    @Override
-    public ProviderReview submitProviderReviewAndRating(Customer customer, ReviewDto reviewDto, ProviderReview provider_review) throws Exception {
-        Order order;
-        RentalProvider provider;
-
-        try {
-            order = orderRepository.findById(Long.parseLong(reviewDto.getOrderId())).get();
-            provider = order.getCarProvider();
-        } catch (NoSuchElementException e) {
-            throw new NoSuchElementException(String.format("Order with id %s is not found", reviewDto.getOrderId()));
-        }
-
-        if (validateOrderIsCompleted(order)){
-            provider.setNumberOfReviews(provider.getNumberOfReviews() + 1);
-            provider.setPerformanceRating(provider.getPerformanceRating() / provider.getNumberOfReviews());
-            return providerReviewRepository.save(provider_review);
-        }
-        return provider_review;
-    }
-
-    @Override
-    public CustomerReview submitCustomerReviewAndRating(RentalProvider provider, ReviewDto reviewDto, CustomerReview customer_review) throws Exception {
-        Order order;
-        Customer customer;
-
-        try {
-            order = orderRepository.findById(Long.parseLong(reviewDto.getOrderId())).get();
-            customer = order.getCustomer();
-        } catch (NoSuchElementException e) {
-            throw new NoSuchElementException(String.format("Order with id %s is not found", reviewDto.getOrderId()));
-        }
-
-        if (validateOrderIsCompleted(order)){
-            customer.setNumberOfReviews(provider.getNumberOfReviews() + 1);
-            customer.setRating(provider.getPerformanceRating() / provider.getNumberOfReviews());
-            return customerReviewRepository.save(customer_review);
-        }
-        return customer_review;
+        reviewRepository.save(review);
+        return review;
     }
 
     @Override
@@ -116,6 +57,11 @@ public class ReviewServiceImpl implements ReviewService {
         } catch (OrderDoesNotExistException e) {
             throw new OrderNotReviewableException(id);
         }
+    }
+
+    private boolean validateOrderIsCompleted(Order order) {
+        OrderStatus status = order.getOrderStatus();
+        return status.equals(OrderStatus.COMPLETED);
     }
 
     private boolean orderOwnedByUser(Order order,UserDetails user) {
@@ -135,10 +81,5 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         throw new OrderDoesNotExistException(id);
-    }
-
-    private boolean isComplete(Order order) {
-        OrderStatus status = order.getOrderStatus();
-        return status.equals(OrderStatus.COMPLETED);
     }
 }

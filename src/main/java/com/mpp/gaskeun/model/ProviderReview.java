@@ -6,20 +6,14 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@DiscriminatorValue("provider")
 @Table(name = "provider_review")
-@Setter
-@Getter
-public class ProviderReview {
-    @Id
-    private long id;
-
-    @OneToOne
-    @MapsId
-    private Order order;
-
-    @Column(name = "rating", nullable = false)
-    private double rating;
-
-    @Column(name = "description")
-    private String description;
+public class ProviderReview extends Review {
+    @Override
+    public void updateRevieweeRating() {
+        RentalProvider provider = this.order.getCarProvider();
+        double ratingSum = getRating() + provider.getPerformanceRating();
+        provider.setNumberOfReviews(provider.getNumberOfReviews() + 1);
+        provider.setPerformanceRating(ratingSum/provider.getNumberOfReviews());
+    }
 }
