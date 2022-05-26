@@ -32,14 +32,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Order> findAllOrders(Customer customer) {
-        return orderRepository.findAll().stream().filter(order -> order.isOwningCustomer(customer)).toList();
+        return orderRepository.findAll().stream().filter(order -> order.customerIsOwner(customer)).toList();
         //retrieve all order and convert to stream
     }
 
     @Override
     public List<Order> findAllOnGoingOrders(Customer customer) {
         return orderRepository.findAll().stream()
-                .filter(order -> order.isOwningCustomer(customer))
+                .filter(order -> order.customerIsOwner(customer))
                 .filter(order -> !order.getOrderStatus().equals(OrderStatus.COMPLETED)).toList();
 
     }
@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     //Update
     @Override
     public Customer update(Customer customer, UserDto userDto){
-        if(!userDto.isValid()){
+        if(!userDto.isComplete()){
             throw new IncompleteFormException();
         }
         if(userDto.containsPassword()) {
@@ -64,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         customer.setName(userDto.getName());
-        customer.setPhoneNumber(userDto.getPhone_number());
+        customer.setPhoneNumber(userDto.getPhoneNumber());
         return customerRepository.save(customer);
     }
 
