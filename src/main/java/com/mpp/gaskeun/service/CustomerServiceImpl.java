@@ -23,6 +23,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private final BCryptPasswordEncoder encoder;
+
     @Override
     public List<Order> findAllOrders(Customer customer) {
         return orderRepository.findAll().stream().filter(order -> order.isOwningCustomer(customer)).toList();
