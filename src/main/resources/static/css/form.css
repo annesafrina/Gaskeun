@@ -446,6 +446,10 @@
     color: white;
 }
 
+.button-green {
+    background-color: #20e99f;
+}
+
 /* Links */
 .link {
     text-decoration: none;

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -28,6 +30,16 @@ public class OrderController {
 
     @Autowired
     private CarService carService;
+
+    private Map<OrderStatus, String> cssStyleStatus = new HashMap<>(){{
+        put(OrderStatus.PENDING, "background-color: #ECE4B7;");
+        put(OrderStatus.ACTIVE, "background-color: #33CA7F; color: white;");
+        put(OrderStatus.WAITING_FOR_PAYMENT, "background-color: #7DCFB6;");
+        put(OrderStatus.CANCELLED, "background-color: #FC9F5B;");
+        put(OrderStatus.REJECTED, "background-color: #D50000; color: white;");
+        put(OrderStatus.COMPLETED, "background-color: #00CFC1; color: white;");
+
+    }};
 
     @GetMapping("/create/{carId}")
     public String displayCreateOrder(Model model, @PathVariable("carId") String carId, @AuthenticationPrincipal Customer customer) {
@@ -68,7 +80,15 @@ public class OrderController {
     @GetMapping("/display/{orderId}")
     public String displayIndividualOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user, Model model) {
         Order order = orderService.getOrder(Long.parseLong(orderId), user);
+        Car orderCar = order.getCar();
+
+        String cssStyle = cssStyleStatus.get(order.getOrderStatus());
+
         model.addAttribute("order", order);
+        model.addAttribute("car", orderCar);
+        model.addAttribute("base64Image", orderCar.getPicture());
+        model.addAttribute("cssStyle", cssStyle);
+        model.addAttribute("price", (order.getEndDate().getTime() - order.getStartDate().getTime()) / (1000 * 24 * 3600));
 
         model.addAttribute("isProvider", user instanceof RentalProvider);
         model.addAttribute("isRejected", order.getOrderStatus() == OrderStatus.REJECTED);

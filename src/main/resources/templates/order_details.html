@@ -1,36 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+            integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link th:href="@{/css/global.css}" rel="stylesheet" />
+    <link th:href="@{/css/form.css}" rel="stylesheet" />
+    <link th:href="@{/css/order.css}" rel="stylesheet" />
     <script defer th:src="@{/js/confirmOrder.js}"></script>
     <title>Order Details</title>
 </head>
 <body>
-    <main class="container" th:attr="data-order-id=${order.getId()}">
-        <p th:text="${order.getStartDate()}"></p>
-        <p id="status" th:text="${orderStatusCleaned}"></p>
-        <p th:if="${isRejected && !isProvider}" th:text="${order.getBookingMessage()}"></p>
-        <p th:text="${order.getEndDate()}"></p>
-        <p th:text="${order.getCustomer().getName()}"></p>
-        <p th:text="${order.getCarProvider().getName()}"></p>
-    
-        <div th:if="${isProvider && isPending}">
-            <div>
-                <label for="booking-msg">Details</label>
-                <textarea id="booking-msg"></textarea>
+<main class="container" th:attr="data-order-id=${order.getId()}">
+    <div class="car-header">
+        <div class="header__grid">
+            <h2 class="header__title" th:text="${car.getModel()}"></h2>
+            <div class="header__text transmission">
+                <p th:text="${car.getTransmission().toString().charAt(0) + car.getTransmission().toString().toLowerCase().substring(1)}"></p>
+                <i class="fa-solid fa-gears"></i>
             </div>
-            <button id="button-confirm" type="button">Confirm</button>
-            <button id="button-reject" type="button">Reject</button>
+            <div class="header__text capacity">
+                <p th:text="${car.getCapacity()}"></p>
+                <i class="fa-solid fa-user-group"></i>
+            </div>
+            <img
+                    th:src="@{'data:image/png;base64,' + ${base64Image}}"
+                    src="gaskeun-regis.jpg"
+                    class="header__image image"
+            />
+            <input
+                    id="price-per-day"
+                    type="hidden"
+                    th:value="${car.getPriceRate()}"
+            />
+        </div>
+    </div>
+    <main class="info-section">
+        <div class="current-order">
+            <p class="current-order__text">
+                From <span th:text="${order.getStartDate()}"></span> to
+                <span th:text="${order.getStartDate()}"></span>
+            </p>
+            <p class="current-order__text">
+                Status:
+                <span
+                        id="status"
+                        class="current-order__status"
+                        th:text="${orderStatusCleaned}"
+                        th:style="${cssStyle}"
+                ></span
+                >
+            </p>
+            <p>
+                Created by
+                <span
+                        class="current-order__bold"
+                        th:text="${order.getCustomer().getName()}"
+                ></span
+                >
+            </p>
+
+            <p th:if="${isRejected && !isProvider}" class="form-label--static">Message from the provider:</p>
+            <div th:if="${isRejected && !isProvider}" class="reject-message">
+                <p class="reject-message__text">From <span th:text="${order.getCarProvider().getName()}"></span></p>
+                <p
+                        th:text="${order.getBookingMessage()}"
+                ></p>
+            </div>
+
         </div>
 
-        <div>
-            <button id="button-pay" th:if="${isWaitingForPayment && isProvider}" type="button">Accept Payment</button>
-            <button id="button-complete" th:if="${isActive && !isProvider}" type="button">Complete</button>
+        <div class="contact-details">
+            <h2 class="contact-details__title">Contact Information</h2>
+            <div class="contact-details__row">
+                <i class="fa-solid fa-id-card"></i>
+                <p th:text="${order.getCarProvider().getName()}"></p>
+            </div>
+            <div class="contact-details__row">
+                <i class="fa-solid fa-phone"></i>
+                <p th:text="${order.getCarProvider().getPhoneNumber()}"></p>
+            </div>
         </div>
     </main>
 
+
+    <div class="price-show price-box">
+        <p>Total cost</p>
+        <h2>Rp. <span class="price-show__price" th:text="${price}"></span></h2>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="confirm-reject-box" th:if="${isProvider && isPending}">
+        <div class="confirm-reject">
+            <label class="form-label--static" for="booking-msg">Details</label>
+            <textarea class="form-input__textarea" id="booking-msg"></textarea>
+        </div>
+        <div class="confirm-reject--row">
+            <button class="button button-green" id="button-confirm" type="button">
+                Confirm
+            </button>
+            <button class="button button-red" id="button-reject" type="button">
+                Reject
+            </button>
+        </div>
+    </div>
+
+    <div class="buttons-bottom">
+      <button
+        id="button-pay"
+        th:if="${isWaitingForPayment && isProvider}"
+        type="button"
+        class="button button-green"
+      >
+        Accept Payment
+      </button>
+      <button
+        id="button-complete"
+        th:if="${isActive && !isProvider}"
+        type="button"
+        class="button button-green"
+      >
+        Complete
+      </button>
+    </div>
+</main>
 </body>
 </html>

@@ -21,8 +21,11 @@
     <title>Create Order</title>
 </head>
 <body>
-<div>
-    <p th:if="${error != null}" th:text="${error}"></p>
+<div th:if="${error != null}" class="toast toast--red">
+    <i class="fa-solid fa-exclamation"></i>
+    <h1 th:text="${error}">
+    </h1>
+    <i class="fa-solid fa-xmark close-error"></i>
 </div>
 
 <main>
@@ -58,7 +61,7 @@
                             type="date"
                             th:field="*{startDate}"
                     />
-                    <label class="form-label" for="start-date">Start Date</label>
+                    <label class="form-label" for="start-date" >Start Date</label>
                 </div>
             </div>
             <div class="form-text">
