@@ -54,7 +54,10 @@ public class OrderController {
         } catch (Exception e) {
             log.error(e.getMessage());
             model.addAttribute("error", e.getMessage());
+            Car car = carService.getCarByIdAllowAnyone(Long.parseLong(orderDto.getCarId()));
             model.addAttribute("orderDto", orderDto);
+            model.addAttribute("base64Image", car.getPicture());
+            model.addAttribute("car", car);
             return "create_order";
         }
 
