@@ -28,7 +28,7 @@ public class BaseController {
             return "login";
         }
 
-        return "login";
+        return "redirect:/";
     }
 
 

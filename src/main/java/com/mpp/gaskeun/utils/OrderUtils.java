@@ -1,5 +1,7 @@
 package com.mpp.gaskeun.utils;
 
+import com.mpp.gaskeun.dto.OrderDisplayDto;
+import com.mpp.gaskeun.dto.OrderDto;
 import com.mpp.gaskeun.model.DateRange;
 import com.mpp.gaskeun.model.Order;
 
@@ -24,5 +26,12 @@ public class OrderUtils {
         }
 
         return unavailableDates;
+    }
+
+    public static OrderDisplayDto lightDisplayOrder(Order order) {
+        String startDate = DateParser.parse(order.getStartDate());
+        String endDate = DateParser.parse(order.getEndDate());
+        OrderDisplayDto dto = new OrderDisplayDto(order.getId(), order.getCar().getModel(), order.getOrderStatus(), startDate, endDate);
+        return dto;
     }
 }

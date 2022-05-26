@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+          integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+  />
+  <link rel="stylesheet" th:href="@{/css/global.css}" />
+  <link rel="stylesheet" th:href="@{/css/form.css}">
+  <link rel="stylesheet" th:href="@{/css/list-of-orders.css}" />
+
+  <script defer th:src="@{/js/carOrders.js}"></script>
+  <title>Order List</title>
+</head>
+<body>
+<main class="order-lst">
+  <h2 class="title">My Orders</h2>
+  <div class="nav-order">
+    <ul>
+      <li id="all-orders" class="nav-order__option active">All Orders</li>
+      <li id="current-orders" class="nav-order__option">Current Orders</li>
+      <div class="indicator"></div>
+    </ul>
+  </div>
+
+  <div class="order">
+    <div class="order__card">
+      <div class="order__card--left">
+        <div class="order__title">Toyota Supra</div>
+        <div class="order__circle order__text">#1234</div>
+        <div class="order__circle order__text">PENDING</div>
+        <div class="order__date">
+          <i class="fa-solid fa-calendar"></i>
+          <p>25 May 2022</p>
+          <p>-</p>
+          <p>26 May 2022</span>
+        </div>
+      </div>
+      <div class="order__card--right">
+        <a href="#" class="button button-cyan">View Order</a>
+        <a href="#" class="button button-green">Review Car</a>
+        <a href="#" class="button button-green">Review Provider</a>
+      </div>
+    </div>
+    <div class="order__card">
+      <div class="order__card--left">
+        <div class="order__title">Toyota Supra</div>
+        <div class="order__circle order__text">#1234</div>
+        <div class="order__circle order__text">PENDING</div>
+        <div class="order__date">
+          <i class="fa-solid fa-calendar"></i>
+          <p>25 May 2022</p>
+          <p>-</p>
+          <p>26 May 2022</span>
+        </div>
+      </div>
+      <div class="order__card--right">
+        <a href="#" class="button button-cyan">View Order</a>
+        <a href="#" class="button button-green">Review Customer</a>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
