@@ -12,5 +12,5 @@ public interface OrderService {
     Order createOrder(Customer customer, OrderDto orderDto) throws NoSuchElementException, ParseException;
     Order getOrder(long id, UserDetails user);
     void cancelOrder(Customer customer, Order order);
-    Order setOrderStatus(RentalProvider provider, Order order, OrderStatus status, String bookingMessage);
+    Order setOrderStatus(Order order, OrderStatus status, String bookingMessage);
 }

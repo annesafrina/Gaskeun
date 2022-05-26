@@ -6,6 +6,7 @@ import com.mpp.gaskeun.exception.IllegalUserAccessException;
 import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.service.CarService;
 import com.mpp.gaskeun.service.OrderService;
+import com.mpp.gaskeun.utils.DateParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -83,12 +84,17 @@ public class OrderController {
         Car orderCar = order.getCar();
 
         String cssStyle = cssStyleStatus.get(order.getOrderStatus());
+        String startDateString = DateParser.parse(order.getStartDate());
+        String endDateString = DateParser.parse(order.getEndDate());
 
         model.addAttribute("order", order);
         model.addAttribute("car", orderCar);
         model.addAttribute("base64Image", orderCar.getPicture());
         model.addAttribute("cssStyle", cssStyle);
-        model.addAttribute("price", (order.getEndDate().getTime() - order.getStartDate().getTime()) / (1000 * 24 * 3600));
+        model.addAttribute("price", (order.getEndDate().getTime() - order.getStartDate().getTime()) / (1000 * 24 * 3600) * order.getCar().getPriceRate());
+
+        model.addAttribute("startDate", startDateString);
+        model.addAttribute("endDate", endDateString);
 
         model.addAttribute("isProvider", user instanceof RentalProvider);
         model.addAttribute("isRejected", order.getOrderStatus() == OrderStatus.REJECTED);
@@ -99,10 +105,10 @@ public class OrderController {
         return "order_details";
     }
 
-    private ResponseEntity<?> confirmOrRejectUtils(long id, RentalProvider provider, ConfirmOrderDto confirmOrderDto, OrderStatus status) {
+    private ResponseEntity<?> confirmOrRejectUtils(long id, UserDetails user, ConfirmOrderDto confirmOrderDto, OrderStatus status) {
        try {
-           Order order = orderService.getOrder(id, provider);
-           orderService.setOrderStatus(provider, order, status, confirmOrderDto.getBookingMessage());
+           Order order = orderService.getOrder(id, user);
+           orderService.setOrderStatus(order, status, confirmOrderDto.getBookingMessage());
            return ResponseEntity.ok(order);
        } catch (IllegalUserAccessException e) {
            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
@@ -130,7 +136,13 @@ public class OrderController {
     }
 
     @PostMapping(value = "/complete/{orderId}")
-    public ResponseEntity<?> completeOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, @RequestBody ConfirmOrderDto confirmOrderDto) {
-        return confirmOrRejectUtils(Long.parseLong(orderId), provider, confirmOrderDto, OrderStatus.COMPLETED);
+    public ResponseEntity<?> completeOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal Customer customer, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), customer, confirmOrderDto, OrderStatus.COMPLETED);
     }
+
+    @PostMapping(value = "/cancel/{orderId}")
+    public ResponseEntity<?> cancelOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal Customer customer, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), customer, confirmOrderDto, OrderStatus.CANCELLED);
+    }
+
 }
