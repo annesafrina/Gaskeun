@@ -112,7 +112,7 @@ public class ReviewController {
         return  "redirect:/index/";
     }
 
-    @GetMapping("/create/customer/{orderId}")
+    @GetMapping("/create/provider/{orderId}")
     public String getProviderReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user,
                                     @PathVariable("description") String description, @PathVariable("rating") double rating) {
         if(!(user instanceof Customer)) {
@@ -128,7 +128,7 @@ public class ReviewController {
         return "car_review";
     }
 
-    @PostMapping("/create/customer")
+    @PostMapping("/create/provider")
     public String postCreateProviderReview(ReviewDto reviewDto, @AuthenticationPrincipal UserDetails user, Model model) {
 
         if(!(user instanceof Customer)) {
