@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.mpp.gaskeun.repository.OrderRepository;
+import com.mpp.gaskeun.repository.CustomerRepository;
 
 
 import java.util.List;
@@ -19,6 +20,9 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Autowired
     private OrderRepository orderRepository;
