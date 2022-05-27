@@ -61,8 +61,6 @@ p
 @src/main/java/com/mpp/gaskeun/service/AuthenticationService.java,c\b\cb974695e6d28c2bbef3d64a9f592e107073f4d9
 t
 Dsrc/main/java/com/mpp/gaskeun/service/AuthenticationServiceImpl.java,b\8\b8a8c6bd34fd762477336366cd96c27a8f011029
->
-.gitlab-ci.yml,5\8\587d266bb27a4dc3022bbed44dfa19849df3044c
 j
 :src/test/java/com/mpp/gaskeun/GaskeunApplicationTests.java,e\b\ebbf1b9594d389a67791a571ecc3996e8d07367e
 q

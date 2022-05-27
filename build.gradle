@@ -44,3 +44,17 @@ jar {
         )
     }
 }
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "advprog-project-minterm"
+        property "sonar.projectKey", "advprog-project-minterm"
+        property "sonar.jacoco.reportPaths", allTestCoverageFile
+        property "sonar.host.url", "https://sonarqube.cs.ui.ac.id"
+        property("sonar.coverage.exclusions",
+                [
+                        "**/*Application**'"
+                ])
+
+    }
+}
