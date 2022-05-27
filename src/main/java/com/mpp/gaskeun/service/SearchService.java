@@ -10,5 +10,5 @@ public interface SearchService {
 
     List<String> getCarNames();
 
-    List<Car> getCars(String cityName, String startDate, String endDate, int carCapacity, String transmission, long minPrice, long maxPrice, String modelName) throws ParseException;
+    List<Car> getCars(String cityName, String startDate, String endDate, String transmission, long minPrice, long maxPrice, String modelName) throws ParseException;
 }

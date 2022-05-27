@@ -65,18 +65,17 @@ class SearchServiceImplTest {
         doReturn(List.of()).when(orderRepository).findAllByCar(car1);
         doReturn(true).when(orderService).isValidForCar(any(Car.class), any(Order.class));
 
-        List<Car> expected = searchService.getCars(
+        List<Car> cars = searchService.getCars(
                 "Jakarta",
                 "2022-04-15",
                 "2022-04-16",
-                5,
                 "automatic",
                 0,
                 1001,
                 "Honda CRV"
 
         );
-        assertNotEquals(expected.size(), 0);
+        assertNotEquals(0, cars.size());
     }
 
     @Test
