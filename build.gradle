@@ -2,8 +2,10 @@ plugins {
     id 'org.springframework.boot' version '2.6.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'org.sonarqube' version '3.3'
 }
 
+apply plugin: "jacoco"
 group = 'com.mpp'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
@@ -19,6 +21,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.sonarsource.scanner.api:sonar-scanner-api:2.16.2.588'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
@@ -37,10 +40,38 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+def allTestCoverageFile = "$buildDir/jacoco/allTestCoverage.exec"
+
 jar {
     manifest {
         attributes(
                 'Main-Class': 'com.mpp.gaskeun.GaskeunApplication'
         )
+    }
+}
+
+jacocoTestReport {
+
+    reports {
+        xml.enabled true
+    }
+
+}
+
+plugins.withType(JacocoPlugin) {
+    tasks["test"].finalizedBy 'jacocoTestReport'
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "advprog-project-minterm"
+        property "sonar.projectKey", "advprog-project-minterm"
+        property "sonar.jacoco.reportPaths", allTestCoverageFile
+        property "sonar.host.url", "https://sonarqube.cs.ui.ac.id"
+        property("sonar.coverage.exclusions",
+                [
+                        "**/*Application**'"
+                ])
+
     }
 }

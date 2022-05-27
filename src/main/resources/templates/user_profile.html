@@ -31,6 +31,8 @@
         <div class="editable-field"><span th:text="'Phone: ' +${user.getPhoneNumber()}"></span></div>
         <div class="editable-field" th:if="${type == 'provider'}"><span th:text="'Performance rating: ' + ${performanceRating}"></span></div>
         <div class="editable-field" th:if="${type == 'provider'}"><span th:text="'Number of owned cars: ' + ${numCarsOwned}"></span></div>
+        <div class="editable-field" th:if="${type == 'customer'}"><span th:text="'ID Card Number: ' + ${idCard}"></span></div>
+        <div class="editable-field" th:if="${type == 'customer'}"><span th:text="'Driving License Number: ' + ${drivingLicense}"></span></div>
         <div id="action-container">
            <div id="edit-profile">Edit?</div>
         </div>

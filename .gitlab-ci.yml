@@ -1,13 +1,30 @@
 stages:
   - build
+  - test
   - deploy
+  - sonar
 
 image: gradle:7.3.3-jdk17
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 build:
   stage: build
   script:
-    - gradle build --parallel
+    - gradle assemble --parallel
+
+test:
+  stage: test
+  script:
+    - gradle check --parallel
+    - gradle jacocoTestReport --parallel
+    - gradle jacocoTestCoverageVerification
+  artifacts:
+    paths:
+      - build/jacoco/allTestCoverage.exec
 
 deploy:
   stage: deploy
@@ -16,5 +33,14 @@ deploy:
     - apt-get install -y ruby-dev
     - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_APP_NAME --api_key=$HEROKU_API_KEY
+  only:
+    - master
+
+sonarCheck:
+  stage: sonar
+  needs:
+    - build
+  script:
+    - gradle sonarqube -Dsonar.login=$SONAR_TOKEN
   only:
     - master
