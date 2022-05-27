@@ -29,6 +29,9 @@ import java.util.Map;
 @RequestMapping("/customer")
 public class CustomerController {
 
+    public static final String CUSTOMER = "customer";
+    public static final String ERROR = "error";
+
     @Autowired
     private CustomerService customerService;
 
@@ -36,7 +39,7 @@ public class CustomerController {
     public String getOrders(@AuthenticationPrincipal Customer customer, Model model) {
         String email = customer.getEmail();
 
-        model.addAttribute("type", "customer");
+        model.addAttribute("type", CUSTOMER);
 
         return "order-list";
     }
@@ -55,8 +58,8 @@ public class CustomerController {
 
         UserDto userDto = new UserDto();
         userDto.fillCustomerDto(customer);
-        model.addAttribute("error", errorFlashMap.get("error"));
-        model.addAttribute("type", "customer");
+        model.addAttribute("error", errorFlashMap.get(ERROR));
+        model.addAttribute("type", CUSTOMER);
         model.addAttribute("user", userDto);
         model.addAttribute("idCard", customer.getIdCardNumber());
         model.addAttribute("drivingLicense", customer.getDrivingLicenseNumber());
@@ -88,9 +91,8 @@ public class CustomerController {
     public ResponseEntity<?> getAllOrders(@AuthenticationPrincipal UserDetails user) {
         Map<String, Object> response = new HashMap<>();
         if (user instanceof Customer customer) {
-            List<OrderDisplayDto> orderByCustomer = customerService.findAllOrders(customer).stream().map((order) ->
-                    OrderUtils.lightDisplayOrder(order)).toList();
-            response.put("type", "customer");
+            List<OrderDisplayDto> orderByCustomer = customerService.findAllOrdersInDto(customer);
+            response.put("type", CUSTOMER);
             response.put("data", orderByCustomer);
 
         } else if (user instanceof RentalProvider) {
@@ -103,9 +105,8 @@ public class CustomerController {
     public ResponseEntity<?> getCurrentOrders(@AuthenticationPrincipal UserDetails user) {
         Map<String, Object> response = new HashMap<>();
         if (user instanceof Customer customer) {
-            List<OrderDisplayDto> orderByCustomer = customerService.findAllOnGoingOrders(customer).stream().map((order) ->
-                    OrderUtils.lightDisplayOrder(order)).toList();
-            response.put("type", "customer");
+            List<OrderDisplayDto> orderByCustomer = customerService.findAllOrdersInDto(customer);
+            response.put("type", CUSTOMER);
             response.put("data", orderByCustomer);
 
         } else if (user instanceof RentalProvider) {
