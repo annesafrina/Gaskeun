@@ -69,7 +69,7 @@ function afterFetch(spinner, data, type) {
     }
 
     data.forEach(object => {
-        const { id, carName, status, startDate, endDate } = object;
+        const { id, carName, status, startDate, endDate, customerReviewed, carReviewed, providerReviewed } = object;
         const divCard = document.createElement("div");
         const cssStyle = CSS_MAP[status];
         divCard.classList.add("order__card");
@@ -86,32 +86,33 @@ function afterFetch(spinner, data, type) {
             </div>
           </div>`;
 
+        const carReviewButton = `<a href="/review/create/car/${id}" class="button button-green">Review Car</a>`;
+        const providerReviewButton = `<a href="/review/create/provider/${id}" class="button button-green">Review Provider</a>`;
+        const customerReviewButton = `<a href="/review/create/customer/${id}" class="button button-green">Review Customer</a>`;
+
+        let reviewContent = "";
+
+
         if (type === "customer") {
-            if (status === "COMPLETED") {
-                divCard.innerHTML += `
-                <div class="order__card--right">
-                    <a href="/order/display/${id}" class="button button-cyan">View Order</a>
-                    <a href="/review/create/car/${id}" class="button button-green">Review Car</a>
-                    <a href="/review/create/provider/${id}" class="button button-green">Review Provider</a>
-                </div>`
-            } else {
-                divCard.innerHTML += `<div class="order__card--right">
-                    <a href="/order/display/${id}" class="button button-cyan">View Order</a>
-                </div>`
+            if (status === "COMPLETED" && !carReviewed) {
+                reviewContent += carReviewButton;
+            }
+
+            if (status === "COMPLETED" && !providerReviewed) {
+                reviewContent += providerReviewButton;
             }
         } else {
-            if (status === "COMPLETED") {
-                divCard.innerHTML += `
-                <div class="order__card--right">
-                    <a href="/order/display/${id}" class="button button-cyan">View Order</a>
-                    <a href="/review/create/customer/${id}" class="button button-green">Review Customer</a>
-                </div>`
-            } else {
-                divCard.innerHTML += `<div class="order__card--right">
-                    <a href="/order/display/${id}" class="button button-cyan">View Order</a>
-                </div>`
+            if (status === "COMPLETED" && !customerReviewed) {
+                reviewContent += customerReviewButton;
             }
         }
+
+        divCard.innerHTML += `
+                <div class="order__card--right">
+                    <a href="/order/display/${id}" class="button button-cyan">View Order</a>
+                    ${reviewContent}        
+                </div>`;
+
         orders.appendChild(divCard);
     });
 }
@@ -122,7 +123,7 @@ async function fetchCurrentOrders() {
 
     spinner = setUpFetch();
 
-    const response = await fetch("/customer/api/current-orders");
+    const response = await fetch(`/${userType}/api/current-orders`);
     const { data, type } = await response.json();
 
     afterFetch(spinner, data, type);
@@ -134,7 +135,7 @@ async function fetchAllOrders() {
 
     spinner = setUpFetch();
 
-    const response = await fetch("/customer/api/all-orders");
+    const response = await fetch(`/${userType}/api/all-orders`);
     const {data, type} = await response.json();
 
     afterFetch(spinner, data, type);
@@ -154,6 +155,7 @@ const CSS_MAP = {
 
 const allOrders = document.querySelector("#all-orders");
 const currentOrders = document.querySelector("#current-orders");
+const userType = document.querySelector("#user-type").value;
 const orders = document.querySelector(".order");
 
 window.addEventListener("DOMContentLoaded", fetchAllOrders());

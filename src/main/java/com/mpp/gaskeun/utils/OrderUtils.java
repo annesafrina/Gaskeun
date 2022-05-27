@@ -31,7 +31,7 @@ public class OrderUtils {
     public static OrderDisplayDto lightDisplayOrder(Order order) {
         String startDate = DateParser.parse(order.getStartDate());
         String endDate = DateParser.parse(order.getEndDate());
-        OrderDisplayDto dto = new OrderDisplayDto(order.getId(), order.getCar().getModel(), order.getOrderStatus(), startDate, endDate);
+        OrderDisplayDto dto = new OrderDisplayDto(order.getId(), order.getCar().getModel(), order.getOrderStatus(), startDate, endDate, order.isCustomerIsReviewed(), order.isCarIsReviewed(), order.isProviderIsReviewed());
         return dto;
     }
 }
