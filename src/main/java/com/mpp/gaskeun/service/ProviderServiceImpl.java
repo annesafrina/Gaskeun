@@ -19,20 +19,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor @Slf4j
-public class ProviderServiceImpl implements ProviderService{
-
-    @Autowired
-    private ProviderRepository providerRepository;
-
-    @Autowired
-    private CarRepository carRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
+@AllArgsConstructor
+@Slf4j
+public class ProviderServiceImpl implements ProviderService {
 
     @Autowired
     private final BCryptPasswordEncoder encoder;
+    @Autowired
+    private ProviderRepository providerRepository;
+    @Autowired
+    private CarRepository carRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Override
     public long getNumberOfCarRegistered(RentalProvider provider) {
@@ -52,7 +50,7 @@ public class ProviderServiceImpl implements ProviderService{
     public List<Order> findAllOnGoingOrders(RentalProvider provider) {
         return orderRepository.findAll().stream()
                 .filter(order -> order.providerIsAssigned(provider))
-                .filter(order -> order.getOrderStatus() != OrderStatus.COMPLETED)
+                .filter(order -> order.getOrderStatus() == OrderStatus.ACTIVE)
                 .toList();
     }
 
@@ -72,18 +70,18 @@ public class ProviderServiceImpl implements ProviderService{
 
     @Override
     public RentalProvider update(RentalProvider provider, UserDto userDto) {
-        if(!userDto.containNameAndPhoneNumber()) {
+        if (!userDto.containNameAndPhoneNumber()) {
             throw new IncompleteFormException();
         }
 
-        if(userDto.containsPassword()) {
-            if(!encoder.matches(userDto.getOldPassword(), provider.getPassword())) {
+        if (userDto.containsPassword()) {
+            if (!encoder.matches(userDto.getOldPassword(), provider.getPassword())) {
                 throw new IllegalArgumentException("Password does not match current password");
             }
 
-            if(!userDto.getPassword().equals(userDto.getPasswordConfirmation())) {
+            if (!userDto.getPassword().equals(userDto.getPasswordConfirmation())) {
                 throw new IllegalArgumentException("New password does not match");
-                
+
             } else {
                 provider.setPassword(encoder.encode(userDto.getPassword()));
             }
