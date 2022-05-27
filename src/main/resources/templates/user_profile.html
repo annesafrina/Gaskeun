@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${type} + ' Info'"></title>
+    <link rel="stylesheet" th:href="@{/css/global.css}" type="text/css"/>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+            integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" th:href="@{/css/profile.css}" type="text/css"/>
+    <script defer th:src="@{/js/editProfile.js}"></script>
+</head>
+<body>
+<a href="/" id="to-home"><i class="fa-solid fa-house fa-2x"></i></a>
+<div id="error-toast" th:if="${error.length() != 0}">
+    <i class="fa-solid fa-exclamation"></i>
+    <h1 th:text="${error}"></h1>
+    <span class="close-error">&times;</span>
+</div>
+    <div class="blob-1"></div>
+    <main id="profile-container">
+        <div class="user-profile"><i class="fa-solid fa-user fa-6x"></i></div>
+        <div id="email"><span th:text="${user.getEmail()}"></span></div>
+        <div class="editable-field"><span th:text="'Name: ' +${user.getName()}"></span></div>
+        <div class="editable-field"><span th:text="'Phone: ' +${user.getPhoneNumber()}"></span></div>
+        <div class="editable-field" th:if="${type == 'provider'}"><span th:text="'Performance rating: ' + ${performanceRating}"></span></div>
+        <div class="editable-field" th:if="${type == 'provider'}"><span th:text="'Number of owned cars: ' + ${numCarsOwned}"></span></div>
+        <div id="action-container">
+           <div id="edit-profile">Edit?</div>
+        </div>
+    </main>
+</body>
+</html>
