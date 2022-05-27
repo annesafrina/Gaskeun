@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.6.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'org.sonarqube' version '3.3'
 }
 
 group = 'com.mpp'
@@ -19,6 +20,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.sonarsource.scanner.api:sonar-scanner-api:2.16.2.588'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'

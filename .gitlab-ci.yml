@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
   - deploy
   - sonar
 
@@ -23,7 +24,7 @@ deploy:
 sonarCheck:
   stage: sonar
   needs:
-    - job: test
+    - build
   script:
     - gradle sonarqube -Dsonar.login=$SONAR_TOKEN
   only:
