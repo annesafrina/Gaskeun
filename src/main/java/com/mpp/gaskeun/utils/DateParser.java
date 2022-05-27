@@ -1,5 +1,6 @@
 package com.mpp.gaskeun.utils;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateParser {
@@ -9,6 +10,12 @@ public class DateParser {
 
     public static String parse(Date date) {
         String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-        return String.format("%d %s %d", date.getDate(), months[date.getMonth()], date.getYear() + 1900);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        return String.format("%d %s %d",
+                calendar.get(Calendar.DATE),
+                months[calendar.get(Calendar.MONTH)],
+                calendar.get(Calendar.YEAR) + 1900);
     }
 }
