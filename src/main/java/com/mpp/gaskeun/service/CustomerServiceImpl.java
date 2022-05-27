@@ -1,10 +1,12 @@
 package com.mpp.gaskeun.service;
 
+import com.mpp.gaskeun.dto.OrderDisplayDto;
 import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.exception.IncompleteFormException;
 import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.model.Order;
 import com.mpp.gaskeun.model.OrderStatus;
+import com.mpp.gaskeun.utils.OrderUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,19 @@ public class CustomerServiceImpl implements CustomerService {
                 .filter(order -> !order.getOrderStatus().equals(OrderStatus.COMPLETED)).toList();
 
     }
+
+    @Override
+    public List<OrderDisplayDto> findAllOrdersInDto(Customer customer) {
+        return findAllOnGoingOrders(customer)
+                .stream().map(OrderUtils::lightDisplayOrder).toList();
+    }
+
+    @Override
+    public List<OrderDisplayDto> findAllOnGoingOrdersInDto(Customer customer) {
+        return findAllOnGoingOrders(customer)
+                .stream().map(OrderUtils::lightDisplayOrder).toList();
+    }
+
 
     //Update
     @Override
