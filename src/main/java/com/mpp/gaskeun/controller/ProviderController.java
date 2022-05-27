@@ -170,7 +170,12 @@ public class ProviderController {
             log.error(e.getMessage());
             model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
             model.addAttribute(CAR_DTO_ATTRIB_NAME, carDto);
-
+            model.addAllAttributes(Map.of(
+                    CAR_DTO_ATTRIB_NAME, carDto,
+                    "colors", Color.values(),
+                    "transmissions", Transmission.values(),
+                    "locations", carService.getAllLocations()
+            ));
             return "car_edit_listing";
         }
 

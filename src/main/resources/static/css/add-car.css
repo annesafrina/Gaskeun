@@ -10,6 +10,44 @@
     font-family: "Poppins", sans-serif;
 }
 
+.toast {
+    position: fixed;
+    transform: translate(-50%, 50%);
+    top: 2rem;
+    left: 50%;
+    border-radius: 10px;
+    background-color: rgb(255, 187, 187);
+
+    font-size: clamp(14px, 1vw, 20px);
+    padding: 1.5rem 2rem;
+    display: flex;
+    animation: toast-enter 500ms forwards;
+
+    z-index: 3;
+}
+
+.toast h1 {
+    margin: 0 1vw;
+}
+.toast .close-error {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+@keyframes toast-enter {
+    from {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 50%);
+        opacity: 1;
+    }
+}
+
 .add-car-display {
     min-height: 100vh;
 
@@ -92,6 +130,8 @@
     "buttons buttons";
 
     gap: 0 3rem;
+
+    position: relative;
 }
 
 .display__field .model {
@@ -149,6 +189,25 @@
     flex-direction: row;
     gap: 1rem;
     justify-content: space-between;
+}
+
+.image--center {
+    display: grid;
+    place-items: center;
+
+    margin: 1rem 0;
+}
+
+.form__image {
+    width: 400px;
+    height: 250px;
+
+    position: relative;
+
+    object-fit: cover;
+
+    border-radius: 1rem;
+    border: 3px solid var(--turquoise-green);
 }
 
 @media only screen and (max-width: 1277px) {

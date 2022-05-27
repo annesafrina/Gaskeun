@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 @Setter @Getter
 @Slf4j
 public class CarDto {
+    public static final int MAX_SIZE = 65_535;
     String licensePlate;
     int capacity;
     String transmission;
@@ -41,9 +42,11 @@ public class CarDto {
     }
 
     public void setImage(MultipartFile imageFile) throws IOException {
-        if(imageFile != null && !imageFile.isEmpty()) {
+        if(imageFile != null && !imageFile.isEmpty() && imageFile.getSize() <= MAX_SIZE) {
             byte[] image = Base64.encodeBase64(imageFile.getBytes());
             this.base64image = new String(image);
+        } else {
+            throw new IOException("File size is above 64 KB");
         }
     }
 

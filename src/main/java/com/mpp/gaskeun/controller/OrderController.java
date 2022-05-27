@@ -45,6 +45,7 @@ public class OrderController {
         cssStyleStatus.put(OrderStatus.COMPLETED, "background-color: #00CFC1; color: white;");
     }
 
+
     @GetMapping("/create/{carId}")
     public String displayCreateOrder(Model model, @PathVariable("carId") String carId) {
         OrderDto orderDto = new OrderDto();
