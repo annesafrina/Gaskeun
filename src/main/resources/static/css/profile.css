@@ -164,6 +164,31 @@ body {
     animation: toast-enter 500ms forwards;
 }
 
+.redirect-container {
+    display: flex;
+    width: 30%;
+
+    justify-content: center;
+    padding: 0.75rem 2rem;
+}
+
+.redirect-container__buttons {
+    padding: 0.4rem 1.2rem;
+    border-radius: 1rem;
+
+    font-weight: 600;
+}
+
+.redirect-container__buttons.orders {
+    background-color: #9CC69B;
+    color: black;
+}
+
+.redirect-container__buttons.cars {
+    background-color: #4a96ff;
+    color: white;
+}
+
 @keyframes toast-enter {
     from {
         transform: translate(-50%, -100%);
