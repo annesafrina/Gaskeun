@@ -3,7 +3,9 @@ package com.mpp.gaskeun.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class BaseController {
 
     @GetMapping("")
-    public String displayHomePage(Model model) {
+    public String displayHomePage(@AuthenticationPrincipal UserDetails user, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isLoggedIn = authentication == null || authentication instanceof AnonymousAuthenticationToken;
-        model.addAttribute("loggedIn", isLoggedIn);
+        boolean isNotLoggedIn = authentication == null || authentication instanceof AnonymousAuthenticationToken;
+        model.addAttribute("notLoggedIn", isNotLoggedIn);
 
         return "index";
     }
