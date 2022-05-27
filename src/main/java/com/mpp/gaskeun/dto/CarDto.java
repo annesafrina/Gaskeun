@@ -42,7 +42,7 @@ public class CarDto {
     }
 
     public void setImage(MultipartFile imageFile) throws IOException {
-        if(imageFile != null && !imageFile.isEmpty() && imageFile. <= MAX_SIZE) {
+        if(imageFile != null && !imageFile.isEmpty() && imageFile.getSize() <= MAX_SIZE) {
             byte[] image = Base64.encodeBase64(imageFile.getBytes());
             this.base64image = new String(image);
         } else {
