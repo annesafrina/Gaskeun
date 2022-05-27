@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car List</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}" type="text/css">
+    <link rel="stylesheet"  th:href="@{/css/car-list.css}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <a href="/" id="to-home"><i class="fa-solid fa-house fa-2x"></i></a>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="title">Your Cars</div>
+    <main id="car-list">
+        <div th:each="car : ${cars}" class="car-list__card">
+            <div class="available-date">
+                15, April 2022 - 15, April 2022
+            </div>
+            <div class="model">
+                <span th:text="${car.getModel()}"></span>
+            </div>
+            <div class="capacity">
+                <i class="fa-solid fa-user-group"></i>
+                <span th:text="${car.getCapacity()}"></span>
+            </div>
+            <div class="picture">
+                <img th:src="'data:image/png;base64,' + ${car.getPicture()}" alt="">
+            </div>
+            <div class="transmission">
+                <i class="fa-solid fa-gears"></i>
+                <span th:text="${car.getTransmissionName()}"></span>
+            </div>
+            <div class="location">
+                <i class="fa-solid fa-location-dot"></i>
+                <span th:text="${car.getLocationName()}"></span>
+            </div>
+            <div class="stars">
+                <i class="fa-solid fa-star"></i>
+                <span th:text="${car.getRating()}"></span>
+            </div>
+            <div class="rate">
+                <span th:text="'Rp. ' + ${car.getPriceRate()} + ' /day'"></span>
+            </div>
+            <a th:href="'/provider/update-car/'+ ${car.getId()}" class="edit">click to edit listing</a>
+            <a th:href="'/provider/car-detail/' + ${car.getLicensePlate()}" class="view">click to view listing</a>
+        </div>
+    </main>
+</body>
+</html>
