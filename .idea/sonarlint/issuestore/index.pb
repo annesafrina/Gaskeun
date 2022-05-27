@@ -29,8 +29,6 @@ a
 1src/main/java/com/mpp/gaskeun/model/Location.java,8\4\8469b6d7423fdf39ec39d8b93cdc365aad2aee60
 c
 3src/main/java/com/mpp/gaskeun/model/PriceRange.java,b\f\bf4e813b8b8e9e52311b464240eb372248f29227
-g
-7src/main/java/com/mpp/gaskeun/model/ProviderReview.java,9\1\9170b95901a9135b4a22c4593e11e03f01691843
 e
 5src/main/java/com/mpp/gaskeun/model/Transmission.java,b\a\baa5ca9d894fc9930ae3f73c55836bddc44ca0f7
 k
@@ -51,10 +49,6 @@ h
 8src/main/java/com/mpp/gaskeun/service/SearchService.java,0\4\04f25207ed84e01514b3861d656063e67bf07c71
 x
 Hsrc/test/java/com/mpp/gaskeun/service/AuthenticationServiceImplTest.java,7\3\73ab901d805f7c3c2da12fd011651ff370f11531
-p
-@src/main/java/com/mpp/gaskeun/service/AuthenticationService.java,c\b\cb974695e6d28c2bbef3d64a9f592e107073f4d9
-t
-Dsrc/main/java/com/mpp/gaskeun/service/AuthenticationServiceImpl.java,b\8\b8a8c6bd34fd762477336366cd96c27a8f011029
 j
 :src/test/java/com/mpp/gaskeun/GaskeunApplicationTests.java,e\b\ebbf1b9594d389a67791a571ecc3996e8d07367e
 q
@@ -67,8 +61,6 @@ t
 Dsrc/main/java/com/mpp/gaskeun/security/config/WebSecurityConfig.java,9\e\9e4feb81752ff18eb36229174adece927da6dd70
 l
 <src/main/java/com/mpp/gaskeun/service/SearchServiceImpl.java,4\3\436cce84877a56c8aaeaa19ab0cde87a7a50009f
-e
-5src/main/java/com/mpp/gaskeun/service/CarService.java,4\2\423b8232ccdf4d4ea9edd78db58c49386f56cb7a
 f
 6src/main/java/com/mpp/gaskeun/dto/ConfirmOrderDto.java,d\8\d8d86bca6f95e305593329f6cbceee99e276167d
 g
@@ -79,8 +71,6 @@ b
 -src/main/java/com/mpp/gaskeun/dto/CarDto.java,0\8\0800f1ab71711beb6e2ccccb90c75756e5dc9601
 m
 =src/test/java/com/mpp/gaskeun/service/CarServiceImplTest.java,f\6\f6c89b3e9643323e7e3094a5a62af114a0cbb3eb
-n
->src/main/java/com/mpp/gaskeun/service/CustomerServiceImpl.java,2\7\27b97ade10c018e9931af97e3636224cac9e6fea
 \
 ,src/main/java/com/mpp/gaskeun/model/Car.java,7\b\7b96db2838ed7a70285b1a875f1ded49d9d5c444
 g

@@ -1,9 +1,8 @@
 package com.mpp.gaskeun.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @DiscriminatorValue("provider")
@@ -14,7 +13,7 @@ public class ProviderReview extends Review {
         RentalProvider provider = this.order.getCarProvider();
         double ratingSum = getRating() + provider.getPerformanceRating();
         provider.setNumberOfReviews(provider.getNumberOfReviews() + 1);
-        provider.setPerformanceRating(ratingSum/(provider.getNumberOfReviews() + 1));
+        provider.setPerformanceRating(ratingSum / (provider.getNumberOfReviews() + 1));
     }
 
     @Override

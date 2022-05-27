@@ -4,14 +4,17 @@ import com.mpp.gaskeun.dto.OrderDisplayDto;
 import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.model.Order;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
 public interface CustomerService {
-    public List<Order> findAllOrders(Customer customer);
-    public List<Order> findAllOnGoingOrders(Customer customer);
-    public Customer update(Customer customer, UserDto userDto);
-    public List<OrderDisplayDto> findAllOrdersInDto(Customer customer);
-    public List<OrderDisplayDto> findAllOnGoingOrdersInDto(Customer customer);
+    List<Order> findAllOrders(Customer customer);
+
+    List<Order> findAllOnGoingOrders(Customer customer);
+
+    Customer update(Customer customer, UserDto userDto);
+
+    List<OrderDisplayDto> findAllOrdersInDto(Customer customer);
+
+    List<OrderDisplayDto> findAllOnGoingOrdersInDto(Customer customer);
 }

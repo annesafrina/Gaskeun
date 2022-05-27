@@ -2,7 +2,6 @@ package com.mpp.gaskeun.service;
 
 import com.mpp.gaskeun.dto.CarDto;
 import com.mpp.gaskeun.exception.CarDoesNotExistException;
-import com.mpp.gaskeun.exception.IncompleteFormException;
 import com.mpp.gaskeun.exception.NotCarOwnerException;
 import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.CarRepository;
@@ -20,7 +19,9 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-@Slf4j @Setter @Getter
+@Slf4j
+@Setter
+@Getter
 public class CarServiceImpl implements CarService {
 
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -40,7 +41,7 @@ public class CarServiceImpl implements CarService {
     public Car addCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
         Object[] isValid = isValidCarRegistration(carDto, true);
 
-        if(!(boolean) isValid[0]) {
+        if (!(boolean) isValid[0]) {
             throw new IllegalArgumentException(String.valueOf(isValid[1]));
         }
 
@@ -55,7 +56,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car updateCar(RentalProvider provider, CarDto carDto) throws ParseException, IllegalArgumentException {
         Object[] isValid = isValidCarRegistration(carDto, false);
-        if(!(boolean) isValid[0]) {
+        if (!(boolean) isValid[0]) {
             throw new IllegalArgumentException(String.valueOf(isValid[1]));
         }
 
