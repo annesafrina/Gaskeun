@@ -87,8 +87,6 @@ g
 7src/main/java/com/mpp/gaskeun/model/RentalProvider.java,9\0\900d3267154bea1ac4c4f6b34687a69986a647f6
 p
 @src/test/java/com/mpp/gaskeun/service/SearchServiceImplTest.java,6\6\66c4849cf8ce17ea866e0ffb345b61e5b6afb3a4
-p
-@src/main/java/com/mpp/gaskeun/controller/CustomerController.java,c\f\cf4905a226f5048a8de42a6b7771eb9d816478b7
 ^
 .src/main/java/com/mpp/gaskeun/model/Order.java,0\0\00e56d1f0de76a23313409c92eb4264c96a8818d
 o
