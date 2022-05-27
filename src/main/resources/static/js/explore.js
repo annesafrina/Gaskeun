@@ -203,7 +203,7 @@ function populateAvailableCarModels() {
 
 
 function populateAvailableLocations() {
-    fetch(`/api/all-locations/`)
+    fetch(`/api/all-locations`)
         .then(data => data.json())
         .then(json => {
             json.forEach(loc => {
