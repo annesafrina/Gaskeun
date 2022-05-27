@@ -83,7 +83,7 @@ public class ReviewServiceImpl implements ReviewService {
         if (user instanceof Customer customer) {
             return order.getCustomer().getId() == customer.getId();
         } else if (user instanceof RentalProvider provider) {
-            return order.getCarProvider().getId() == provider.getId();
+            return order.providerIsAssigned(provider);
         }
         return false;
     }

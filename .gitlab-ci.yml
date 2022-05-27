@@ -1,6 +1,8 @@
 stages:
   - build
+  - test
   - deploy
+  - sonar
 
 image: gradle:7.3.3-jdk17
 
@@ -16,5 +18,14 @@ deploy:
     - apt-get install -y ruby-dev
     - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_APP_NAME --api_key=$HEROKU_API_KEY
+  only:
+    - master
+
+sonarCheck:
+  stage: sonar
+  needs:
+    - build
+  script:
+    - gradle sonarqube -Dsonar.login=$SONAR_TOKEN
   only:
     - master
