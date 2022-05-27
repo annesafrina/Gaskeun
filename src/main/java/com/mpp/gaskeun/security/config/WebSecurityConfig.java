@@ -35,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/images/**",
                         "/actuator/*",
                         "/",
+                        "/explore",
                         "/explore/*",
                         "/static/**"
                 )
