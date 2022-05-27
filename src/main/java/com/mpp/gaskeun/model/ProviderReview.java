@@ -14,7 +14,7 @@ public class ProviderReview extends Review {
         RentalProvider provider = this.order.getCarProvider();
         double ratingSum = getRating() + provider.getPerformanceRating();
         provider.setNumberOfReviews(provider.getNumberOfReviews() + 1);
-        provider.setPerformanceRating(ratingSum/provider.getNumberOfReviews());
+        provider.setPerformanceRating(ratingSum/(provider.getNumberOfReviews() + 1));
     }
 
     @Override
