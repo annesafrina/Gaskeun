@@ -42,13 +42,11 @@ public class CarDto {
     }
 
     public void setImage(MultipartFile imageFile) throws IOException {
-        if (imageFile.getSize() > MAX_SIZE) {
-            throw new IOException("File size is above 64 KB");
-        }
-
-        else if(imageFile != null && !imageFile.isEmpty()) {
+        if(imageFile != null && !imageFile.isEmpty() && imageFile. <= MAX_SIZE) {
             byte[] image = Base64.encodeBase64(imageFile.getBytes());
             this.base64image = new String(image);
+        } else {
+            throw new IOException("File size is above 64 KB");
         }
     }
 
