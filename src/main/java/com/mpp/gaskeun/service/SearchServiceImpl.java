@@ -64,14 +64,13 @@ public class SearchServiceImpl implements SearchService {
      * neglected field will be included as long as it complies to the remaining filters.
      */
     @Override
-    public List<Car> getCars(String cityName, String startDate, String endDate, int carCapacity, String transmission, long minPrice, long maxPrice, String modelName) throws ParseException {
+    public List<Car> getCars(String cityName, String startDate, String endDate, String transmission, long minPrice, long maxPrice, String modelName) throws ParseException {
         Order dummyOrder = createDummyOrder(startDate, endDate);
         Location location = locationRepository.findByCityName(cityName).orElse(null);
         return carRepository.findAll()
                 .stream()
                 .filter(location != null ? car -> car.getLocation().equals(location) : car -> true)
                 .filter(dummyOrder == null ? car -> true : car -> orderService.isValidDuringDate(car, dummyOrder) && orderService.isValidForCar(car, dummyOrder))
-                .filter(carCapacity == -1 ? car -> true : car -> car.getCapacity() == carCapacity)
                 .filter(transmission.length() == 0 ? car -> true : car -> car.getTransmission() == Transmission.valueOf(transmission.toUpperCase()))
                 .filter(car -> car.getPriceRate() >= minPrice && (car.getPriceRate() <= maxPrice || maxPrice == 0))
                 .filter(modelName.length() == 0 ? car -> true : car -> car.getModel().equalsIgnoreCase(modelName))

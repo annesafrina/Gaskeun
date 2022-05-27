@@ -43,7 +43,7 @@ public class ExploreController {
             @RequestParam(defaultValue = "", name = "location") String cityName,
             @RequestParam(defaultValue = "", name = "model") String modelName
     ) throws ParseException {
-        List<Car> allCars = searchService.getCars(cityName, startDate, endDate, -1, transmissionType, 0, maxPrice, modelName);
+        List<Car> allCars = searchService.getCars(cityName, startDate, endDate, transmissionType, 0, maxPrice, modelName);
 
         return ResponseEntity.ok(allCars);
     }
