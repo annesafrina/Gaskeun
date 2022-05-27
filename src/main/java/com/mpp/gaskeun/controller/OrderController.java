@@ -18,8 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -28,13 +26,11 @@ import java.util.NoSuchElementException;
 public class OrderController {
 
     public static final String BASE_64_IMAGE = "base64Image";
+    private final EnumMap<OrderStatus, String> cssStyleStatus = new EnumMap<>(OrderStatus.class);
     @Autowired
     private OrderService orderService;
-
     @Autowired
     private CarService carService;
-
-    private final EnumMap<OrderStatus, String> cssStyleStatus = new EnumMap<>(OrderStatus.class);
 
     OrderController() {
         cssStyleStatus.put(OrderStatus.PENDING, "background-color: #ECE4B7;");
@@ -64,7 +60,7 @@ public class OrderController {
     public String postCreateOrder(OrderDto orderDto, @AuthenticationPrincipal UserDetails user, Model model) {
         log.info("Creating order");
 
-        if(!(user instanceof Customer)) {
+        if (!(user instanceof Customer)) {
             return "redirect:/";
         }
 
@@ -114,17 +110,17 @@ public class OrderController {
     }
 
     private ResponseEntity<Object> confirmOrRejectUtils(long id, UserDetails user, ConfirmOrderDto confirmOrderDto, OrderStatus status) {
-       try {
-           Order order = orderService.getOrder(id, user);
-           orderService.setOrderStatus(order, status, confirmOrderDto.getBookingMessage());
-           return ResponseEntity.ok(order);
-       } catch (IllegalUserAccessException e) {
-           return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-       } catch (NoSuchElementException e) {
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-       } catch (IllegalStateException e) {
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-       }
+        try {
+            Order order = orderService.getOrder(id, user);
+            orderService.setOrderStatus(order, status, confirmOrderDto.getBookingMessage());
+            return ResponseEntity.ok(order);
+        } catch (IllegalUserAccessException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
 
