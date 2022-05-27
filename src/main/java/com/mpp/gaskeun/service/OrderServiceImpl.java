@@ -207,7 +207,7 @@ public class OrderServiceImpl implements OrderService{
         return order;
     }
 
-    private boolean verifyOrderOwnership(Customer customer, Order order) {
+    public boolean verifyOrderOwnership(Customer customer, Order order) {
         if(order == null) {
             return false;
         }
