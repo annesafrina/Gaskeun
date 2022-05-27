@@ -17,6 +17,7 @@
     <script defer th:src="@{/js/editProfile.js}"></script>
 </head>
 <body>
+<a href="/" id="to-home"><i class="fa-solid fa-house fa-2x"></i></a>
 <div id="error-toast" th:if="${error.length() != 0}">
     <i class="fa-solid fa-exclamation"></i>
     <h1 th:text="${error}"></h1>

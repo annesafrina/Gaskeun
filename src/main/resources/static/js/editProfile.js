@@ -22,7 +22,6 @@ function showActions() {
     buttonContainer.appendChild(editConfirmButton);
     editCancelButton.addEventListener("click", hideForm)
     editConfirmButton.addEventListener("click", () => {
-        console.log("clicked");
         if (infoChanged) {
             document.getElementById("edits").submit()
         }
@@ -56,7 +55,7 @@ function showForm() {
     inputs[0].value = fields[0].substring(fields[0].indexOf(":") + 1)
     inputs[1].value = fields[1].substring(fields[1].indexOf(":") + 1)
     form.setAttribute("method", "POST");
-    form.setAttribute("action", `/${type}/edit`)
+    form.setAttribute("action", `/${type}/info`)
     inputs.forEach(el => el.addEventListener("keyup", checkChange))
     const email = document.getElementById("email");
     email.after(form);

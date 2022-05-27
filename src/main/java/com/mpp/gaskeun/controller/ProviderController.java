@@ -51,7 +51,7 @@ public class ProviderController {
         return "user_profile";
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/info")
     public String updateProviderInfoPost(@AuthenticationPrincipal UserDetails user,
                                          @ModelAttribute UserDto userDto,
                                          Model model) {

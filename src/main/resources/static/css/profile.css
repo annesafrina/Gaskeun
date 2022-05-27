@@ -184,3 +184,13 @@ body {
     font-size: 24px;
     cursor: pointer;
 }
+
+#to-home {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    margin: 1.5vw;
+    color: black;
+    text-decoration: none;
+}
