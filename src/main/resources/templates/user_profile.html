@@ -37,7 +37,7 @@
            <div id="edit-profile">Edit?</div>
         </div>
         <div class="redirect-container">
-            <a th:href="@{/provider/orders}" class="redirect-container__buttons orders">View Orders</a>
+            <a th:href="@{|/${type}/orders|}" class="redirect-container__buttons orders">View Orders</a>
             <a th:if="${type == 'provider'}" th:href="@{/provider/cars}" class="redirect-container__buttons cars">View Cars</a>
         </div>
     </main>
