@@ -32,7 +32,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/registration/*",
                         "/css/**",
                         "/js/**",
-                        "/images/**"
+                        "/images/**",
+                        "/actuator/*",
+                        "/",
+                        "/explore"
                 )
                 .permitAll()
                 .anyRequest()

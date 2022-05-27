@@ -33,7 +33,8 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
-
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
