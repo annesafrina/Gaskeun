@@ -119,7 +119,7 @@ public class ProviderController {
             model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
         }
 
-        return "redirect:/provider/register-car";
+        return "redirect:/provider/cars";
     }
 
     @GetMapping("/update-car/{carId}")
@@ -204,13 +204,13 @@ public class ProviderController {
 
     @GetMapping("/cars")
     public String displayAllCars(@AuthenticationPrincipal UserDetails user, Model model) {
-        if (!(user instanceof RentalProvider)) {
+
+        if (!(user instanceof RentalProvider provider)) {
             return REDIRECT_URL;
         }
+        model.addAttribute("cars", carService.getAllCar(provider));
 
-        model.addAttribute("cars", carService.getAllCar((RentalProvider) user));
-
-        return "all_cars";
+        return "car_list";
     }
 
     @GetMapping("/orders")

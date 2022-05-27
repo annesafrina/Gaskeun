@@ -1,0 +1,176 @@
+body {
+    overflow: hidden;
+}
+.blob {
+    position: fixed;
+    border-radius: 50%;
+    height: 750px;
+    width: 750px;
+    background-color: black;
+    z-index: -1;
+}
+
+.blob-1 {
+    background-color: #375A7F;
+    right: 0;
+    transform: translate(50%, 50%);
+}
+.blob-2 {
+    background-color: #78e9e2;
+    right: 0;
+    bottom: 0;
+    transform: translateY(60%);
+}
+.blob-3 {
+    background-color: #1c9bb7;
+    top: 0;
+    transform: translate(-50%, -50%);
+}
+
+#car-list {
+    overflow: scroll;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10rem;
+}
+
+#car-list::-webkit-scrollbar {
+    width: 0.6em;
+  }
+  
+#car-list::-webkit-scrollbar-thumb {
+    background-color: rgb(116, 116, 116);
+    border-radius: 10px;
+  }
+
+#to-home {
+    position: absolute;
+    top: -15%;
+    left: 0;
+    cursor: pointer;
+    margin: 1.5vw;
+    color: black;
+    text-decoration: none;
+}
+
+.title {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateY(-200%) translateX(-50%);
+    font-weight: 900;
+    font-size: clamp(2.5rem, 3vw, 4rem);
+}
+
+.car-list__card {
+    text-decoration: none;
+    color: black;
+    min-width: 690px;
+    margin: 1rem 0;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: white;
+    height: clamp(250px, 20vw, 300px);
+    border-radius: 25px;
+    width: 60%;
+    justify-self: center;
+    display: grid;
+    grid-template-rows: repeat(8, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5px;
+    grid-template-areas:
+    "date date date"
+    "name pic edit"
+    "cap pic view"
+    "trm pic rate"
+    "none pic rate"
+    "star pic rate"
+    "star pic rate"
+    "loc loc loc"
+;
+    padding: 1rem;
+    box-sizing: border-box;
+    transition: transform 300ms;
+}
+
+.car-list__card .available-date {
+    justify-self: center;
+    grid-area: date;
+    font-weight: bold;
+    font-size: clamp(10px, 3vw, 15px);
+}
+.car-list__card .edit {
+    grid-area: edit;
+    justify-self: flex-end;
+    color: #375A7F;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.car-list__card .view {
+    grid-area: view;
+    justify-self: flex-end;
+    color: #375A7F;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.car-list__card .model {
+    justify-self: center;
+    grid-area: name;
+    color: #375A7F;
+    font-weight: 900;
+    font-size: clamp(14px, 5vw, 28px);
+}
+.car-list__card .capacity {
+    justify-self: center;
+    grid-area: cap;
+}
+
+.car-list__card .capacity, .car-list__card .transmission {
+    justify-self: center;
+    align-self: center;
+    font-size: clamp(8px, 5vw, 20px);
+    font-weight: 600;
+    padding-top: 1vw;
+}
+.car-list__card .picture {
+    grid-area: pic;
+    border-radius: 10px;
+    object-fit: contain;
+    justify-self: center;
+    align-self: center;
+}
+.car-list__card .transmission {
+    grid-area: trm;
+}
+.car-list__card .location {
+    grid-area: loc;
+    justify-self: flex-end;
+    font-size: clamp(4px, 3vw, 14px);
+}
+.car-list__card .rate {
+    grid-area: rate;
+    align-self: center;
+    justify-self: flex-end;
+    font-weight: 700;
+    font-size: clamp(12px, 5vw, 24px);
+}
+.car-list__card .stars {
+    justify-self: center;
+    grid-area: star;
+    align-self: center;
+    font-size: clamp(12px, 5vw, 24px);
+    font-weight: 900;
+}
+.car-list__card .stars i {
+    color: darkgoldenrod;
+}
+
+.car-list__card .picture img{
+  
+    border-radius: 10px;
+}
