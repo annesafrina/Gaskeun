@@ -42,7 +42,7 @@
         </div>
         <section class="nav-section user-actions">
             <a th:if="${!notLoggedIn}" href="/logout" class="nav-link"><i class="fa-solid fa-right-from-bracket"></i></a>
-            <a href="" class="nav-link"><i class="fa-regular fa-user"></i></a>
+            <a th:if="${!notLoggedIn}" th:href="'/' +${userType}+'/info'" class="nav-link"><i class="fa-regular fa-user"></i></a>
         </section>
         <input class="checkbox" type="checkbox" name="" id="" />
         <div class="drawer-opener">
@@ -52,7 +52,7 @@
         </div>
         <div class="drawer">
             <a th:if="${!notLoggedIn}" href="/logout" class="drawer-link">Logout <i class="fa-solid fa-right-from-bracket"></i></a>
-            <a href="/" class="drawer-link">My Profile <i class="fa-regular fa-user"></i></a>
+            <a th:if="${!notLoggedIn}" th:href="'/' +${userType}+'/info'" class="drawer-link">My Profile <i class="fa-regular fa-user"></i></a>
             <div class="drawer-link">
             <a th:if="${notLoggedIn}" href="" class="anchor-pill-button">JOIN NOW!</a>
             </div>

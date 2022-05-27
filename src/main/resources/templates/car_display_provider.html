@@ -1,66 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Car Details</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/car-display.css}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <h3>Car Details</h3>
-    <div th:if="${car != null}">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <main id="car-profile" th:if="${car != null}">
+        <h1>Car Details</h1>
+        <div class="info">
         <label>Car ID:</label>
         <span th:text="${car.getId()}"></span>
+        </div>
 
+        <div class="info">
         <label>License Plate:</label>
         <span th:text="${car.getLicensePlate()}"></span>
-        <br/>
+        </div>
 
+        <div class="info">
         <label>Capacity:</label>
         <span th:text="${car.getCapacity()}"></span>
-        <br/>
+        </div>
 
+        <div class="info">
         <label>Color:</label>
         <span th:text="${car.getColorName()}"></span>
-        <br/>
+        </div>
 
+        <div class="info">
         <label>Transmission:</label>
         <span th:text="${car.getTransmissionName()}"></span>
-        <br/>
+        </div>
 
+        <div class="info">
         <label>Rating:</label>
         <span th:text="${car.getRating()}"></span>
-        <br/>
+        </div>
 
+        <div class="info">
         <label>Availability Status:</label>
         <span th:if="${car.isAvailable()}" th:text="Available"></span>
         <span th:unless="${car.isAvailable()}" th:text="Not Available"></span>
-        <br/>
+        </div>
 
+        <div class="info">
         <label>Available Start Date:</label>
         <span th:text="${#dates.format(car.getAvailableStartDate(), 'dd-MM-yyyy')}"></span>
-        <br/>
+        </div>
 
+        <div class="info">
         <label>Available End Date:</label>
         <span th:text="${#dates.format(car.getAvailableEndDate(), 'dd-MM-yyyy')}"></span>
-        <br/>
+        </div>
 
+        <div class="info">
         <label>Price Rate:</label>
         <span th:text="${car.getPriceRate()}"></span>
-        <br/>
+        </div>
 
+        <div class="info">
         <label>Model:</label>
         <span th:text="${car.getModel()}"></span>
-        <br/>
+        </div>
 
+        <div class="info">
         <label>Location:</label>
         <span th:text="${car.getLocationName()}"></span>
-        <br/>
+        </div>
 
-        <label>Description:</label>
-        <span th:text="${car.getDescription()}"></span>
-        <br/>
+        <div class="info">
+            <label>Description:</label>
+             <span th:text="${car.getDescription()}"></span>
+        </div>
 
+        <div>
         <img th:src="@{'data:image/png;base64,' + ${car.getPicture()}}" >
-        <a th:href="@{/provider/update-car/{carId}(carId=${car.getId()})}">Edit</a>
-    </div>
+        </div>
+    </main>
 </body>
 </html>
