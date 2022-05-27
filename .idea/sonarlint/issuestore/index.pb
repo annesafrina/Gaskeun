@@ -51,8 +51,6 @@ g
 7src/main/java/com/mpp/gaskeun/service/OrderService.java,4\4\441e3efbed193685dced1998ab15a69e4d2bbe28
 b
 2src/main/java/com/mpp/gaskeun/dto/CustomerDto.java,f\f\ffa098052398a5aae460293ae9925151a09ae87c
-m
-=src/test/java/com/mpp/gaskeun/service/CarServiceImplTest.java,f\6\f6c89b3e9643323e7e3094a5a62af114a0cbb3eb
 \
 ,src/main/java/com/mpp/gaskeun/model/Car.java,7\b\7b96db2838ed7a70285b1a875f1ded49d9d5c444
 g
@@ -61,7 +59,5 @@ p
 @src/test/java/com/mpp/gaskeun/service/SearchServiceImplTest.java,6\6\66c4849cf8ce17ea866e0ffb345b61e5b6afb3a4
 ^
 .src/main/java/com/mpp/gaskeun/model/Order.java,0\0\00e56d1f0de76a23313409c92eb4264c96a8818d
-o
-?src/test/java/com/mpp/gaskeun/service/OrderServiceImplTest.java,6\5\652200207a9979e351171b6cc85bfd063fbaa0c7
 r
 Bsrc/test/java/com/mpp/gaskeun/service/ProviderServiceImplTest.java,2\9\29bea9c29154e9f6306875ef4f90c2bcda86bda9
