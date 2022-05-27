@@ -65,16 +65,12 @@ Dsrc/main/java/com/mpp/gaskeun/service/AuthenticationServiceImpl.java,b\8\b8a8c
 .gitlab-ci.yml,5\8\587d266bb27a4dc3022bbed44dfa19849df3044c
 j
 :src/test/java/com/mpp/gaskeun/GaskeunApplicationTests.java,e\b\ebbf1b9594d389a67791a571ecc3996e8d07367e
-n
->src/main/java/com/mpp/gaskeun/service/ProviderServiceImpl.java,0\6\0623a9eaca4c9677c89b7cb209785b9570110a33
 q
 Asrc/main/java/com/mpp/gaskeun/exception/NotCarOwnerException.java,e\c\ec8747aa6e159307699a3719b160323f0b25edc7
 t
 Dsrc/main/java/com/mpp/gaskeun/exception/IncompleteFormException.java,e\f\efe8451c456f6947b7d22ee1d1d114f4490b0174
 i
 9src/main/java/com/mpp/gaskeun/service/CarServiceImpl.java,2\b\2b383d883052d80c1deed86b614106e97bf43d8f
-o
-?src/test/java/com/mpp/gaskeun/service/OrderServiceImplTest.java,6\5\652200207a9979e351171b6cc85bfd063fbaa0c7
 d
 4src/main/java/com/mpp/gaskeun/model/OrderStatus.java,3\7\373f9e5d87e431ee561c3ae23a1b421dc6f611ae
 t

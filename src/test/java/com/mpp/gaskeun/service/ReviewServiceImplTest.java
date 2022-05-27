@@ -1,9 +1,7 @@
 package com.mpp.gaskeun.service;
 
 import com.mpp.gaskeun.exception.OrderDoesNotExistException;
-import com.mpp.gaskeun.model.Customer;
-import com.mpp.gaskeun.model.Order;
-import com.mpp.gaskeun.model.RentalProvider;
+import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,16 +86,48 @@ class ReviewServiceImplTest {
         Order order = new Order();
         order.setCustomer(owningCustomer);
 
-        boolean orderIsOwnByUser = (boolean) pubOrderOwnedByUser.invoke(reviewService, order, owningCustomer);
-        assertTrue(orderIsOwnByUser);
+        boolean orderIsOwnedByUser = (boolean) pubOrderOwnedByUser.invoke(reviewService, order, owningCustomer);
+        assertTrue(orderIsOwnedByUser);
     }
 
-    void whenOrderOwnedByProvider_mustReturnTrue() throws NoSuchMethodException {
+    @Test
+    void whenOrderOwnedByProvider_mustReturnTrue() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method pubOrderOwnedByUser = reviewService.getClass().getDeclaredMethod("orderOwnedByUser", Order.class, UserDetails.class);
         pubOrderOwnedByUser.setAccessible(true);
         RentalProvider owningProvider = new RentalProvider();
         owningProvider.setId(320);
 
+        Car car = new Car();
+        car.setRentalProvider(owningProvider);
+
         Order order = new Order();
+        order.setCar(car);
+
+        boolean orderIsOwnedByUser = (boolean) pubOrderOwnedByUser.invoke(reviewService, order, owningProvider);
+        assertTrue(orderIsOwnedByUser);
+    }
+
+    @Test
+    void whenOrderIsCompleted_mustReturnTrue() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method pubValidateOrder = reviewService.getClass().getDeclaredMethod("validateOrderIsCompleted", Order.class);
+        pubValidateOrder.setAccessible(true);
+
+        Order order = new Order();
+        order.setOrderStatus(OrderStatus.COMPLETED);
+
+        boolean isComplete = (boolean) pubValidateOrder.invoke(reviewService, order);
+        assertTrue(isComplete);
+    }
+
+    @Test
+    void whenOrderIsNotCompleted_mustReturnFalse() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        Method pubValidateOrder = reviewService.getClass().getDeclaredMethod("validateOrderIsCompleted", Order.class);
+        pubValidateOrder.setAccessible(true);
+
+        Order order = new Order();
+        order.setOrderStatus(OrderStatus.PENDING);
+
+        boolean isComplete = (boolean) pubValidateOrder.invoke(reviewService, order);
+        assertFalse(isComplete);
     }
 }
