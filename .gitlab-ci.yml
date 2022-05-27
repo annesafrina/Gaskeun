@@ -9,7 +9,17 @@ image: gradle:7.3.3-jdk17
 build:
   stage: build
   script:
-    - gradle build --parallel
+    - gradle assemble --parallel
+
+test:
+  stage: test
+  script:
+    - gradle check --parallel
+    - gradle jacocoTestReport --parallel
+    - gradle jacocoTestCoverageVerification
+  artifacts:
+    paths:
+      - build/jacoco/allTestCoverage.exec
 
 deploy:
   stage: deploy
