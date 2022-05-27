@@ -77,7 +77,7 @@ function filterData(queryParams) {
     const loader = document.createElement("div")
     loader.classList.add("lds-dual-ring")
     carList.appendChild(loader)
-    fetch(`/explore/api/?${queryParams}`)
+    fetch(`/explore/api?${queryParams}/`)
         .then(data => data.json())
         .then(json => {
             displayCarList(json)
@@ -192,7 +192,7 @@ function load() {
 }
 
 function populateAvailableCarModels() {
-    fetch(`/explore/api/model-names`)
+    fetch(`/explore/api/model-names/`)
         .then(data => data.json())
         .then(json => {
             json.forEach(car => {
@@ -203,7 +203,7 @@ function populateAvailableCarModels() {
 
 
 function populateAvailableLocations() {
-    fetch(`/api/all-locations`)
+    fetch(`/api/all-locations/`)
         .then(data => data.json())
         .then(json => {
             json.forEach(loc => {
