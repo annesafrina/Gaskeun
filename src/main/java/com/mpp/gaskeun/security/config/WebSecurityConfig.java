@@ -35,8 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/images/**",
                         "/actuator/*",
                         "/",
-                        "/explore",
-                        "/javax.faces.resource/**",
+                        "/explore/*",
                         "/static/**"
                 )
                 .permitAll()
@@ -45,7 +44,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .usernameParameter("email")
                 .permitAll()
-                .loginPage("/login");
+                .loginPage("/login")
+                .defaultSuccessUrl("/");
     }
 
     @Override
