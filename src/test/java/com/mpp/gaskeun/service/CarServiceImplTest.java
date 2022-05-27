@@ -2,7 +2,6 @@ package com.mpp.gaskeun.service;
 
 import com.mpp.gaskeun.dto.CarDto;
 import com.mpp.gaskeun.exception.CarDoesNotExistException;
-import com.mpp.gaskeun.exception.IncompleteFormException;
 import com.mpp.gaskeun.exception.NotCarOwnerException;
 import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.CarRepository;
@@ -184,12 +183,14 @@ class CarServiceImplTest {
 
     @Test
     void whenRegistrationIsNotComplete_mustReturnFalseWithCorrectString() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        CarDto notCompleteDto = new CarDto();
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
         isValidCarRegistration.setAccessible(true);
 
+        CarDto notCompleteDto = new CarDto();
+
         Object[] isValid = (Object[]) isValidCarRegistration.invoke(carService, notCompleteDto, true);
+
         assertFalse((boolean) isValid[0]);
         assertEquals("Form contains invalid/incomplete data", isValid[1]);
     }
@@ -199,7 +200,9 @@ class CarServiceImplTest {
         Method isValidCarRegistration = carService.getClass()
                 .getDeclaredMethod("isValidCarRegistration", CarDto.class, boolean.class);
         isValidCarRegistration.setAccessible(true);
+
         Object[] isValid = (Object[]) isValidCarRegistration.invoke(carService, invalidDateCarDto, false);
+
         assertFalse((boolean) isValid[0]);
         assertEquals("Available start date should not be after available end date", isValid[1]);
     }

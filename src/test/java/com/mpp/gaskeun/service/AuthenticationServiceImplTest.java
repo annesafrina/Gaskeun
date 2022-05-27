@@ -19,7 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -127,18 +128,19 @@ class AuthenticationServiceImplTest {
         validUserDto.setPasswordConfirmation("password1");
         validUserDto.setPhoneNumber("08123456789");
 
+        String encodedPassword = encoder.encode(validUserDto.getPassword());
+
         when(customerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.empty());
         when(providerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.empty());
-        when(mockEncoder.encode(validUserDto.getPassword())).thenReturn(encoder.encode(validUserDto.getPassword()));
+        when(mockEncoder.encode(validUserDto.getPassword())).thenReturn(encodedPassword);
 
         RentalProvider savedUser = (RentalProvider) authenticationService.register(validUserDto);
-        verify(providerRepository, times(1)).save(savedUser);
 
+        verify(providerRepository, times(1)).save(savedUser);
         assertEquals(validUserDto.getEmail(), savedUser.getEmail());
         assertEquals(validUserDto.getName(), savedUser.getName());
         assertEquals(validUserDto.getPhoneNumber(), savedUser.getPhoneNumber());
 
-        System.out.println();
         assert encoder.matches(validUserDto.getPassword(), savedUser.getPassword());
     }
 
@@ -176,7 +178,6 @@ class AuthenticationServiceImplTest {
         validUserDto.setIdCard("ID_CARD");
         validUserDto.setDrivingLicense("DRIVING_LICENSE");
 
-
         when(customerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.of(new Customer()));
 
         IllegalArgumentException exception = assertThrows(
@@ -198,13 +199,15 @@ class AuthenticationServiceImplTest {
         validUserDto.setIdCard("ID_CARD");
         validUserDto.setDrivingLicense("DRIVING_LICENSE");
 
+        String encodedPassword = encoder.encode(validUserDto.getPassword());
+
         when(customerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.empty());
         when(providerRepository.findByEmail(validUserDto.getEmail())).thenReturn(Optional.empty());
-        when(mockEncoder.encode(validUserDto.getPassword())).thenReturn(encoder.encode(validUserDto.getPassword()));
+        when(mockEncoder.encode(validUserDto.getPassword())).thenReturn(encodedPassword);
 
         Customer savedUser = (Customer) authenticationService.register(validUserDto);
-        verify(customerRepository, times(1)).save(savedUser);
 
+        verify(customerRepository, times(1)).save(savedUser);
         assertEquals(validUserDto.getEmail(), savedUser.getEmail());
         assertEquals(validUserDto.getName(), savedUser.getName());
         assertEquals(validUserDto.getPhoneNumber(), savedUser.getPhoneNumber());

@@ -8,11 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.event.annotation.BeforeTestMethod;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -149,8 +145,8 @@ class OrderServiceImplTest {
         Order order = new Order();
         Car car = new Car();
 
-        order.setStartDate(new Date(2022,10,5));
-        order.setEndDate(new Date(2022,9,5));
+        order.setStartDate(new Date(2022, 10, 5));
+        order.setEndDate(new Date(2022, 9, 5));
 
         Object[] isValid = orderService.validateOrder(car, order);
 
@@ -167,7 +163,7 @@ class OrderServiceImplTest {
         car.setAvailableStartDate(new Date(2022, 5, 1));
         car.setAvailableEndDate(new Date(2022, 5, 6));
 
-        order.setStartDate(new Date(2023,3,2));
+        order.setStartDate(new Date(2023, 3, 2));
         order.setEndDate(new Date(2023, 3, 4));
 
         Object[] isValid = orderService.validateOrder(car, order);
@@ -300,7 +296,7 @@ class OrderServiceImplTest {
     @Test
     void whenOrderMadeAWeekAgo_failCancelOrder() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, - 7);
+        calendar.add(Calendar.DATE, -7);
         Date createdDate = calendar.getTime();
 
         Customer customer = new Customer();
