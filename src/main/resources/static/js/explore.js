@@ -77,7 +77,7 @@ function filterData(queryParams) {
     const loader = document.createElement("div")
     loader.classList.add("lds-dual-ring")
     carList.appendChild(loader)
-    fetch(`/explore/api?${queryParams}/`)
+    fetch(`/explore/api?${queryParams}`)
         .then(data => data.json())
         .then(json => {
             displayCarList(json)
