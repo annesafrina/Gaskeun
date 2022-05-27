@@ -197,13 +197,13 @@ public class ProviderController {
 
     @GetMapping("/cars")
     public String displayAllCars(@AuthenticationPrincipal UserDetails user, Model model) {
-        if (!(user instanceof RentalProvider)) {
+        if (!(user instanceof RentalProvider provider)) {
             return REDIRECT;
         }
 
-        model.addAttribute("cars", carService.getAllCar((RentalProvider) user));
+        model.addAttribute("cars", carService.getAllCar(provider));
 
-        return "all_cars";
+        return "car_list";
     }
 
     @GetMapping("/orders")
