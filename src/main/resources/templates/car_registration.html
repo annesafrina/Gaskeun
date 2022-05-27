@@ -21,6 +21,10 @@
     <title>Car Registration</title>
 </head>
 <body>
+<div id="error-toast" th:if="${error != null}">
+    <i class="fa-solid fa-exclamation"></i>
+    <h1 th:text="${error}"></h1>
+</div>
 <main>
     <form
             class="add-car-display"
