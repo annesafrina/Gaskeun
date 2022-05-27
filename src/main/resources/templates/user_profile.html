@@ -18,7 +18,7 @@
 </head>
 <body>
 <a href="/" id="to-home"><i class="fa-solid fa-house fa-2x"></i></a>
-<div id="error-toast" th:if="${error.length() != 0}">
+<div id="error-toast" th:if="${error != null}">
     <i class="fa-solid fa-exclamation"></i>
     <h1 th:text="${error}"></h1>
     <span class="close-error">&times;</span>
