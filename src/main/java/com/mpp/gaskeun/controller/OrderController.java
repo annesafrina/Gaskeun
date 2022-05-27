@@ -39,7 +39,6 @@ public class OrderController {
         put(OrderStatus.CANCELLED, "background-color: #FC9F5B;");
         put(OrderStatus.REJECTED, "background-color: #D50000; color: white;");
         put(OrderStatus.COMPLETED, "background-color: #00CFC1; color: white;");
-
     }};
 
     @GetMapping("/create/{carId}")

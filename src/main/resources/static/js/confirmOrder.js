@@ -75,8 +75,6 @@ async function handleResponse(response) {
     }
 }
 
-const API_ROUTE = "http://localhost:8090";
-
 async function createRejection (bookingDetails, main) {
 
 
@@ -87,7 +85,7 @@ async function createRejection (bookingDetails, main) {
         bookingMessage: detailValue
     }
 
-    const response = await fetch(`${API_ROUTE}/order/reject/${orderId}`, {
+    const response = await fetch(`/order/reject/${orderId}`, {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -101,7 +99,7 @@ async function createRejection (bookingDetails, main) {
 async function createConfirmation(main) {
     const orderId = main.dataset.orderId;
 
-    const response = await fetch(`${API_ROUTE}/order/confirm/${orderId}`, {
+    const response = await fetch(`/order/confirm/${orderId}`, {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -115,7 +113,7 @@ async function createConfirmation(main) {
 async function activateOrder(main) {
     const orderId = main.dataset.orderId;
 
-    const response = await fetch(`${API_ROUTE}/order/pay/${orderId}`, {
+    const response = await fetch(`/order/pay/${orderId}`, {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"

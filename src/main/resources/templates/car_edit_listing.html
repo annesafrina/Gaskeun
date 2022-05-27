@@ -1,100 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+            integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/form.css}" />
+    <link rel="stylesheet" th:href="@{/css/add-car.css}" />
+
+    <script defer th:src="@{/js/addCar.js}"></script>
+    <script defer th:src="@{/js/toast.js}"></script>
     <title>Edit Car Listing</title>
 </head>
 <body>
-    <span th:if="${error != null}" th:text="${error}"></span>
-    <div th:if="${carDto != null}">
-        <h3>Edit Car Listing</h3>
-
-        <label>License Plate</label>
-        <span class="form-control" th:text="${carDto.getLicensePlate()}"></span>
-        <br/>
-
-        <label>Model</label>
-        <span class="form-control" th:text="*{carDto.getModel()}"></span>
-        <br/>
-
-        <form action="/provider/update-car" method="post" enctype="multipart/form-data" th:object="${carDto}">
-            <input type="hidden" th:value="*{licensePlate}" th:field="*{licensePlate}">
-            <input type="hidden" th:value="*{model}" th:field="*{model}">
-            <input type="hidden" th:value="*{base64image}" th:field="*{base64image}">
-
-            <label>Price Rate</label>
-            <input type="number"
-                   class="form-control"
-                   placeholder="Price Rate"
-                   th:field="*{priceRate}"
-                   th:value="*{priceRate}"
-            ><br/>
-
-            <label>Capacity</label>
-            <input type="number"
-                   class="form-control"
-                   placeholder="Capacity"
-                   th:field="*{capacity}"
-                   th:value="*{capacity}"
-            ><br/>
-
-            <label>Transmission</label>
-            <select name="Transmission" th:field="*{transmission}">
-                <option selected
-                        th:text="*{transmission}"
-                        th:value="*{transmission}"></option>
-
-                <option th:each="transmission: ${transmissions}"
-                        th:value="${transmission.toString()}"
-                        th:text="${transmission.toString().toLowerCase()}"></option>
-            </select><br/>
-
-            <label>Color</label>
-            <select name="Color" th:field="*{color}">
-                <option selected
-                        th:text="*{color}"
-                        th:value="*{color}"></option>
-
-                <option th:each="color: ${colors}"
-                        th:value="${color.toString()}"
-                        th:text="${color.toString().toLowerCase()}"></option>
-            </select><br/>
-
-            <label>Available Start Date</label>
-            <input type="date"
-                   th:field="*{availableStart}"
-                   th:value="*{availableStart}"
-            ><br/>
-
-            <label>Available End Date</label>
-            <input type="date"
-                   th:field="*{availableEnd}"
-                   th:value="*{availableEnd}"
-            ><br/>
-
-            <label>Location</label>
-            <select name="Location" th:field="*{cityName}">
-                <option selected
-                        th:value="*{cityName}"
-                        th:text="*{cityName}">
-                </option>
-                <option th:each="location: ${locations}"
-                        th:value="${location.getCityName()}"
-                        th:text="${location.getCityName()}">
-                </option>
-            </select><br/>
-
-            <label>Car Description</label><br/>
-            <textarea th:field="*{description}" th:value="*{description}"></textarea><br/>
-
-            <input type="file"
-                   name="car-image"
-                   accept="image/jpeg, image/png"
-            />
-            <button type="submit">Submit</button>
-        </form>
+    <div class="toast toast-error" th:if="${error != null}">
+        <i class="fa-solid fa-exclamation"></i>
+        <h1 th:text="${error}"></h1>
+        <i class="fa-solid fa-xmark close-error"></i>
     </div>
+    <main th:if="${carDto != null}">
+        <form
+                class="add-car-display"
+                th:action="@{/provider/update-car}"
+                method="post"
+                enctype="multipart/form-data"
+                th:object="${carDto}"
+        >
+            <div class="display--left display--left-init">
+                <div class="blob blob--left blob--black"></div>
+            </div>
+            <div class="display--right">
+                <div class="display--header">
+                    <h2 class="display__title" th:text="${carDto.getLicensePlate()}">
+                    </h2>
+                    <p class="display__text">
+                        License Plate :
+                        <span
+                                class="display__text--bold"
+                                th:text="${carDto.getModel()}"
+                        ></span>
+                    </p>
+                </div>
+                <input
+                        type="hidden"
+                        th:value="*{licensePlate}"
+                        th:field="*{licensePlate}"
+                />
+                <input type="hidden" th:value="*{model}" th:field="*{model}" />
+                <input
+                        type="hidden"
+                        th:value="*{base64image}"
+                        th:field="*{base64image}"
+                />
+                <div class="image--center">
+                    <img class="form__image" th:src="@{'data:image/png;base64,' + ${carDto.getBase64image()}}" >
+                </div>
+                <div class="display__field">
+                    <div class="form-text capacity">
+                        <div class="form-input">
+                            <input
+                                    type="number"
+                                    min="0"
+                                    id="capacity"
+                                    class="form-input__text"
+                                    placeholder=" "
+                                    value="0"
+                                    th:field="*{capacity}"
+                            />
+                            <i class="fa-solid form-icon fa-user-group"></i>
+                            <label for="capacity" class="form-label">Capacity</label>
+                        </div>
+                    </div>
 
-    <img th:src="@{'data:image/png;base64,' + ${carDto.getBase64image()}}" >
+                    <div class="form-text price-rate">
+                        <div class="form-input">
+                            <input
+                                    type="number"
+                                    min="0"
+                                    class="form-input__text"
+                                    id="pricerate"
+                                    placeholder=" "
+                                    value="0"
+                                    th:field="*{priceRate}"
+                            />
+                            <i class="fa-solid form-icon fa-money-bill"></i>
+                            <label for="pricerate" class="form-label">Price Rate</label>
+                        </div>
+                    </div>
+
+                    <div class="form-text transmission">
+                        <label class="form-label--static">Transmission</label>
+                        <div class="form-select">
+                            <select
+                                    class="form-input__select"
+                                    name="Transmission"
+                                    th:field="*{transmission}"
+                            >
+                                <option
+                                        class="form-input__option"
+                                        th:each="transmission: ${transmissions}"
+                                        th:value="${transmission.toString()}"
+                                        th:text="${transmission.toString().toLowerCase()}"
+                                ></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-text colour">
+                        <label class="form-label--static">Color</label>
+                        <div class="form-select">
+                            <select
+                                    class="form-input__select"
+                                    name="Color"
+                                    th:field="*{color}"
+                            >
+                                <option
+                                        class="form-input__option"
+                                        th:each="color: ${colors}"
+                                        th:value="${color.toString()}"
+                                        th:text="${color.toString().toLowerCase()}"
+                                ></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-text start-date">
+                        <div class="form-input">
+                            <input
+                                    id="start-date"
+                                    class="form-input__text"
+                                    placeholder=" "
+                                    type="date"
+                                    th:field="*{availableStart}"
+                            />
+                            <label for="start-date" class="form-label"
+                            >Available Start Date</label
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-text end-date">
+                        <div class="form-input">
+                            <input
+                                    id="end-date"
+                                    class="form-input__text"
+                                    type="date"
+                                    th:field="*{availableEnd}"
+                            />
+                            <label for="end-date" class="form-label"
+                            >Available End Date</label
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-text description">
+                        <label class="form-label--static">Car Description</label>
+                        <textarea
+                                required
+                                class="form-input__textarea"
+                                th:field="*{description}"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-text location">
+                        <label class="form-label--static">Location</label>
+                        <div class="form-select">
+                            <select class="form-input__select" name="Location" th:field="*{cityName}">
+                                <option
+                                        class = "form-input__option"
+                                        th:each="location: ${locations}"
+                                        th:value="${location.getCityName()}"
+                                        th:text="${location.getCityName()}"
+                                ></option></select
+                            >
+                        </div>
+
+                    </div>
+
+                    <div class="form-text file">
+                        <label for="file" class="form-input__file">
+                            <p id="file-name">Upload a picture</p>
+                            <i class="fa-solid fa-images form-icon"></i>
+                        </label>
+                        <input
+                                class="form-input__file-hide"
+                                type="file"
+                                id="file"
+                                name="car-image"
+                                accept="image/jpeg, image/png"
+                        />
+                    </div>
+
+                    <div class="form-text buttons">
+                        <a class="button button-red back" href="/provider/cars">Back</a>
+                        <button class="button button-cyan submit" type="submit">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
 </body>
 </html>
