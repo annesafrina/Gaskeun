@@ -20,10 +20,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -42,13 +46,19 @@ public class ProviderController {
     private ProviderService providerService;
 
     @GetMapping("/info")
-    public String getProviderInfo(@AuthenticationPrincipal UserDetails user, Model model) {
+    public String getProviderInfo(HttpServletRequest request, @AuthenticationPrincipal UserDetails user, Model model) {
         if (!(user instanceof RentalProvider provider)) {
             return REDIRECT;
         }
+
+        Map<String, ?> errorFlashMap = RequestContextUtils.getInputFlashMap(request);
+        if (errorFlashMap == null ) {
+            errorFlashMap = new HashMap<>();
+        }
+
         UserDto userDto = new UserDto();
         userDto.fillDto(provider);
-        model.addAttribute(ERROR_ATTRIB_NAME, "");
+        model.addAttribute(ERROR_ATTRIB_NAME, errorFlashMap.get(ERROR_ATTRIB_NAME));
         model.addAttribute("type", "provider");
         model.addAttribute("user", userDto);
         model.addAttribute("performanceRating", provider.getPerformanceRating());
@@ -59,7 +69,8 @@ public class ProviderController {
     @PostMapping("/info")
     public String updateProviderInfoPost(@AuthenticationPrincipal UserDetails user,
                                          @ModelAttribute UserDto userDto,
-                                         Model model) {
+                                         RedirectAttributes attrs
+    ) {
 
         if (!(user instanceof RentalProvider)) {
             return REDIRECT;
@@ -68,13 +79,8 @@ public class ProviderController {
         try {
             providerService.update((RentalProvider) user, userDto);
         } catch (IllegalArgumentException e) {
-            userDto.fillDto((RentalProvider) user);
-            model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
-            model.addAttribute("type", "provider");
-            model.addAttribute("user", userDto);
-            model.addAttribute("performanceRating", ((RentalProvider) user).getPerformanceRating());
-            model.addAttribute("numCarsOwned", providerService.getNumberOfCarRegistered((RentalProvider) user));
-            return "user_profile";
+            attrs.addFlashAttribute(ERROR_ATTRIB_NAME,e.getMessage());
+            return "redirect:/provider/info";
         }
 
         return "redirect:/provider/info";
