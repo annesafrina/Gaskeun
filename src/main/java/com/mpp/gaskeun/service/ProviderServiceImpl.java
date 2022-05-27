@@ -50,7 +50,7 @@ public class ProviderServiceImpl implements ProviderService {
     public List<Order> findAllOnGoingOrders(RentalProvider provider) {
         return orderRepository.findAll().stream()
                 .filter(order -> order.providerIsAssigned(provider))
-                .filter(order -> order.getOrderStatus() != OrderStatus.COMPLETED)
+                .filter(order -> order.getOrderStatus() == OrderStatus.ACTIVE)
                 .toList();
     }
 

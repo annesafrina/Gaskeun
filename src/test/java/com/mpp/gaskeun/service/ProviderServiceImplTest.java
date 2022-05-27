@@ -4,11 +4,11 @@ import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.exception.IncompleteFormException;
 import com.mpp.gaskeun.model.Car;
 import com.mpp.gaskeun.model.Order;
+import com.mpp.gaskeun.model.OrderStatus;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.OrderRepository;
 import com.mpp.gaskeun.repository.ProviderRepository;
-import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -252,8 +252,40 @@ class ProviderServiceImplTest {
         assertEquals(providersOrders, retrievedOrders);
     }
 
+    @Test
     void whenFindAllOnGoingOrders_mustReturnOnlyOnGoingOrders() {
+        RentalProvider provider = new RentalProvider();
+        provider.setEmail("provideremail");
+        provider.setId(1);
+        RentalProvider anotherProvider = new RentalProvider();
+        provider.setEmail("anotherprovider");
+        provider.setId(2);
 
+        Car providerCar1 = new Car();
+        Car providerCar2 = new Car();
+        Car anotherCar = new Car();
+        providerCar1.setRentalProvider(provider);
+        providerCar2.setRentalProvider(provider);
+        anotherCar.setRentalProvider(anotherProvider);
+
+        Order order1 = new Order();
+        Order order2 = new Order();
+        Order order3 = new Order();
+        order1.setCar(providerCar1);
+        order1.setOrderStatus(OrderStatus.ACTIVE);
+        order2.setCar(providerCar2);
+        order2.setOrderStatus(OrderStatus.COMPLETED);
+        order3.setCar(anotherCar);
+        order3.setOrderStatus(OrderStatus.PENDING);
+
+        List<Order> allOrders = List.of(order1, order2, order3);
+        List<Order> providerActiveOrders = List.of(order1);
+
+        when(orderRepository.findAll()).thenReturn(allOrders);
+        List<Order> retrievedOrders = providerService.findAllOnGoingOrders(provider);
+
+        assertEquals(providerActiveOrders, retrievedOrders);
     }
+
 
 }
