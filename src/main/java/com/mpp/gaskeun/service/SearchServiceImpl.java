@@ -6,7 +6,6 @@ import com.mpp.gaskeun.model.Order;
 import com.mpp.gaskeun.model.Transmission;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.LocationRepository;
-
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

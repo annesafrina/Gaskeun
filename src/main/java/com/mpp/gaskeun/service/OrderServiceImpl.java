@@ -22,7 +22,7 @@ import java.util.NoSuchElementException;
 @Service
 @Slf4j
 @Setter
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -64,13 +64,13 @@ public class OrderServiceImpl implements OrderService{
             return isValid;
         }
 
-        if(!orderStartIsMaximum30Days(order)) {
+        if (!orderStartIsMaximum30Days(order)) {
             isValid[0] = false;
             isValid[1] = "The car should only be book at most 30 days from now";
             return isValid;
         }
 
-        if(!orderLengthIsMaximum30Days(order)) {
+        if (!orderLengthIsMaximum30Days(order)) {
             isValid[0] = false;
             isValid[1] = "Orders length is at most 30 days";
             return isValid;
@@ -98,7 +98,7 @@ public class OrderServiceImpl implements OrderService{
         List<Order> orderMadeUsingCar = orderRepository.findAllByCar(car);
 
         List<DateRange> unavailableDateRange = OrderUtils.findUnavailableDates(orderMadeUsingCar);
-        for (DateRange dateRange: unavailableDateRange) {
+        for (DateRange dateRange : unavailableDateRange) {
             if (dateRange.dateInRange(order.getStartDate()) || dateRange.dateInRange(order.getEndDate())) {
                 return false;
             }
@@ -158,11 +158,11 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public void cancelOrder(Customer customer, Order order) {
-        if(!verifyOrderOwnership(customer, order)) {
+        if (!verifyOrderOwnership(customer, order)) {
             throw new IllegalUserAccessException(order.getId(), customer.getEmail());
         }
 
-        if(!isWithin2DaysAfterCreation(order)) {
+        if (!isWithin2DaysAfterCreation(order)) {
             throw new IllegalArgumentException("Cancellation period has ended");
         }
 
@@ -173,15 +173,15 @@ public class OrderServiceImpl implements OrderService{
      * Method to change the status and booking message of an order. This process is conducted by a rental provider.
      * Hence, before making any changes to the Order object, we first verify if the order indeed belongs to the
      * provider.
-     *
+     * <p>
      * If verified, the changes will be made and committed.
      *
-     * @param provider=The provider object that receives the order from the customer
-     * @param order=The order whose status and description is wanted to be changed
-     * @param status=The status given by the rental provider to the order. When the customer chooses to confirm,
-     *              the system must change the order status to WAITING_FOR_PAYMENT, else REJECTED.
+     * @param provider=The               provider object that receives the order from the customer
+     * @param order=The                  order whose status and description is wanted to be changed
+     * @param status=The                 status given by the rental provider to the order. When the customer chooses to confirm,
+     *                                   the system must change the order status to WAITING_FOR_PAYMENT, else REJECTED.
      * @param bookingMessage=Description given by the rental provider regarding the booking/order
-     *                      The field is nullable.
+     *                                   The field is nullable.
      * @return The edited order
      */
     @Override
@@ -208,7 +208,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     public boolean verifyOrderOwnership(Customer customer, Order order) {
-        if(order == null) {
+        if (order == null) {
             return false;
         }
 
@@ -218,8 +218,9 @@ public class OrderServiceImpl implements OrderService{
 
     /**
      * Verifies whether an order is destined to a rental provider
+     *
      * @param provider=The provider whose ownership over an order is to be verified
-     * @param order=The order object to be tested
+     * @param order=The    order object to be tested
      * @return true if the car used in the order belongs to the provider, false if otherwise
      */
     public boolean verifyOrderOwnership(RentalProvider provider, Order order) {

@@ -36,11 +36,8 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping("/orders")
-    public String getOrders(@AuthenticationPrincipal Customer customer, Model model) {
-        String email = customer.getEmail();
-
+    public String getOrders(Model model) {
         model.addAttribute("type", CUSTOMER);
-
         return "order-list";
     }
 
@@ -58,7 +55,7 @@ public class CustomerController {
 
         UserDto userDto = new UserDto();
         userDto.fillCustomerDto(customer);
-        model.addAttribute("error", errorFlashMap.get(ERROR));
+        model.addAttribute(ERROR, errorFlashMap.get(ERROR));
         model.addAttribute("type", CUSTOMER);
         model.addAttribute("user", userDto);
         model.addAttribute("idCard", customer.getIdCardNumber());
@@ -79,7 +76,7 @@ public class CustomerController {
         try {
             customerService.update(customer, userDto);
         } catch (IllegalArgumentException e) {
-            attrs.addFlashAttribute("error",e.getMessage());
+            attrs.addFlashAttribute(ERROR,e.getMessage());
             return "redirect:/customer/info";
         }
 
@@ -88,7 +85,7 @@ public class CustomerController {
 
 
     @GetMapping("/api/all-orders")
-    public ResponseEntity<?> getAllOrders(@AuthenticationPrincipal UserDetails user) {
+    public ResponseEntity<Object> getAllOrders(@AuthenticationPrincipal UserDetails user) {
         Map<String, Object> response = new HashMap<>();
         if (user instanceof Customer customer) {
             List<OrderDisplayDto> orderByCustomer = customerService.findAllOrdersInDto(customer);
@@ -102,10 +99,10 @@ public class CustomerController {
     }
 
     @GetMapping("/api/current-orders")
-    public ResponseEntity<?> getCurrentOrders(@AuthenticationPrincipal UserDetails user) {
+    public ResponseEntity<Object> getCurrentOrders(@AuthenticationPrincipal UserDetails user) {
         Map<String, Object> response = new HashMap<>();
         if (user instanceof Customer customer) {
-            List<OrderDisplayDto> orderByCustomer = customerService.findAllOrdersInDto(customer);
+            List<OrderDisplayDto> orderByCustomer = customerService.findAllOnGoingOrdersInDto(customer);
             response.put("type", CUSTOMER);
             response.put("data", orderByCustomer);
 
