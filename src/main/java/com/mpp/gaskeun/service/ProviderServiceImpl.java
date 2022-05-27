@@ -4,6 +4,7 @@ import com.mpp.gaskeun.dto.OrderDisplayDto;
 import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.exception.IncompleteFormException;
 import com.mpp.gaskeun.model.Order;
+import com.mpp.gaskeun.model.OrderStatus;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.repository.CarRepository;
 import com.mpp.gaskeun.repository.OrderRepository;
@@ -44,6 +45,14 @@ public class ProviderServiceImpl implements ProviderService{
     public List<Order> findAllOrders(RentalProvider provider) {
         return orderRepository.findAll().stream()
                 .filter(order -> order.providerIsAssigned(provider))
+                .toList();
+    }
+
+    @Override
+    public List<Order> findAllOnGoingOrders(RentalProvider provider) {
+        return orderRepository.findAll().stream()
+                .filter(order -> order.providerIsAssigned(provider))
+                .filter(order -> order.getOrderStatus() != OrderStatus.COMPLETED)
                 .toList();
     }
 

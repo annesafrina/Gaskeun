@@ -12,6 +12,8 @@ public interface ProviderService {
 
     List<Order> findAllOrders(RentalProvider provider);
 
+    List<Order> findAllOnGoingOrders(RentalProvider provider);
+
     List<OrderDisplayDto> findAllOrdersInDto(RentalProvider provider);
 
     RentalProvider update(RentalProvider provider, UserDto userDto);
