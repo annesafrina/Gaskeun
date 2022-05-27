@@ -61,8 +61,6 @@ n
 >src/main/java/com/mpp/gaskeun/service/ProviderServiceImpl.java,0\6\0623a9eaca4c9677c89b7cb209785b9570110a33
 p
 @src/main/java/com/mpp/gaskeun/controller/ExternalController.java,2\d\2dceba0c1ac6b4bbda0da12ddb7a56fc6260f043
-i
-9src/main/java/com/mpp/gaskeun/service/CarServiceImpl.java,2\b\2b383d883052d80c1deed86b614106e97bf43d8f
 p
 @src/main/java/com/mpp/gaskeun/controller/CustomerController.java,c\f\cf4905a226f5048a8de42a6b7771eb9d816478b7
 o

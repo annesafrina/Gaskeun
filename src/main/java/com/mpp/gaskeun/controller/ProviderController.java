@@ -117,9 +117,16 @@ public class ProviderController {
         try {
             carDto.setImage(imageFile);
             carService.addCar((RentalProvider) user, carDto);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IOException e) {
             log.error(e.getMessage());
             model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
+            model.addAllAttributes(Map.of(
+                    CAR_DTO_ATTRIB_NAME, carDto,
+                    COLOR_ATTRIB_NAME, Color.values(),
+                    TRANSMISSION_ATTRIB_NAME, Transmission.values(),
+                    LOCATION_ATTRIB_NAME, carService.getAllLocations()
+            ));
+            return "car_registration";
         }
 
         return "redirect:/provider/cars";
@@ -139,17 +146,18 @@ public class ProviderController {
         try {
             Car car = carService.getCarById((RentalProvider) provider, carId);
             carDto.fillDto(car);
-            model.addAllAttributes(Map.of(
-                    CAR_DTO_ATTRIB_NAME, carDto,
-                    COLOR_ATTRIB_NAME, Color.values(),
-                    TRANSMISSION_ATTRIB_NAME, Transmission.values(),
-                    LOCATION_ATTRIB_NAME, carService.getAllLocations()
-            ));
             log.info("Car found {}", car.getLicensePlate());
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
             model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
         }
+
+        model.addAllAttributes(Map.of(
+                CAR_DTO_ATTRIB_NAME, carDto,
+                COLOR_ATTRIB_NAME, Color.values(),
+                TRANSMISSION_ATTRIB_NAME, Transmission.values(),
+                LOCATION_ATTRIB_NAME, carService.getAllLocations()
+        ));
 
         return "car_edit_listing";
     }
