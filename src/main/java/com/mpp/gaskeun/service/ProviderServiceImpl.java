@@ -55,6 +55,13 @@ public class ProviderServiceImpl implements ProviderService {
     }
 
     @Override
+    public List<OrderDisplayDto> findAllOnGoingOrdersInDto(RentalProvider provider) {
+        return findAllOnGoingOrders(provider).stream()
+                .map(OrderUtils::lightDisplayOrder)
+                .toList();
+    }
+
+    @Override
     public List<OrderDisplayDto> findAllOrdersInDto(RentalProvider provider) {
         return findAllOrders(provider).stream()
                 .map(OrderUtils::lightDisplayOrder)

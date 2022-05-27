@@ -1,8 +1,10 @@
 package com.mpp.gaskeun.service;
 
+import com.mpp.gaskeun.dto.ReviewDto;
 import com.mpp.gaskeun.exception.OrderDoesNotExistException;
 import com.mpp.gaskeun.model.*;
 import com.mpp.gaskeun.repository.OrderRepository;
+import com.mpp.gaskeun.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,13 +18,16 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceImplTest {
 
     @Mock
     private OrderRepository orderRepository;
+
+    @Mock
+    private ReviewRepository reviewRepository;
 
     @InjectMocks
     private ReviewServiceImpl reviewService;
@@ -129,5 +134,71 @@ class ReviewServiceImplTest {
 
         boolean isComplete = (boolean) pubValidateOrder.invoke(reviewService, order);
         assertFalse(isComplete);
+    }
+
+    @Test
+    void whenCarReviewIsSubmitted_mustBeSave() {
+        ReviewDto reviewDto = new ReviewDto();
+        Order dummyOrder = new Order();
+        Car dummyCar = new Car();
+        dummyCar.setRating(0);
+        dummyCar.setNumberOfReviews(0);
+        dummyOrder.setId(1);
+        dummyOrder.setCar(dummyCar);
+        reviewDto.setReviewType(ReviewType.CAR);
+        reviewDto.setOrderId("1");
+        reviewDto.setRating(5);
+        reviewDto.setDescription("This is my Car review");
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(dummyOrder));
+
+        Review carReview = reviewService.submitReview(reviewDto);
+
+        verify(reviewRepository, times(1)).save(carReview);
+        assertTrue(carReview instanceof CarReview);
+    }
+    @Test
+    void whenProviderReviewIsSubmitted_mustBeSave() {
+        ReviewDto reviewDto = new ReviewDto();
+        Order dummyOrder = new Order();
+        Car dummyCar = new Car();
+        RentalProvider dummyProvider = new RentalProvider();
+        dummyProvider.setPerformanceRating(0);
+        dummyProvider.setNumberOfReviews(0);
+        dummyCar.setRentalProvider(dummyProvider);
+        dummyOrder.setId(1);
+        dummyOrder.setCar(dummyCar);
+        reviewDto.setReviewType(ReviewType.PROVIDER);
+        reviewDto.setOrderId("1");
+        reviewDto.setRating(5);
+        reviewDto.setDescription("This is my Provider review");
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(dummyOrder));
+
+        Review providerReview = reviewService.submitReview(reviewDto);
+
+        verify(reviewRepository, times(1)).save(providerReview);
+        assertTrue(providerReview instanceof ProviderReview);
+    }
+
+    @Test
+    void whenCustomerReviewIsSubmitted_mustBeSave() {
+        ReviewDto reviewDto = new ReviewDto();
+        Order dummyOrder = new Order();
+        Car dummyCar = new Car();
+        Customer dummyCustomer = new Customer();
+        dummyCustomer.setRating(5);
+        dummyCustomer.setNumberOfReviews(0);
+        dummyOrder.setId(1);
+        dummyOrder.setCar(dummyCar);
+        dummyOrder.setCustomer(dummyCustomer);
+        reviewDto.setReviewType(ReviewType.CUSTOMER);
+        reviewDto.setOrderId("1");
+        reviewDto.setRating(5);
+        reviewDto.setDescription("This is my Customer review");
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(dummyOrder));
+
+        Review customerReview = reviewService.submitReview(reviewDto);
+
+        verify(reviewRepository, times(1)).save(customerReview);
+        assertTrue(customerReview instanceof CustomerReview);
     }
 }
