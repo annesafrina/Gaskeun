@@ -1,5 +1,6 @@
 package com.mpp.gaskeun.dto;
 
+import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.model.RentalProvider;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,13 @@ public class UserDto {
         email = provider.getEmail();
         phoneNumber = provider.getPhoneNumber();
         name = provider.getName();
+    }
+
+    public void fillCustomerDto(Customer customer) {
+        id = customer.getId();
+        email = customer.getEmail();
+        phoneNumber = customer.getPhoneNumber();
+        name = customer.getName();
     }
 
     public boolean containsPassword() {
