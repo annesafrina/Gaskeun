@@ -1,11 +1,11 @@
 package com.mpp.gaskeun.service;
 
-import com.mpp.gaskeun.dto.OrderDto;
 import com.mpp.gaskeun.dto.ReviewDto;
 import com.mpp.gaskeun.exception.OrderDoesNotExistException;
 import com.mpp.gaskeun.exception.OrderNotReviewableException;
 import com.mpp.gaskeun.model.*;
-import com.mpp.gaskeun.repository.*;
+import com.mpp.gaskeun.repository.OrderRepository;
+import com.mpp.gaskeun.repository.ReviewRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +79,7 @@ public class ReviewServiceImpl implements ReviewService {
         return status.equals(OrderStatus.COMPLETED);
     }
 
-    private boolean orderOwnedByUser(Order order,UserDetails user) {
+    private boolean orderOwnedByUser(Order order, UserDetails user) {
         if (user instanceof Customer customer) {
             return order.getCustomer().getId() == customer.getId();
         } else if (user instanceof RentalProvider provider) {
@@ -89,7 +89,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private Order validateOrderExists(Long id) {
-        Order order = orderRepository.findById(id).orElse(null) ;
+        Order order = orderRepository.findById(id).orElse(null);
 
         if (order != null) {
             return order;

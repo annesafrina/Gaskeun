@@ -20,7 +20,7 @@ public class ExternalController {
     private CarService carService;
 
     @PostMapping("/location")
-    public ResponseEntity<?> addLocation(@RequestBody LocationDto locationDto) {
+    public ResponseEntity<Object> addLocation(@RequestBody LocationDto locationDto) {
         Location newLocation = new Location();
         newLocation.setCityName(locationDto.getCityName());
 

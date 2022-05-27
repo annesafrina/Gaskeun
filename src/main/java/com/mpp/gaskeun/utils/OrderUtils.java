@@ -1,7 +1,6 @@
 package com.mpp.gaskeun.utils;
 
 import com.mpp.gaskeun.dto.OrderDisplayDto;
-import com.mpp.gaskeun.dto.OrderDto;
 import com.mpp.gaskeun.model.DateRange;
 import com.mpp.gaskeun.model.Order;
 
@@ -18,7 +17,7 @@ public class OrderUtils {
     public static List<DateRange> findUnavailableDates(List<Order> orderList) {
         List<DateRange> unavailableDates = new ArrayList<>();
 
-        for (Order order: orderList) {
+        for (Order order : orderList) {
             Date startDate = order.getStartDate();
             Date endDate = order.getEndDate();
             DateRange dateRange = new DateRange(startDate, endDate);
