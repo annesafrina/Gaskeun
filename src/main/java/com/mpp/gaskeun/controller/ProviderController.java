@@ -38,29 +38,20 @@ public class ProviderController {
 
     @GetMapping("/info")
     public String getProviderInfo(@AuthenticationPrincipal UserDetails user, Model model) {
-        if (!(user instanceof RentalProvider)) {
+        if (!(user instanceof RentalProvider provider)) {
             return REDIRECT;
         }
-
-        model.addAttribute("provider", user);
-        model.addAttribute("numCarsOwned", providerService.getNumberOfCarRegistered((RentalProvider) user));
-        return "provider_info";
-    }
-
-    @GetMapping("/edit")
-    public String updateProviderInfo(@AuthenticationPrincipal UserDetails user, Model model) {
-        if (!(user instanceof RentalProvider)) {
-            return REDIRECT;
-        }
-
         UserDto userDto = new UserDto();
-        userDto.fillDto((RentalProvider) user);
-
-        model.addAttribute("userDto", userDto);
-        return "provider_edit";
+        userDto.fillDto(provider);
+        model.addAttribute(ERROR_ATTRIB_NAME, "");
+        model.addAttribute("type", "provider");
+        model.addAttribute("user", userDto);
+        model.addAttribute("performanceRating", provider.getPerformanceRating());
+        model.addAttribute("numCarsOwned", providerService.getNumberOfCarRegistered((RentalProvider) user));
+        return "user_profile";
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/info")
     public String updateProviderInfoPost(@AuthenticationPrincipal UserDetails user,
                                          @ModelAttribute UserDto userDto,
                                          Model model) {
@@ -74,8 +65,11 @@ public class ProviderController {
         } catch (IllegalArgumentException e) {
             userDto.fillDto((RentalProvider) user);
             model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
-            model.addAttribute("userDto", userDto);
-            return "provider_edit";
+            model.addAttribute("type", "provider");
+            model.addAttribute("user", userDto);
+            model.addAttribute("performanceRating", ((RentalProvider) user).getPerformanceRating());
+            model.addAttribute("numCarsOwned", providerService.getNumberOfCarRegistered((RentalProvider) user));
+            return "user_profile";
         }
 
         return "redirect:/provider/info";
