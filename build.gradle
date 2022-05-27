@@ -39,6 +39,8 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+def allTestCoverageFile = "$buildDir/jacoco/allTestCoverage.exec"
+
 jar {
     manifest {
         attributes(
