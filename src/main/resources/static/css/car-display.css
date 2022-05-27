@@ -1,0 +1,51 @@
+.blob {
+    position: fixed;
+    border-radius: 50%;
+    height: 750px;
+    width: 750px;
+    background-color: black;
+    z-index: -1;
+}
+
+.blob-1 {
+    background-color: #375A7F;
+    left: 0;
+    transform: translate(-50%, 50%);
+}
+.blob-2 {
+    background-color: #78e9e2;
+    left: 0;
+    bottom: 0;
+    transform: translateY(60%);
+}
+.blob-3 {
+    background-color: #1c9bb7;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+}
+
+#car-profile {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#car-profile h1{
+    margin: 1rem 0;
+    font-weight: 900;
+    font-size: clamp(2.5rem, 3vw, 4rem);
+}
+
+#car-profile .info {
+    margin: 0.5rem 0;
+    font-weight: bold;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+}
+
+#car-profile img {
+    border-radius: 10px;
+}
