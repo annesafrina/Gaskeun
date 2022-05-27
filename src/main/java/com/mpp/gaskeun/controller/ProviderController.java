@@ -117,7 +117,7 @@ public class ProviderController {
             model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
         }
 
-        return "redirect:/provider/register-car";
+        return "redirect:/provider/cars";
     }
 
     @GetMapping("/update-car/{carId}")
