@@ -23,6 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/review")
 public class ReviewController {
 
+    public static final String REDIRECT_URL = "redirect:/";
+    public static final String ORDER_ATTRIB_NAME = "order";
+    public static final String REVIEW_DTO_ATTRIB_NAME = "reviewDto";
+    public static final String ERROR_ATTRIB_NAME = "error";
+    public static final String REVIEW_TYPE_ATTRIB_NAME = "reviewType";
+    public static final String REVIEW_PAGE_HTML = "review";
     @Autowired
     private ReviewService reviewService;
 
@@ -30,7 +36,7 @@ public class ReviewController {
     public String getCarReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user) {
         Order order;
         if(!(user instanceof Customer)) {
-            return "redirect:/";
+            return REDIRECT_URL;
         }
 
         try {
@@ -38,7 +44,7 @@ public class ReviewController {
             order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.CAR);
 
         } catch (NumberFormatException | OrderNotReviewableException e) {
-            return "redirect:/";
+            return REDIRECT_URL;
         }
 
         ReviewDto reviewDto = new ReviewDto();
@@ -46,8 +52,8 @@ public class ReviewController {
 
         model.addAttribute("orderStartDate", DateParser.parse(order.getStartDate()));
         model.addAttribute("orderEndDate", DateParser.parse(order.getEndDate()));
-        model.addAttribute("order", order);
-        model.addAttribute("reviewDto", reviewDto);
+        model.addAttribute(ORDER_ATTRIB_NAME, order);
+        model.addAttribute(REVIEW_DTO_ATTRIB_NAME, reviewDto);
         return "car_review";
     }
 
@@ -55,7 +61,7 @@ public class ReviewController {
     public String postCreateCarReview(ReviewDto reviewDto, @AuthenticationPrincipal UserDetails user, Model model) {
 
         if(!(user instanceof Customer)) {
-            return "redirect:/";
+            return REDIRECT_URL;
         }
 
         log.info("Creating Car Review");
@@ -67,20 +73,20 @@ public class ReviewController {
             log.error(e.getMessage());
             Long parsedOrderId = Long.parseLong(reviewDto.getOrderId());
             Order order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.CAR);
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("order", order);
-            model.addAttribute("reviewDto", reviewDto);
+            model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
+            model.addAttribute(ORDER_ATTRIB_NAME, order);
+            model.addAttribute(REVIEW_DTO_ATTRIB_NAME, reviewDto);
             return "car_review";
         }
 
-        return  "redirect:/";
+        return REDIRECT_URL;
     }
 
     @GetMapping("/create/customer/{orderId}")
     public String getCustomerReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user) {
         Order order;
         if(!(user instanceof RentalProvider)) {
-            return "redirect:/";
+            return REDIRECT_URL;
         }
 
         try {
@@ -88,23 +94,23 @@ public class ReviewController {
             order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.CUSTOMER);
 
         } catch (NumberFormatException | OrderNotReviewableException e) {
-            return "redirect:/";
+            return REDIRECT_URL;
         }
 
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setOrderId(orderId);
 
-        model.addAttribute("reviewType", "Customer");
-        model.addAttribute("order", order);
-        model.addAttribute("reviewDto", reviewDto);
-        return "review";
+        model.addAttribute(REVIEW_TYPE_ATTRIB_NAME, "Customer");
+        model.addAttribute(ORDER_ATTRIB_NAME, order);
+        model.addAttribute(REVIEW_DTO_ATTRIB_NAME, reviewDto);
+        return REVIEW_PAGE_HTML;
     }
 
     @PostMapping("/create/customer")
     public String postCreateCustomerReview(ReviewDto reviewDto, @AuthenticationPrincipal UserDetails user, Model model) {
 
         if(!(user instanceof RentalProvider)) {
-            return "redirect:/";
+            return REDIRECT_URL;
         }
 
         log.info("Creating Provider Review");
@@ -115,21 +121,21 @@ public class ReviewController {
         } catch (Exception e) {
             Long parsedOrderId = Long.parseLong(reviewDto.getOrderId());
             Order order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.CUSTOMER);
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("reviewType", "customer");
-            model.addAttribute("order", order);
-            model.addAttribute("reviewDto", reviewDto);
-            return "review";
+            model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
+            model.addAttribute(REVIEW_TYPE_ATTRIB_NAME, "customer");
+            model.addAttribute(ORDER_ATTRIB_NAME, order);
+            model.addAttribute(REVIEW_DTO_ATTRIB_NAME, reviewDto);
+            return REVIEW_PAGE_HTML;
         }
 
-        return  "redirect:/";
+        return REDIRECT_URL;
     }
 
     @GetMapping("/create/provider/{orderId}")
     public String getProviderReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user) {
         Order order;
         if(!(user instanceof Customer)) {
-            return "redirect:/";
+            return REDIRECT_URL;
         }
 
         try {
@@ -137,23 +143,23 @@ public class ReviewController {
             order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.PROVIDER);
 
         } catch (NumberFormatException | OrderNotReviewableException e) {
-            return "redirect:/";
+            return REDIRECT_URL;
         }
 
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setOrderId(orderId);
 
-        model.addAttribute("reviewType", "Provider");
-        model.addAttribute("order", order);
-        model.addAttribute("reviewDto", reviewDto);
-        return "review";
+        model.addAttribute(REVIEW_TYPE_ATTRIB_NAME, "Provider");
+        model.addAttribute(ORDER_ATTRIB_NAME, order);
+        model.addAttribute(REVIEW_DTO_ATTRIB_NAME, reviewDto);
+        return REVIEW_PAGE_HTML;
     }
 
     @PostMapping("/create/provider")
     public String postCreateProviderReview(ReviewDto reviewDto, @AuthenticationPrincipal UserDetails user, Model model) {
 
         if(!(user instanceof Customer)) {
-            return "redirect:/";
+            return REDIRECT_URL;
         }
 
         log.info("Creating Provider Review");
@@ -164,14 +170,14 @@ public class ReviewController {
         } catch (Exception e) {
             Long parsedOrderId = Long.parseLong(reviewDto.getOrderId());
             Order order = reviewService.validateOrderReviewable(parsedOrderId, user, ReviewType.PROVIDER);
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("reviewType", "Provider");
-            model.addAttribute("order", order);
-            model.addAttribute("reviewDto", reviewDto);
-            return "review";
+            model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
+            model.addAttribute(REVIEW_TYPE_ATTRIB_NAME, "Provider");
+            model.addAttribute(ORDER_ATTRIB_NAME, order);
+            model.addAttribute(REVIEW_DTO_ATTRIB_NAME, reviewDto);
+            return REVIEW_PAGE_HTML;
         }
 
-        return  "redirect:/";
+        return REDIRECT_URL;
     }
 
 

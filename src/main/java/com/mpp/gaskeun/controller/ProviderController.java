@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +35,10 @@ import java.util.Map;
 @Slf4j
 public class ProviderController {
 
-    public static final String REDIRECT = "redirect:/";
+    public static final String REDIRECT_URL = "redirect:/";
     public static final String ERROR_ATTRIB_NAME = "error";
     public static final String CAR_DTO_ATTRIB_NAME = "carDto";
+    public static final String PROVIDER_ATTRIB_VALUE = "provider";
     @Autowired
     private CarService carService;
 
@@ -46,20 +46,23 @@ public class ProviderController {
     private ProviderService providerService;
 
     @GetMapping("/info")
-    public String getProviderInfo(HttpServletRequest request, @AuthenticationPrincipal UserDetails user, Model model) {
+    public String getProviderInfo(HttpServletRequest request,
+                                  @AuthenticationPrincipal UserDetails user,
+                                  Model model
+    ) {
         if (!(user instanceof RentalProvider provider)) {
-            return REDIRECT;
+            return REDIRECT_URL;
         }
 
         Map<String, ?> errorFlashMap = RequestContextUtils.getInputFlashMap(request);
-        if (errorFlashMap == null ) {
+        if (errorFlashMap == null) {
             errorFlashMap = new HashMap<>();
         }
 
         UserDto userDto = new UserDto();
         userDto.fillDto(provider);
         model.addAttribute(ERROR_ATTRIB_NAME, errorFlashMap.get(ERROR_ATTRIB_NAME));
-        model.addAttribute("type", "provider");
+        model.addAttribute("type", PROVIDER_ATTRIB_VALUE);
         model.addAttribute("user", userDto);
         model.addAttribute("performanceRating", provider.getPerformanceRating());
         model.addAttribute("numCarsOwned", providerService.getNumberOfCarRegistered((RentalProvider) user));
@@ -73,14 +76,13 @@ public class ProviderController {
     ) {
 
         if (!(user instanceof RentalProvider)) {
-            return REDIRECT;
+            return REDIRECT_URL;
         }
 
         try {
             providerService.update((RentalProvider) user, userDto);
         } catch (IllegalArgumentException e) {
-            attrs.addFlashAttribute(ERROR_ATTRIB_NAME,e.getMessage());
-            return "redirect:/provider/info";
+            attrs.addFlashAttribute(ERROR_ATTRIB_NAME, e.getMessage());
         }
 
         return "redirect:/provider/info";
@@ -90,7 +92,7 @@ public class ProviderController {
     public String registerCar(@AuthenticationPrincipal UserDetails user, Model model) {
 
         if (!(user instanceof RentalProvider))
-            return REDIRECT;
+            return REDIRECT_URL;
 
         CarDto dto = new CarDto();
         model.addAllAttributes(Map.of(
@@ -127,7 +129,7 @@ public class ProviderController {
             Model model) {
 
         if (!(provider instanceof RentalProvider))
-            return REDIRECT;
+            return REDIRECT_URL;
 
         CarDto carDto = new CarDto();
 
@@ -158,7 +160,7 @@ public class ProviderController {
             Model model) {
 
         if (!(user instanceof RentalProvider))
-            return REDIRECT;
+            return REDIRECT_URL;
 
         try {
             log.info("Received car with license {}", carDto.getLicensePlate());
@@ -182,7 +184,7 @@ public class ProviderController {
             Model model) {
 
         if (!(user instanceof RentalProvider))
-            return REDIRECT;
+            return REDIRECT_URL;
 
         try {
             Car car = carService.getCarByLicensePlate((RentalProvider) user, licensePlate);
@@ -198,7 +200,7 @@ public class ProviderController {
     @GetMapping("/cars")
     public String displayAllCars(@AuthenticationPrincipal UserDetails user, Model model) {
         if (!(user instanceof RentalProvider)) {
-            return REDIRECT;
+            return REDIRECT_URL;
         }
 
         model.addAttribute("cars", carService.getAllCar((RentalProvider) user));
@@ -209,35 +211,35 @@ public class ProviderController {
     @GetMapping("/orders")
     public String displayOrder(@AuthenticationPrincipal UserDetails user, Model model) {
         if (!(user instanceof RentalProvider)) {
-            return REDIRECT;
+            return REDIRECT_URL;
         }
 
-        model.addAttribute("type", "provider");
+        model.addAttribute("type", PROVIDER_ATTRIB_VALUE);
         return "order-list";
     }
 
     @GetMapping("/api/all-orders")
-    public ResponseEntity<?> getAllOrders(@AuthenticationPrincipal UserDetails user) {
-        if(!(user instanceof RentalProvider)) {
+    public ResponseEntity<Object> getAllOrders(@AuthenticationPrincipal UserDetails user) {
+        if (!(user instanceof RentalProvider)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         Map<String, Object> response = new HashMap<>();
         List<OrderDisplayDto> orderByProvider = providerService.findAllOrdersInDto((RentalProvider) user);
-        response.put("type", "provider");
+        response.put("type", PROVIDER_ATTRIB_VALUE);
         response.put("data", orderByProvider);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/api/current-orders")
-    public ResponseEntity<?> getCurrentOrders(@AuthenticationPrincipal UserDetails user) {
-        if (!(user instanceof  RentalProvider)) {
+    public ResponseEntity<Object> getCurrentOrders(@AuthenticationPrincipal UserDetails user) {
+        if (!(user instanceof RentalProvider)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
         Map<String, Object> response = new HashMap<>();
         List<OrderDisplayDto> orderDisplayDtos = providerService.findAllOnGoingOrdersInDto((RentalProvider) user);
-        response.put("type", "provider");
+        response.put("type", PROVIDER_ATTRIB_VALUE);
         response.put("data", orderDisplayDtos);
 
         return ResponseEntity.ok(response);
