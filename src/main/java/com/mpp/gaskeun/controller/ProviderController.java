@@ -206,6 +206,16 @@ public class ProviderController {
         return "all_cars";
     }
 
+    @GetMapping("/orders")
+    public String displayOrder(@AuthenticationPrincipal UserDetails user, Model model) {
+        if (!(user instanceof RentalProvider)) {
+            return REDIRECT;
+        }
+
+        model.addAttribute("type", "provider");
+        return "order-list";
+    }
+
     @GetMapping("/api/all-orders")
     public ResponseEntity<?> getAllOrders(@AuthenticationPrincipal UserDetails user) {
         if(!(user instanceof RentalProvider)) {
@@ -215,6 +225,20 @@ public class ProviderController {
         List<OrderDisplayDto> orderByProvider = providerService.findAllOrdersInDto((RentalProvider) user);
         response.put("type", "provider");
         response.put("data", orderByProvider);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/current-orders")
+    public ResponseEntity<?> getCurrentOrders(@AuthenticationPrincipal UserDetails user) {
+        if (!(user instanceof  RentalProvider)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        List<OrderDisplayDto> orderDisplayDtos = providerService.findAllOnGoingOrdersInDto((RentalProvider) user);
+        response.put("type", "provider");
+        response.put("data", orderDisplayDtos);
 
         return ResponseEntity.ok(response);
     }
