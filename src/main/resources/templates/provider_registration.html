@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="../static/css/home.css">
 </head>
 <body>
+<div id="error-toast" th:if="${error != null}">
+    <i class="fa-solid fa-exclamation"></i>
+    <h1 th:text="${error}"></h1>
+</div>
 <div class="blob"></div>
 <header class="logo-header">
 
