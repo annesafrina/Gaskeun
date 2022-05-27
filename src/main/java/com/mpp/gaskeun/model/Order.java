@@ -60,6 +60,10 @@ public class Order {
         return this.customer.equals(customer);
     }
 
+    public boolean providerIsAssigned(RentalProvider provider) {
+        return this.car.providerIsOwner(provider);
+    }
+
     public RentalProvider getCarProvider() {
         return this.car.getRentalProvider();
     }

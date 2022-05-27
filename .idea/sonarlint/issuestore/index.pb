@@ -1,14 +1,10 @@
 
 l
 <src/main/java/com/mpp/gaskeun/controller/BaseController.java,2\7\2755a2a464102163f7393ee92e4370272db6dc39
-p
-@src/main/java/com/mpp/gaskeun/controller/CustomerController.java,c\f\cf4905a226f5048a8de42a6b7771eb9d816478b7
 o
 ?src/main/java/com/mpp/gaskeun/controller/ExploreController.java,e\c\ec58f6ef500ffcf5aa33e37dcbe3d1239306828e
 m
 =src/main/java/com/mpp/gaskeun/controller/OrderController.java,b\a\ba2c976f0f1c4c59f8d248cb6261f1a47b7f6fd9
-p
-@src/main/java/com/mpp/gaskeun/controller/ProviderController.java,b\f\bf79b71cb55402dbc689c43411519a2a8dfc3f42
 w
 Gsrc/main/java/com/mpp/gaskeun/exception/IllegalUserAccessException.java,3\a\3a5534540761c82a4026f75b109323b4ade7d86d
 p
@@ -27,8 +23,6 @@ Esrc/main/java/com/mpp/gaskeun/exception/CarDoesNotExistException.java,9\e\9e2e
 .src/main/java/com/mpp/gaskeun/model/Color.java,7\0\70972144d3a5e97da0c809de2cf85442ade5c945
 a
 1src/main/java/com/mpp/gaskeun/model/Customer.java,5\4\5479b98bc2d0422232ec504178e8ffc9216388d7
-\
-,src/main/java/com/mpp/gaskeun/model/Car.java,7\b\7b96db2838ed7a70285b1a875f1ded49d9d5c444
 b
 2src/main/java/com/mpp/gaskeun/model/CarReview.java,0\1\015fa0640ece2c97efbf87dbe0d7ad4df9a24ba7
 g
@@ -41,8 +35,6 @@ c
 3src/main/java/com/mpp/gaskeun/model/PriceRange.java,b\f\bf4e813b8b8e9e52311b464240eb372248f29227
 g
 7src/main/java/com/mpp/gaskeun/model/ProviderReview.java,9\1\9170b95901a9135b4a22c4593e11e03f01691843
-g
-7src/main/java/com/mpp/gaskeun/model/RentalProvider.java,9\0\900d3267154bea1ac4c4f6b34687a69986a647f6
 e
 5src/main/java/com/mpp/gaskeun/model/Transmission.java,b\a\baa5ca9d894fc9930ae3f73c55836bddc44ca0f7
 k
@@ -55,8 +47,6 @@ m
 =src/main/java/com/mpp/gaskeun/repository/OrderRepository.java,3\f\3ff0457cf5a422a7c2027f6633cf3e1e4be77b71
 k
 ;src/main/java/com/mpp/gaskeun/security/PasswordEncoder.java,7\9\797ed792a78bd3d7e48f54680eb7047a7a7083c0
-n
->src/main/java/com/mpp/gaskeun/service/CustomerServiceImpl.java,2\7\27b97ade10c018e9931af97e3636224cac9e6fea
 j
 :src/main/java/com/mpp/gaskeun/service/ProviderService.java,a\3\a3600664981952fde1fbfc7fbace4e6bda7df200
 h

@@ -1,6 +1,7 @@
 package com.mpp.gaskeun.controller;
 
 import com.mpp.gaskeun.dto.CarDto;
+import com.mpp.gaskeun.dto.OrderDisplayDto;
 import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.model.Car;
 import com.mpp.gaskeun.model.Color;
@@ -11,6 +12,8 @@ import com.mpp.gaskeun.service.ProviderService;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.PropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -38,29 +43,20 @@ public class ProviderController {
 
     @GetMapping("/info")
     public String getProviderInfo(@AuthenticationPrincipal UserDetails user, Model model) {
-        if (!(user instanceof RentalProvider)) {
+        if (!(user instanceof RentalProvider provider)) {
             return REDIRECT;
         }
-
-        model.addAttribute("provider", user);
-        model.addAttribute("numCarsOwned", providerService.getNumberOfCarRegistered((RentalProvider) user));
-        return "provider_info";
-    }
-
-    @GetMapping("/edit")
-    public String updateProviderInfo(@AuthenticationPrincipal UserDetails user, Model model) {
-        if (!(user instanceof RentalProvider)) {
-            return REDIRECT;
-        }
-
         UserDto userDto = new UserDto();
-        userDto.fillDto((RentalProvider) user);
-
-        model.addAttribute("userDto", userDto);
-        return "provider_edit";
+        userDto.fillDto(provider);
+        model.addAttribute(ERROR_ATTRIB_NAME, "");
+        model.addAttribute("type", "provider");
+        model.addAttribute("user", userDto);
+        model.addAttribute("performanceRating", provider.getPerformanceRating());
+        model.addAttribute("numCarsOwned", providerService.getNumberOfCarRegistered((RentalProvider) user));
+        return "user_profile";
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/info")
     public String updateProviderInfoPost(@AuthenticationPrincipal UserDetails user,
                                          @ModelAttribute UserDto userDto,
                                          Model model) {
@@ -74,8 +70,11 @@ public class ProviderController {
         } catch (IllegalArgumentException e) {
             userDto.fillDto((RentalProvider) user);
             model.addAttribute(ERROR_ATTRIB_NAME, e.getMessage());
-            model.addAttribute("userDto", userDto);
-            return "provider_edit";
+            model.addAttribute("type", "provider");
+            model.addAttribute("user", userDto);
+            model.addAttribute("performanceRating", ((RentalProvider) user).getPerformanceRating());
+            model.addAttribute("numCarsOwned", providerService.getNumberOfCarRegistered((RentalProvider) user));
+            return "user_profile";
         }
 
         return "redirect:/provider/info";
@@ -199,5 +198,18 @@ public class ProviderController {
         model.addAttribute("cars", carService.getAllCar((RentalProvider) user));
 
         return "all_cars";
+    }
+
+    @GetMapping("/api/all-orders")
+    public ResponseEntity<?> getAllOrders(@AuthenticationPrincipal UserDetails user) {
+        if(!(user instanceof RentalProvider)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        Map<String, Object> response = new HashMap<>();
+        List<OrderDisplayDto> orderByProvider = providerService.findAllOrdersInDto((RentalProvider) user);
+        response.put("type", "provider");
+        response.put("data", orderByProvider);
+
+        return ResponseEntity.ok(response);
     }
 }

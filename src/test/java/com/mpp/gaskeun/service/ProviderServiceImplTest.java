@@ -5,6 +5,7 @@ import com.mpp.gaskeun.exception.IncompleteFormException;
 import com.mpp.gaskeun.model.Car;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.repository.CarRepository;
+import com.mpp.gaskeun.repository.OrderRepository;
 import com.mpp.gaskeun.repository.ProviderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,9 @@ class ProviderServiceImplTest {
     @Mock
     private CarRepository carRepository;
 
+    @Mock
+    private OrderRepository orderRepository;
+
     @InjectMocks
     private ProviderServiceImpl providerService;
 
@@ -40,7 +44,7 @@ class ProviderServiceImplTest {
 
     @BeforeEach
     void setup() {
-        providerService = new ProviderServiceImpl(providerRepository, carRepository, encoder);
+        providerService = new ProviderServiceImpl(providerRepository, carRepository, orderRepository, encoder);
     }
 
     @BeforeEach
