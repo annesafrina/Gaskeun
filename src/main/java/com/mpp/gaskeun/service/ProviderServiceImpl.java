@@ -1,15 +1,21 @@
 package com.mpp.gaskeun.service;
 
+import com.mpp.gaskeun.dto.OrderDisplayDto;
 import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.exception.IncompleteFormException;
+import com.mpp.gaskeun.model.Order;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.repository.CarRepository;
+import com.mpp.gaskeun.repository.OrderRepository;
 import com.mpp.gaskeun.repository.ProviderRepository;
+import com.mpp.gaskeun.utils.OrderUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor @Slf4j
@@ -22,6 +28,9 @@ public class ProviderServiceImpl implements ProviderService{
     private CarRepository carRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
     private final BCryptPasswordEncoder encoder;
 
     @Override
@@ -29,6 +38,20 @@ public class ProviderServiceImpl implements ProviderService{
         return carRepository.findAll().stream()
                 .filter(car -> car.providerIsOwner(provider))
                 .count();
+    }
+
+    @Override
+    public List<Order> findAllOrders(RentalProvider provider) {
+        return orderRepository.findAll().stream()
+                .filter(order -> order.providerIsAssigned(provider))
+                .toList();
+    }
+
+    @Override
+    public List<OrderDisplayDto> findAllOrdersInDto(RentalProvider provider) {
+        return findAllOrders(provider).stream()
+                .map(OrderUtils::lightDisplayOrder)
+                .toList();
     }
 
     @Override

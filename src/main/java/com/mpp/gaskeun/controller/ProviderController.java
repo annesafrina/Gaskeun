@@ -1,6 +1,7 @@
 package com.mpp.gaskeun.controller;
 
 import com.mpp.gaskeun.dto.CarDto;
+import com.mpp.gaskeun.dto.OrderDisplayDto;
 import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.model.Car;
 import com.mpp.gaskeun.model.Color;
@@ -11,6 +12,8 @@ import com.mpp.gaskeun.service.ProviderService;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.PropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -193,5 +198,18 @@ public class ProviderController {
         model.addAttribute("cars", carService.getAllCar((RentalProvider) user));
 
         return "all_cars";
+    }
+
+    @GetMapping("/api/all-orders")
+    public ResponseEntity<?> getAllOrders(@AuthenticationPrincipal UserDetails user) {
+        if(!(user instanceof RentalProvider)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        Map<String, Object> response = new HashMap<>();
+        List<OrderDisplayDto> orderByProvider = providerService.findAllOrdersInDto((RentalProvider) user);
+        response.put("type", "provider");
+        response.put("data", orderByProvider);
+
+        return ResponseEntity.ok(response);
     }
 }
