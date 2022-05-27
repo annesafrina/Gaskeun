@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -26,24 +27,26 @@ import java.util.NoSuchElementException;
 @RequestMapping("/order")
 public class OrderController {
 
+    public static final String BASE_64_IMAGE = "base64Image";
     @Autowired
     private OrderService orderService;
 
     @Autowired
     private CarService carService;
 
-    private Map<OrderStatus, String> cssStyleStatus = new HashMap<>(){{
-        put(OrderStatus.PENDING, "background-color: #ECE4B7;");
-        put(OrderStatus.ACTIVE, "background-color: #33CA7F; color: white;");
-        put(OrderStatus.WAITING_FOR_PAYMENT, "background-color: #7DCFB6;");
-        put(OrderStatus.CANCELLED, "background-color: #FC9F5B;");
-        put(OrderStatus.REJECTED, "background-color: #D50000; color: white;");
-        put(OrderStatus.COMPLETED, "background-color: #00CFC1; color: white;");
+    private final EnumMap<OrderStatus, String> cssStyleStatus = new EnumMap<>(OrderStatus.class);
 
-    }};
+    OrderController() {
+        cssStyleStatus.put(OrderStatus.PENDING, "background-color: #ECE4B7;");
+        cssStyleStatus.put(OrderStatus.ACTIVE, "background-color: #33CA7F; color: white;");
+        cssStyleStatus.put(OrderStatus.WAITING_FOR_PAYMENT, "background-color: #7DCFB6;");
+        cssStyleStatus.put(OrderStatus.CANCELLED, "background-color: #FC9F5B;");
+        cssStyleStatus.put(OrderStatus.REJECTED, "background-color: #D50000; color: white;");
+        cssStyleStatus.put(OrderStatus.COMPLETED, "background-color: #00CFC1; color: white;");
+    }
 
     @GetMapping("/create/{carId}")
-    public String displayCreateOrder(Model model, @PathVariable("carId") String carId, @AuthenticationPrincipal Customer customer) {
+    public String displayCreateOrder(Model model, @PathVariable("carId") String carId) {
         OrderDto orderDto = new OrderDto();
         orderDto.setCarId(carId);
 
@@ -52,24 +55,28 @@ public class OrderController {
 
         model.addAttribute("orderDto", orderDto);
         model.addAttribute("car", car);
-        model.addAttribute("base64Image", base64String);
+        model.addAttribute(BASE_64_IMAGE, base64String);
         return "create_order";
     }
 
     @PostMapping("/create")
-    public String postCreateOrder(OrderDto orderDto, @AuthenticationPrincipal Customer customer, Model model) {
-
+    public String postCreateOrder(OrderDto orderDto, @AuthenticationPrincipal UserDetails user, Model model) {
         log.info("Creating order");
+
+        if(!(user instanceof Customer)) {
+            return "redirect:/";
+        }
+
 
         Order order;
         try {
-            order = orderService.createOrder(customer, orderDto);
+            order = orderService.createOrder((Customer) user, orderDto);
         } catch (Exception e) {
             log.error(e.getMessage());
             model.addAttribute("error", e.getMessage());
             Car car = carService.getCarByIdAllowAnyone(Long.parseLong(orderDto.getCarId()));
             model.addAttribute("orderDto", orderDto);
-            model.addAttribute("base64Image", car.getPicture());
+            model.addAttribute(BASE_64_IMAGE, car.getPicture());
             model.addAttribute("car", car);
             return "create_order";
         }
@@ -89,7 +96,7 @@ public class OrderController {
 
         model.addAttribute("order", order);
         model.addAttribute("car", orderCar);
-        model.addAttribute("base64Image", orderCar.getPicture());
+        model.addAttribute(BASE_64_IMAGE, orderCar.getPicture());
         model.addAttribute("cssStyle", cssStyle);
         model.addAttribute("price", (order.getEndDate().getTime() - order.getStartDate().getTime()) / (1000 * 24 * 3600) * order.getCar().getPriceRate());
 
@@ -105,7 +112,7 @@ public class OrderController {
         return "order_details";
     }
 
-    private ResponseEntity<?> confirmOrRejectUtils(long id, UserDetails user, ConfirmOrderDto confirmOrderDto, OrderStatus status) {
+    private ResponseEntity<Object> confirmOrRejectUtils(long id, UserDetails user, ConfirmOrderDto confirmOrderDto, OrderStatus status) {
        try {
            Order order = orderService.getOrder(id, user);
            orderService.setOrderStatus(order, status, confirmOrderDto.getBookingMessage());
@@ -121,28 +128,28 @@ public class OrderController {
 
 
     @PostMapping("/confirm/{orderId}")
-    public ResponseEntity<?> confirmOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, @RequestBody ConfirmOrderDto confirmOrderDto) {
-        return confirmOrRejectUtils(Long.parseLong(orderId), provider, confirmOrderDto, OrderStatus.WAITING_FOR_PAYMENT);
+    public ResponseEntity<Object> confirmOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), user, confirmOrderDto, OrderStatus.WAITING_FOR_PAYMENT);
     }
 
     @PostMapping(value = "/reject/{orderId}")
-    public ResponseEntity<?> rejectOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, @RequestBody ConfirmOrderDto confirmOrderDto) {
-        return confirmOrRejectUtils(Long.parseLong(orderId), provider, confirmOrderDto, OrderStatus.REJECTED);
+    public ResponseEntity<Object> rejectOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), user, confirmOrderDto, OrderStatus.REJECTED);
     }
 
     @PostMapping(value = "/pay/{orderId}")
-    public ResponseEntity<?> payOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal RentalProvider provider, @RequestBody ConfirmOrderDto confirmOrderDto) {
-        return confirmOrRejectUtils(Long.parseLong(orderId), provider, confirmOrderDto, OrderStatus.ACTIVE);
+    public ResponseEntity<Object> payOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), user, confirmOrderDto, OrderStatus.ACTIVE);
     }
 
     @PostMapping(value = "/complete/{orderId}")
-    public ResponseEntity<?> completeOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal Customer customer, @RequestBody ConfirmOrderDto confirmOrderDto) {
-        return confirmOrRejectUtils(Long.parseLong(orderId), customer, confirmOrderDto, OrderStatus.COMPLETED);
+    public ResponseEntity<Object> completeOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), user, confirmOrderDto, OrderStatus.COMPLETED);
     }
 
     @PostMapping(value = "/cancel/{orderId}")
-    public ResponseEntity<?> cancelOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal Customer customer, @RequestBody ConfirmOrderDto confirmOrderDto) {
-        return confirmOrRejectUtils(Long.parseLong(orderId), customer, confirmOrderDto, OrderStatus.CANCELLED);
+    public ResponseEntity<Object> cancelOrder(@PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user, @RequestBody ConfirmOrderDto confirmOrderDto) {
+        return confirmOrRejectUtils(Long.parseLong(orderId), user, confirmOrderDto, OrderStatus.CANCELLED);
     }
 
 }

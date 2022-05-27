@@ -3,8 +3,6 @@ l
 <src/main/java/com/mpp/gaskeun/controller/BaseController.java,2\7\2755a2a464102163f7393ee92e4370272db6dc39
 o
 ?src/main/java/com/mpp/gaskeun/controller/ExploreController.java,e\c\ec58f6ef500ffcf5aa33e37dcbe3d1239306828e
-m
-=src/main/java/com/mpp/gaskeun/controller/OrderController.java,b\a\ba2c976f0f1c4c59f8d248cb6261f1a47b7f6fd9
 w
 Gsrc/main/java/com/mpp/gaskeun/exception/IllegalUserAccessException.java,3\a\3a5534540761c82a4026f75b109323b4ade7d86d
 p
@@ -21,8 +19,6 @@ u
 Esrc/main/java/com/mpp/gaskeun/exception/CarDoesNotExistException.java,9\e\9e2e779c30c4e49bbc664781f2275737437a5f70
 ^
 .src/main/java/com/mpp/gaskeun/model/Color.java,7\0\70972144d3a5e97da0c809de2cf85442ade5c945
-a
-1src/main/java/com/mpp/gaskeun/model/Customer.java,5\4\5479b98bc2d0422232ec504178e8ffc9216388d7
 b
 2src/main/java/com/mpp/gaskeun/model/CarReview.java,0\1\015fa0640ece2c97efbf87dbe0d7ad4df9a24ba7
 g
@@ -53,8 +49,6 @@ h
 8src/main/java/com/mpp/gaskeun/service/ReviewService.java,9\8\985cae208d595adf1aaf9359c98ea413b9e0f38c
 h
 8src/main/java/com/mpp/gaskeun/service/SearchService.java,0\4\04f25207ed84e01514b3861d656063e67bf07c71
-c
-3src/main/java/com/mpp/gaskeun/utils/OrderUtils.java,0\d\0d0077ac0f06a03441051d4044cb8fb5a0368fd3
 x
 Hsrc/test/java/com/mpp/gaskeun/service/AuthenticationServiceImplTest.java,7\3\73ab901d805f7c3c2da12fd011651ff370f11531
 p
@@ -97,8 +91,6 @@ p
 @src/main/java/com/mpp/gaskeun/controller/CustomerController.java,c\f\cf4905a226f5048a8de42a6b7771eb9d816478b7
 ^
 .src/main/java/com/mpp/gaskeun/model/Order.java,0\0\00e56d1f0de76a23313409c92eb4264c96a8818d
-k
-;src/main/java/com/mpp/gaskeun/service/OrderServiceImpl.java,b\4\b48f5383fec9a04299bcc6caec59fc73c33a5921
 o
 ?src/test/java/com/mpp/gaskeun/service/OrderServiceImplTest.java,6\5\652200207a9979e351171b6cc85bfd063fbaa0c7
 r
