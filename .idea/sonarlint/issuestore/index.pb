@@ -1,12 +1,8 @@
 
 l
 <src/main/java/com/mpp/gaskeun/controller/BaseController.java,2\7\2755a2a464102163f7393ee92e4370272db6dc39
-o
-?src/main/java/com/mpp/gaskeun/controller/ExploreController.java,e\c\ec58f6ef500ffcf5aa33e37dcbe3d1239306828e
 w
 Gsrc/main/java/com/mpp/gaskeun/exception/IllegalUserAccessException.java,3\a\3a5534540761c82a4026f75b109323b4ade7d86d
-p
-@src/main/java/com/mpp/gaskeun/controller/ExternalController.java,2\d\2dceba0c1ac6b4bbda0da12ddb7a56fc6260f043
 t
 Dsrc/main/java/com/mpp/gaskeun/controller/RegistrationController.java,7\0\70f87e09bec4375d45033bd234e0d46c87e05206
 b
@@ -29,8 +25,6 @@ a
 1src/main/java/com/mpp/gaskeun/model/Location.java,8\4\8469b6d7423fdf39ec39d8b93cdc365aad2aee60
 c
 3src/main/java/com/mpp/gaskeun/model/PriceRange.java,b\f\bf4e813b8b8e9e52311b464240eb372248f29227
-g
-7src/main/java/com/mpp/gaskeun/model/ProviderReview.java,9\1\9170b95901a9135b4a22c4593e11e03f01691843
 e
 5src/main/java/com/mpp/gaskeun/model/Transmission.java,b\a\baa5ca9d894fc9930ae3f73c55836bddc44ca0f7
 k
@@ -41,22 +35,12 @@ p
 @src/main/java/com/mpp/gaskeun/repository/LocationRepository.java,c\c\cc1a351db9af5e1039d1489391f5f16ecf55dc18
 m
 =src/main/java/com/mpp/gaskeun/repository/OrderRepository.java,3\f\3ff0457cf5a422a7c2027f6633cf3e1e4be77b71
-k
-;src/main/java/com/mpp/gaskeun/security/PasswordEncoder.java,7\9\797ed792a78bd3d7e48f54680eb7047a7a7083c0
 j
 :src/main/java/com/mpp/gaskeun/service/ProviderService.java,a\3\a3600664981952fde1fbfc7fbace4e6bda7df200
 h
 8src/main/java/com/mpp/gaskeun/service/ReviewService.java,9\8\985cae208d595adf1aaf9359c98ea413b9e0f38c
 h
 8src/main/java/com/mpp/gaskeun/service/SearchService.java,0\4\04f25207ed84e01514b3861d656063e67bf07c71
-x
-Hsrc/test/java/com/mpp/gaskeun/service/AuthenticationServiceImplTest.java,7\3\73ab901d805f7c3c2da12fd011651ff370f11531
-p
-@src/main/java/com/mpp/gaskeun/service/AuthenticationService.java,c\b\cb974695e6d28c2bbef3d64a9f592e107073f4d9
-t
-Dsrc/main/java/com/mpp/gaskeun/service/AuthenticationServiceImpl.java,b\8\b8a8c6bd34fd762477336366cd96c27a8f011029
-j
-:src/test/java/com/mpp/gaskeun/GaskeunApplicationTests.java,e\b\ebbf1b9594d389a67791a571ecc3996e8d07367e
 q
 Asrc/main/java/com/mpp/gaskeun/exception/NotCarOwnerException.java,e\c\ec8747aa6e159307699a3719b160323f0b25edc7
 t
@@ -65,8 +49,6 @@ d
 4src/main/java/com/mpp/gaskeun/model/OrderStatus.java,3\7\373f9e5d87e431ee561c3ae23a1b421dc6f611ae
 l
 <src/main/java/com/mpp/gaskeun/service/SearchServiceImpl.java,4\3\436cce84877a56c8aaeaa19ab0cde87a7a50009f
-e
-5src/main/java/com/mpp/gaskeun/service/CarService.java,4\2\423b8232ccdf4d4ea9edd78db58c49386f56cb7a
 f
 6src/main/java/com/mpp/gaskeun/dto/ConfirmOrderDto.java,d\8\d8d86bca6f95e305593329f6cbceee99e276167d
 g
@@ -75,8 +57,6 @@ b
 2src/main/java/com/mpp/gaskeun/dto/CustomerDto.java,f\f\ffa098052398a5aae460293ae9925151a09ae87c
 m
 =src/test/java/com/mpp/gaskeun/service/CarServiceImplTest.java,f\6\f6c89b3e9643323e7e3094a5a62af114a0cbb3eb
-n
->src/main/java/com/mpp/gaskeun/service/CustomerServiceImpl.java,2\7\27b97ade10c018e9931af97e3636224cac9e6fea
 \
 ,src/main/java/com/mpp/gaskeun/model/Car.java,7\b\7b96db2838ed7a70285b1a875f1ded49d9d5c444
 g
