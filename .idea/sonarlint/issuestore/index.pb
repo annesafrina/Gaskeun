@@ -67,8 +67,6 @@ q
 Asrc/main/java/com/mpp/gaskeun/exception/NotCarOwnerException.java,e\c\ec8747aa6e159307699a3719b160323f0b25edc7
 t
 Dsrc/main/java/com/mpp/gaskeun/exception/IncompleteFormException.java,e\f\efe8451c456f6947b7d22ee1d1d114f4490b0174
-i
-9src/main/java/com/mpp/gaskeun/service/CarServiceImpl.java,2\b\2b383d883052d80c1deed86b614106e97bf43d8f
 d
 4src/main/java/com/mpp/gaskeun/model/OrderStatus.java,3\7\373f9e5d87e431ee561c3ae23a1b421dc6f611ae
 t
