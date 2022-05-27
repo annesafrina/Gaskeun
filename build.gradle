@@ -49,6 +49,10 @@ jar {
     }
 }
 
+plugins.withType(JacocoPlugin) {
+    tasks["test"].finalizedBy 'jacocoTestReport'
+}
+
 sonarqube {
     properties {
         property "sonar.projectName", "advprog-project-minterm"
