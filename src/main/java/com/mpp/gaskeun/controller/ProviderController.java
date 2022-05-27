@@ -39,6 +39,9 @@ public class ProviderController {
     public static final String ERROR_ATTRIB_NAME = "error";
     public static final String CAR_DTO_ATTRIB_NAME = "carDto";
     public static final String PROVIDER_ATTRIB_VALUE = "provider";
+    public static final String COLOR_ATTRIB_NAME = "colors";
+    public static final String TRANSMISSION_ATTRIB_NAME = "transmissions";
+    public static final String LOCATION_ATTRIB_NAME = "locations";
     @Autowired
     private CarService carService;
 
@@ -97,9 +100,9 @@ public class ProviderController {
         CarDto dto = new CarDto();
         model.addAllAttributes(Map.of(
                 CAR_DTO_ATTRIB_NAME, dto,
-                "colors", Color.values(),
-                "transmissions", Transmission.values(),
-                "locations", carService.getAllLocations()
+                COLOR_ATTRIB_NAME, Color.values(),
+                TRANSMISSION_ATTRIB_NAME, Transmission.values(),
+                LOCATION_ATTRIB_NAME, carService.getAllLocations()
         ));
 
         return "car_registration";
@@ -138,9 +141,9 @@ public class ProviderController {
             carDto.fillDto(car);
             model.addAllAttributes(Map.of(
                     CAR_DTO_ATTRIB_NAME, carDto,
-                    "colors", Color.values(),
-                    "transmissions", Transmission.values(),
-                    "locations", carService.getAllLocations()
+                    COLOR_ATTRIB_NAME, Color.values(),
+                    TRANSMISSION_ATTRIB_NAME, Transmission.values(),
+                    LOCATION_ATTRIB_NAME, carService.getAllLocations()
             ));
             log.info("Car found {}", car.getLicensePlate());
         } catch (IllegalArgumentException e) {
@@ -172,9 +175,9 @@ public class ProviderController {
             model.addAttribute(CAR_DTO_ATTRIB_NAME, carDto);
             model.addAllAttributes(Map.of(
                     CAR_DTO_ATTRIB_NAME, carDto,
-                    "colors", Color.values(),
-                    "transmissions", Transmission.values(),
-                    "locations", carService.getAllLocations()
+                    COLOR_ATTRIB_NAME, Color.values(),
+                    TRANSMISSION_ATTRIB_NAME, Transmission.values(),
+                    LOCATION_ATTRIB_NAME, carService.getAllLocations()
             ));
             return "car_edit_listing";
         }

@@ -5,7 +5,6 @@ import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.service.CustomerService;
-import com.mpp.gaskeun.utils.OrderUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +48,7 @@ public class CustomerController {
         }
 
         Map<String, ?> errorFlashMap = RequestContextUtils.getInputFlashMap(request);
-        if (errorFlashMap == null ) {
+        if (errorFlashMap == null) {
             errorFlashMap = new HashMap<>();
         }
 
@@ -76,7 +75,7 @@ public class CustomerController {
         try {
             customerService.update(customer, userDto);
         } catch (IllegalArgumentException e) {
-            attrs.addFlashAttribute(ERROR,e.getMessage());
+            attrs.addFlashAttribute(ERROR, e.getMessage());
             return "redirect:/customer/info";
         }
 

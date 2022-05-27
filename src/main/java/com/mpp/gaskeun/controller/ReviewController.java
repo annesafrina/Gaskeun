@@ -1,10 +1,11 @@
 package com.mpp.gaskeun.controller;
 
-import com.mpp.gaskeun.dto.*;
-import com.mpp.gaskeun.exception.OrderDoesNotExistException;
+import com.mpp.gaskeun.dto.ReviewDto;
 import com.mpp.gaskeun.exception.OrderNotReviewableException;
-import com.mpp.gaskeun.model.*;
-import com.mpp.gaskeun.service.OrderService;
+import com.mpp.gaskeun.model.Customer;
+import com.mpp.gaskeun.model.Order;
+import com.mpp.gaskeun.model.RentalProvider;
+import com.mpp.gaskeun.model.ReviewType;
 import com.mpp.gaskeun.service.ReviewService;
 import com.mpp.gaskeun.utils.DateParser;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class ReviewController {
     @GetMapping("/create/car/{orderId}")
     public String getCarReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user) {
         Order order;
-        if(!(user instanceof Customer)) {
+        if (!(user instanceof Customer)) {
             return REDIRECT_URL;
         }
 
@@ -60,7 +61,7 @@ public class ReviewController {
     @PostMapping("/create/car")
     public String postCreateCarReview(ReviewDto reviewDto, @AuthenticationPrincipal UserDetails user, Model model) {
 
-        if(!(user instanceof Customer)) {
+        if (!(user instanceof Customer)) {
             return REDIRECT_URL;
         }
 
@@ -85,7 +86,7 @@ public class ReviewController {
     @GetMapping("/create/customer/{orderId}")
     public String getCustomerReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user) {
         Order order;
-        if(!(user instanceof RentalProvider)) {
+        if (!(user instanceof RentalProvider)) {
             return REDIRECT_URL;
         }
 
@@ -109,7 +110,7 @@ public class ReviewController {
     @PostMapping("/create/customer")
     public String postCreateCustomerReview(ReviewDto reviewDto, @AuthenticationPrincipal UserDetails user, Model model) {
 
-        if(!(user instanceof RentalProvider)) {
+        if (!(user instanceof RentalProvider)) {
             return REDIRECT_URL;
         }
 
@@ -134,7 +135,7 @@ public class ReviewController {
     @GetMapping("/create/provider/{orderId}")
     public String getProviderReview(Model model, @PathVariable("orderId") String orderId, @AuthenticationPrincipal UserDetails user) {
         Order order;
-        if(!(user instanceof Customer)) {
+        if (!(user instanceof Customer)) {
             return REDIRECT_URL;
         }
 
@@ -158,7 +159,7 @@ public class ReviewController {
     @PostMapping("/create/provider")
     public String postCreateProviderReview(ReviewDto reviewDto, @AuthenticationPrincipal UserDetails user, Model model) {
 
-        if(!(user instanceof Customer)) {
+        if (!(user instanceof Customer)) {
             return REDIRECT_URL;
         }
 
