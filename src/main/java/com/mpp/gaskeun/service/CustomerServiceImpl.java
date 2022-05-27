@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     //Update
     @Override
     public Customer update(Customer customer, UserDto userDto){
-        if(!userDto.isComplete()){
+        if(!userDto.containNameAndPhoneNumber()){
             throw new IncompleteFormException();
         }
         if(userDto.containsPassword()) {
