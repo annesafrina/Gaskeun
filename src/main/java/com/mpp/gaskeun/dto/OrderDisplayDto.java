@@ -13,4 +13,8 @@ public class OrderDisplayDto {
     private OrderStatus status;
     private String startDate;
     private String endDate;
+    private boolean customerReviewed;
+    private boolean carReviewed;
+    private boolean providerReviewed;
+
 }
