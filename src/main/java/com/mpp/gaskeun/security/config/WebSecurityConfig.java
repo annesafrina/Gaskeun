@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/actuator/*",
                         "/",
                         "/explore",
-                        "/explore/*",
+                        "/explore/**",
                         "/static/**"
                 )
                 .permitAll()
