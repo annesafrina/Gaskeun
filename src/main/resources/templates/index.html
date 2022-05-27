@@ -54,7 +54,7 @@
             <a th:if="${!notLoggedIn}" href="/logout" class="drawer-link">Logout <i class="fa-solid fa-right-from-bracket"></i></a>
             <a th:if="${!notLoggedIn}" th:href="'/' +${userType}+'/info'" class="drawer-link">My Profile <i class="fa-regular fa-user"></i></a>
             <div class="drawer-link">
-            <a th:if="${notLoggedIn}" href="" class="anchor-pill-button">JOIN NOW!</a>
+            <a th:if="${notLoggedIn}" href="/registration/customer" class="anchor-pill-button">JOIN NOW!</a>
             </div>
         </div>
     </nav>
