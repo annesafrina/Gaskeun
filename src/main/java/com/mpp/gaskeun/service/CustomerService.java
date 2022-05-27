@@ -1,5 +1,6 @@
 package com.mpp.gaskeun.service;
 
+import com.mpp.gaskeun.dto.OrderDisplayDto;
 import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.model.Order;
@@ -11,4 +12,6 @@ public interface CustomerService {
     public List<Order> findAllOrders(Customer customer);
     public List<Order> findAllOnGoingOrders(Customer customer);
     public Customer update(Customer customer, UserDto userDto);
+    public List<OrderDisplayDto> findAllOrdersInDto(Customer customer);
+    public List<OrderDisplayDto> findAllOnGoingOrdersInDto(Customer customer);
 }
