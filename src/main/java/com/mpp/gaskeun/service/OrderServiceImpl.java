@@ -134,6 +134,11 @@ public class OrderServiceImpl implements OrderService {
 
     public Order getOrder(long id, UserDetails user) throws NoSuchElementException, IllegalStateException {
         Order order = orderRepository.findById(id).orElseThrow(NoSuchElementException::new);
+
+        if (new Date().after(order.getEndDate())) {
+            order.setOrderStatus(OrderStatus.COMPLETED);
+        }
+
         if (user instanceof Customer customer) {
             handleIllegalCustomer(order, customer);
         } else if (user instanceof RentalProvider provider) {
@@ -167,6 +172,17 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setOrderStatus(OrderStatus.CANCELLED);
+    }
+
+    @Override
+    public void completeOrder(Customer customer, Order order) {
+        if (!verifyOrderOwnership(customer, order)) {
+            throw new IllegalUserAccessException(order.getId(), customer.getEmail());
+        }
+
+        order.setEndDate(new Date());
+
+        order.setOrderStatus(OrderStatus.COMPLETED);
     }
 
     /**
