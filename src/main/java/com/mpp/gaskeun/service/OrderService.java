@@ -20,4 +20,6 @@ public interface OrderService {
     void cancelOrder(Customer customer, Order order);
 
     Order setOrderStatus(Order order, OrderStatus status, String bookingMessage);
+
+    void completeOrder(Customer customer, Order order);
 }
