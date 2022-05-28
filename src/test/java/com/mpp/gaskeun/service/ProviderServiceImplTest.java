@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -268,15 +269,20 @@ class ProviderServiceImplTest {
         providerCar2.setRentalProvider(provider);
         anotherCar.setRentalProvider(anotherProvider);
 
+        Date today = new Date();
+
         Order order1 = new Order();
         Order order2 = new Order();
         Order order3 = new Order();
         order1.setCar(providerCar1);
         order1.setOrderStatus(OrderStatus.ACTIVE);
+        order1.setEndDate(today);
         order2.setCar(providerCar2);
         order2.setOrderStatus(OrderStatus.COMPLETED);
+        order2.setEndDate(today);
         order3.setCar(anotherCar);
         order3.setOrderStatus(OrderStatus.PENDING);
+        order3.setEndDate(today);
 
         List<Order> allOrders = List.of(order1, order2, order3);
         List<Order> providerActiveOrders = List.of(order1);
