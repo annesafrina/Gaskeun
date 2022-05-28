@@ -5,6 +5,7 @@ import com.mpp.gaskeun.dto.UserDto;
 import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.model.RentalProvider;
 import com.mpp.gaskeun.service.CustomerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@Slf4j
 @RequestMapping("/customer")
 public class CustomerController {
 
@@ -90,6 +92,9 @@ public class CustomerController {
             List<OrderDisplayDto> orderByCustomer = customerService.findAllOrdersInDto(customer);
             response.put("type", CUSTOMER);
             response.put("data", orderByCustomer);
+            for (var a: orderByCustomer) {
+                log.info(a.getEndDate());
+            }
 
         } else if (user instanceof RentalProvider) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);

@@ -45,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<OrderDisplayDto> findAllOrdersInDto(Customer customer) {
-        return findAllOnGoingOrders(customer)
+        return findAllOrders(customer)
                 .stream().map(OrderUtils::lightDisplayOrder).toList();
     }
 

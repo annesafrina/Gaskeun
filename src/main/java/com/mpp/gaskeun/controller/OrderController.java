@@ -110,8 +110,16 @@ public class OrderController {
     }
 
     private ResponseEntity<Object> confirmOrRejectUtils(long id, UserDetails user, ConfirmOrderDto confirmOrderDto, OrderStatus status) {
+
         try {
             Order order = orderService.getOrder(id, user);
+
+            if (status == OrderStatus.COMPLETED) {
+                orderService.completeOrder((Customer) user, order);
+            } else if (status == OrderStatus.CANCELLED) {
+                orderService.completeOrder((Customer) user, order);
+            }
+
             orderService.setOrderStatus(order, status, confirmOrderDto.getBookingMessage());
             return ResponseEntity.ok(order);
         } catch (IllegalUserAccessException e) {
