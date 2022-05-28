@@ -20,7 +20,6 @@
         <a href="/provider/register-car" class="car-list__button">Add more Cars</a>
         <div th:each="car : ${cars}" class="car-list__card">
             <div class="available-date">
-                15, April 2022 - 15, April 2022
             </div>
             <div class="model">
                 <span th:text="${car.getModel()}"></span>
