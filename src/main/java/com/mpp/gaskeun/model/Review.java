@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 public abstract class Review {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @OneToOne(cascade = CascadeType.ALL)
