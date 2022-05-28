@@ -16,6 +16,6 @@ public class DateParser {
         return String.format("%d %s %d",
                 calendar.get(Calendar.DATE),
                 months[calendar.get(Calendar.MONTH)],
-                calendar.get(Calendar.YEAR) + 1900);
+                calendar.get(Calendar.YEAR));
     }
 }
