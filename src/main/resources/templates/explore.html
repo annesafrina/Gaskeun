@@ -85,11 +85,11 @@
             </form>
         </section>
         <div class="nav-section stretch">
-            <a th:if="${loggedIn} "href="" class="anchor-pill-button">JOIN NOW!</a>
+            <a th:if="${isNotLoggedIn}" href="/registration/customer" class="anchor-pill-button">JOIN NOW!</a>
         </div>
         <section class="nav-section user-actions">
-            <a href="" class="nav-link"><i class="fa-solid fa-gear"></i></a>
-            <a href="" class="nav-link"><i class="fa-regular fa-user"></i></a>
+            <a th:if="${!isNotLoggedIn}" href="/logout" class="nav-link"><i class="fa-solid fa-right-from-bracket"></i></a>
+            <a th:if="${!isNotLoggedIn}" th:href="@{|/${type}/info|}" class="nav-link"><i class="fa-regular fa-user"></i></a>
         </section>
         <input class="checkbox" type="checkbox" name="" id="" />
         <div class="drawer-opener">
@@ -98,10 +98,10 @@
             <div class="bun line-3"></div>
         </div>
         <div class="drawer">
-            <a href="" class="drawer-link">User Settings <i class="fa-solid fa-gear"></i></a>
-            <a href="" class="drawer-link">My Profile <i class="fa-regular fa-user"></i></a>
+            <a th:if="${!isNotLoggedIn}" href="/logout" class="drawer-link">Logout <i class="fa-solid fa-right-from-bracket"></i></a>
+            <a th:if="${!isNotLoggedIn}" th:href="@{|/${type}/info|}" class="drawer-link">My Profile <i class="fa-regular fa-user"></i></a>
             <div class="drawer-link">
-                <a th:if="${loggedIn}" href="" class="anchor-pill-button">JOIN NOW!</a>
+                <a th:if="${isNotloggedIn}" href="/registration/customer" class="anchor-pill-button">JOIN NOW!</a>
             </div>
         </div>
     </nav>
