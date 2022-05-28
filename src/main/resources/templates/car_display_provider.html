@@ -45,8 +45,8 @@
 
         <div class="info">
         <label>Availability Status:</label>
-        <span th:if="${car.isAvailable()}" th:text="Available"></span>
-        <span th:unless="${car.isAvailable()}" th:text="Not Available"></span>
+        <span th:if="${car.isAvailable()}">Available</span>
+        <span th:unless="${car.isAvailable()}">Not Available</span>
         </div>
 
         <div class="info">
