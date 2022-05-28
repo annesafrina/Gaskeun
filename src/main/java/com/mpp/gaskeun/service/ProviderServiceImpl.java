@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -50,6 +51,7 @@ public class ProviderServiceImpl implements ProviderService {
     public List<Order> findAllOnGoingOrders(RentalProvider provider) {
         return orderRepository.findAll().stream()
                 .filter(order -> order.providerIsAssigned(provider))
+                .map(Order::validateStatus)
                 .filter(order -> order.getOrderStatus() == OrderStatus.ACTIVE)
                 .toList();
     }
