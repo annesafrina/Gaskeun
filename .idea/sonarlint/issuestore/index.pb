@@ -47,10 +47,6 @@ b
 2src/main/java/com/mpp/gaskeun/dto/CustomerDto.java,f\f\ffa098052398a5aae460293ae9925151a09ae87c
 \
 ,src/main/java/com/mpp/gaskeun/model/Car.java,7\b\7b96db2838ed7a70285b1a875f1ded49d9d5c444
-^
-.src/main/java/com/mpp/gaskeun/model/Order.java,0\0\00e56d1f0de76a23313409c92eb4264c96a8818d
-r
-Bsrc/test/java/com/mpp/gaskeun/service/ProviderServiceImplTest.java,2\9\29bea9c29154e9f6306875ef4f90c2bcda86bda9
 j
 :src/test/java/com/mpp/gaskeun/GaskeunApplicationTests.java,e\b\ebbf1b9594d389a67791a571ecc3996e8d07367e
 <

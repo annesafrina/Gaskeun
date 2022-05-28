@@ -80,4 +80,12 @@ public class Order {
     public int hashCode() {
         return Objects.hash(id, bookingMessage, isVerified, createdDate, startDate, endDate, pickupLocation, dropoffLocation, customer, car, orderStatus);
     }
+
+    public static Order validateStatus(Order order) {
+        Date today = new Date();
+        if(order.getEndDate().before(today)) {
+            order.setOrderStatus(OrderStatus.COMPLETED);
+        }
+        return order;
+    }
 }
