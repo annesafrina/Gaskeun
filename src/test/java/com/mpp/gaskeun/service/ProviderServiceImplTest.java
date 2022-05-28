@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -264,27 +265,37 @@ class ProviderServiceImplTest {
 
         Car providerCar1 = new Car();
         Car providerCar2 = new Car();
+        Car providerCar3 = new Car();
         Car anotherCar = new Car();
         providerCar1.setRentalProvider(provider);
         providerCar2.setRentalProvider(provider);
+        providerCar3.setRentalProvider(provider);
         anotherCar.setRentalProvider(anotherProvider);
 
         Date today = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        calendar.add(Calendar.DATE, 1);
+        Date tomorrow = calendar.getTime();
 
         Order order1 = new Order();
         Order order2 = new Order();
         Order order3 = new Order();
+        Order order4 = new Order();
         order1.setCar(providerCar1);
         order1.setOrderStatus(OrderStatus.ACTIVE);
-        order1.setEndDate(today);
+        order1.setEndDate(tomorrow);
         order2.setCar(providerCar2);
         order2.setOrderStatus(OrderStatus.COMPLETED);
         order2.setEndDate(today);
         order3.setCar(anotherCar);
         order3.setOrderStatus(OrderStatus.PENDING);
         order3.setEndDate(today);
+        order4.setCar(providerCar3);
+        order4.setOrderStatus(OrderStatus.ACTIVE);
+        order4.setEndDate(today);
 
-        List<Order> allOrders = List.of(order1, order2, order3);
+        List<Order> allOrders = List.of(order1, order2, order3, order4);
         List<Order> providerActiveOrders = List.of(order1);
 
         when(orderRepository.findAll()).thenReturn(allOrders);
