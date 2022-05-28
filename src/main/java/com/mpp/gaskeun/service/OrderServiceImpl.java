@@ -180,6 +180,10 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalUserAccessException(order.getId(), customer.getEmail());
         }
 
+        if (new Date().before(order.getStartDate())) {
+            throw new IllegalStateException("Order cannot be completed before it is started.");
+        }
+
         order.setEndDate(new Date());
 
         order.setOrderStatus(OrderStatus.COMPLETED);
