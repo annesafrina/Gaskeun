@@ -1,6 +1,7 @@
 package com.mpp.gaskeun.controller;
 
 import com.mpp.gaskeun.model.Car;
+import com.mpp.gaskeun.model.Customer;
 import com.mpp.gaskeun.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +30,14 @@ public class ExploreController {
     @GetMapping("")
     public String getCars(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isLoggedIn = authentication == null || authentication instanceof AnonymousAuthenticationToken;
-        model.addAttribute("loggedIn", isLoggedIn);
+        boolean isNotLoggedIn = authentication == null || authentication instanceof AnonymousAuthenticationToken;
+        model.addAttribute("isNotLoggedIn", isNotLoggedIn);
+
+        if (!isNotLoggedIn) {
+            UserDetails user = (UserDetails) authentication.getPrincipal();
+
+            model.addAttribute("type", (user instanceof Customer) ? "customer" : "provider");
+        }
 
         return "explore";
     }
