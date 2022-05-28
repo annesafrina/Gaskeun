@@ -11,11 +11,12 @@ import javax.persistence.*;
 @Setter
 @Getter
 public abstract class Review {
-    @OneToOne(cascade = CascadeType.ALL)
-    @MapsId
-    protected Order order;
     @Id
     private long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    protected Order order;
+
     @Column(name = "rating", nullable = false)
     private double rating;
 
